@@ -1,0 +1,5 @@
+<module>
+    <components>
+        <component file="../assets/main/topmenu.xml" />
+    </components>  
+</module>
