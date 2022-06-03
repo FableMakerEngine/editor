@@ -2,6 +2,7 @@
     <components>
         <component file="../assets/main/topmenu.xml" />
         <component file="../assets/main/statusbar.xml" />
+        <component file="../assets/main/maplist.xml" />
         <component file="../assets/main/mapeditor.xml" />
     </components>  
 </module>
