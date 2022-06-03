@@ -8,8 +8,8 @@
   <grid columns="1" styleName="main-view">
     <topmenu verticalAlign="top"></topmenu>
     <splitter width="100%" height="100%">
-      <maplist width="220"></maplist>
-      <mapeditor width="100%" height="100%"></mapeditor>
+      <maplist width="15%"></maplist>
+      <mapeditor width="85%"></mapeditor>
     </splitter>
     <statusbar></statusbar>
   </grid>
