@@ -1,5 +1,6 @@
 <module>
     <components>
         <component file="../assets/main/topmenu.xml" />
+        <component file="../assets/main/statusbar.xml" />
     </components>  
 </module>
