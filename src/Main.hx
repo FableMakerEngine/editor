@@ -1,5 +1,6 @@
 package;
 
+import haxe.ui.Toolkit;
 import haxe.ui.HaxeUIApp;
 
 class Main {
@@ -7,7 +8,6 @@ class Main {
         var app = new HaxeUIApp();
         app.ready(function() {
             app.addComponent(new views.MainView());
-
             app.start();
         });
     }
