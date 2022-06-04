@@ -5,7 +5,7 @@
       "name": "Web - Browser Debug",
       "request": "launch",
       "type": "pwa-msedge",
-      "file": "./build/html5/index.html",
+      "file": "./build/heaps/js/index.html",
       "webRoot": "${workspaceFolder}",
       "preLaunchTask": {
         "type": "haxe",

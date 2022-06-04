@@ -7,4 +7,6 @@
 
 -D resourcesPath=assets
 
+--cmd haxe --run Build --web
+
 -js build/heaps/js/main.js
