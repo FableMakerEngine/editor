@@ -7,4 +7,4 @@
 
 -D resourcesPath=assets
 
--js build/heaps/js/Main.js
+-js build/heaps/js/main.js

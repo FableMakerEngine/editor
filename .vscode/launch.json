@@ -2,7 +2,18 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "HashLink",
+      "name": "Web - Browser Debug",
+      "request": "launch",
+      "type": "pwa-msedge",
+      "file": "./build/html5/index.html",
+      "webRoot": "${workspaceFolder}",
+      "preLaunchTask": {
+        "type": "haxe",
+        "args": "active configuration"
+      }
+    },
+    {
+      "name": "Desktop - Debug",
       "request": "launch",
       "type": "hl",
       "cwd": "${workspaceFolder}",
@@ -10,6 +21,26 @@
         "type": "haxe",
         "args": "active configuration"
       }
-    }
+    },
+    {
+      "name": "Build Debug - Web",
+      "type": "haxe-eval",
+      "request": "launch",
+      "args": [
+        "--run",
+        "Build",
+        "--web"
+      ]
+    },
+    {
+      "name": "Build Debug - Hashlink",
+      "type": "haxe-eval",
+      "request": "launch",
+      "args": [
+        "--run",
+        "Build",
+        "--desktop"
+      ]
+    },
   ]
 }
