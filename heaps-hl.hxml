@@ -10,4 +10,6 @@
 
 -D resourcesPath=assets
 
+--debug
+
 -hl build/heaps/hl/Main.hl

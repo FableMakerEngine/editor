@@ -9,6 +9,10 @@
 
 -D resourcesPath=assets
 
+--debug
+
+-D source-map-content
+
 --cmd haxe --run Build --web
 
 -js build/heaps/js/main.js
