@@ -7,10 +7,7 @@
       "type": "pwa-msedge",
       "file": "./build/heaps/js/index.html",
       "webRoot": "${workspaceFolder}",
-      "preLaunchTask": {
-        "type": "haxe",
-        "args": "active configuration"
-      }
+      "preLaunchTask": "haxe: heaps-js.hxml"
     },
     {
       "name": "Desktop - Debug",
