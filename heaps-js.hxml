@@ -1,11 +1,17 @@
 -cp src
 -main Main
 
+--dce full
+
 -lib heaps
 -lib haxeui-core
 -lib haxeui-heaps
 
 -D resourcesPath=assets
+
+--debug
+
+-D source-map-content
 
 --cmd haxe --run Build --web
 

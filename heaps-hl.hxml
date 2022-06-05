@@ -1,11 +1,15 @@
 -cp src
 -main Main
 
+--dce full
+
 -lib heaps
 -lib hlsdl
 -lib haxeui-core
 -lib haxeui-heaps
 
 -D resourcesPath=assets
+
+--debug
 
 -hl build/heaps/hl/Main.hl
