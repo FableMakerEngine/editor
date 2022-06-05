@@ -1,8 +1,8 @@
 <module>
     <components>
-        <component file="../assets/main/topmenu.xml" />
-        <component file="../assets/main/statusbar.xml" />
-        <component file="../assets/main/maplist.xml" />
-        <component file="../assets/main/mapeditor.xml" />
+        <component class="components.TopMenu"/>
+        <component class="components.StatusBar"/>
+        <component class="components.MapList"/>
+        <component class="components.MapEditor"/>
     </components>  
 </module>
