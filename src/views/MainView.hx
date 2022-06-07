@@ -15,13 +15,27 @@ class MainView extends VBox {
     Toolkit.init();
     Toolkit.theme = 'dark';
     contextMenu = new ContextMenu();
-
+    
     Screen.instance.registerEvent(MouseEvent.MOUSE_DOWN, function(e) {
       if (e.buttonDown == 1) {
         contextMenu.left = e.screenX;
         contextMenu.top = e.screenY;
         Screen.instance.addComponent(contextMenu);
+        contextMenu.hide();
       }
     });
+  }
+
+  public override function onReady() {
+    mapList.onRightClick = onMapListRightClick;
+  }
+
+  public function onMapListRightClick(e: MouseEvent) {
+    if (mapList.selectedNode != null) {
+      if (mapList.selectedNode.hitTest(e.screenX, e.screenY)) {
+        contextMenu.items = mapList.menu();
+        contextMenu.show();
+      }
+    }
   }
 }
