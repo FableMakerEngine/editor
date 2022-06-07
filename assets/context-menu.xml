@@ -1,13 +1,1 @@
-<menu text="Normal">
-  <menuitem text="Item 1" shortcutText="Shortcut" />
-  <menuitem text="Item 2 (disabled)" disabled="true" shortcutText="Ctrl+A" />
-  <menu text="Sub Menu">
-    <menuitem text="Item 1" />
-    <menuitem text="Item 2" />
-    <menuitem text="Item 3" />
-  </menu>
-  <menuitem text="Item 3" shortcutText="Ctrl+B" />
-  <menuitem text="Item 4" shortcutText="Ctrl+C" />
-  <menuseparator />
-  <menuitem text="Item 5" shortcutText="Ctrl+D" />
-</menu>
+<menu id="contextMenu" text="Normal"></menu>
