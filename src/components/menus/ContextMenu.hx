@@ -1,9 +1,7 @@
-package components;
+package components.menus;
 
-import components.menus.ContextMenuItem;
 import haxe.ui.containers.menus.MenuSeparator;
 import haxe.ui.containers.menus.Menu;
-import components.menus.ContextMenuEntry;
 
 using Lambda;
 

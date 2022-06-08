@@ -2,7 +2,7 @@ package views;
 
 import haxe.ui.core.Screen;
 import haxe.ui.events.MouseEvent;
-import components.ContextMenu;
+import components.menus.ContextMenu;
 import haxe.ui.Toolkit;
 import haxe.ui.containers.VBox;
 
