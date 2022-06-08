@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vbox width="100%" height="100%">
     <tabview id="workspace" width="100%" height="100%" closable="true">
-    <box text="Map Editor" icon="haxeui-core/styles/default/haxeui_tiny.png">
-      <button text="Page 1" />
+    <box id="mapeditor" text="Map Editor" icon="haxeui-core/styles/default/haxeui_tiny.png">
+      <box id="tilemap" height="100%" width="100%"></box>
     </box>
     <box text="Database" icon="haxeui-core/styles/default/haxeui_tiny.png">
       <button text="Page 2" />
