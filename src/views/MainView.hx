@@ -1,26 +1,41 @@
 package views;
 
-import components.TopMenu;
-import components.StatusBar;
+import haxe.ui.core.Screen;
+import haxe.ui.events.MouseEvent;
+import components.menus.ContextMenu;
 import haxe.ui.Toolkit;
-import components.MapEditor;
-import components.MapList;
 import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('assets/main/main-view.xml'))
 class MainView extends VBox {
-  public var mapEditor: MapEditor;
-  public var mapList: MapList;
-  public var statusBar: StatusBar;
-  public var topMenu: TopMenu;
+  public var contextMenu: ContextMenu;
 
   public function new() {
     super();
     Toolkit.init();
     Toolkit.theme = 'dark';
-    topMenu = new TopMenu();
-    mapList = new MapList();
-    mapEditor = new MapEditor();
-    statusBar = new StatusBar();
+    contextMenu = new ContextMenu();
+    
+    Screen.instance.registerEvent(MouseEvent.MOUSE_DOWN, function(e) {
+      if (e.buttonDown == 1) {
+        contextMenu.left = e.screenX;
+        contextMenu.top = e.screenY;
+        Screen.instance.addComponent(contextMenu);
+        contextMenu.hide();
+      }
+    });
+  }
+
+  public override function onReady() {
+    mapList.onRightClick = onMapListRightClick;
+  }
+
+  public function onMapListRightClick(e: MouseEvent) {
+    if (mapList.selectedNode != null) {
+      if (mapList.selectedNode.hitTest(e.screenX, e.screenY)) {
+        contextMenu.items = mapList.menu();
+        contextMenu.show();
+      }
+    }
   }
 }
