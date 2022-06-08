@@ -5,7 +5,6 @@ import haxe.ui.containers.menus.Menu;
 
 using Lambda;
 
-@:build(haxe.ui.macros.ComponentMacros.build('assets/context-menu.xml'))
 class ContextMenu extends Menu {
   @:isVar
   public var items(default, set): Array<ContextMenuEntry>;
