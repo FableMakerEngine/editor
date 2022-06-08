@@ -1,8 +1,9 @@
 package components;
 
+import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.TreeViewNode;
 import haxe.ui.containers.TreeView;
-import components.menus.ContextMenuItem;
+import components.menus.ContextMenuEntry;
 
 @:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('assets/main/maplist.xml'))
 class MapList extends TreeView {
@@ -15,42 +16,42 @@ class MapList extends TreeView {
     worldNode.expanded = true;
   }
 
-  public function menu(): Array<ContextMenuItem> {
+  public function menu(): Array<ContextMenuEntry> {
     return [
       {
         name: 'edit',
-        title: 'Edit'
+        text: 'Edit'
       },
       {
         name: 'new',
-        title: 'New',
-        onClick: onNewMap
+        text: 'New',
+        action: onNewMap
       },
       {
         name: 'seperator',
-        title: 'Seperator'
+        text: 'Seperator'
       },
       {
         name: 'copy',
-        title: 'Copy'
+        text: 'Copy'
       },
       {
         name: 'paste',
-        title: 'Paste'
+        text: 'Paste'
       },
       {
         name: 'delete',
-        title: 'Delete',
-        onClick: onDeleteMap
+        text: 'Delete',
+        action: onDeleteMap
       }
     ];
   }
 
-  public function onNewMap() {
+  public function onNewMap(event: MouseEvent) {
     selectedNode.addNode({text: 'New Map'});
   }
 
-  public function onDeleteMap() {
+  public function onDeleteMap(event: MouseEvent) {
     if (selectedNode.parentNode == worldNode) {
       worldNode.removeNode(selectedNode);
     } else {

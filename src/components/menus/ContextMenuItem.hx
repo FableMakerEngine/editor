@@ -1,10 +1,20 @@
 package components.menus;
 
-typedef ContextMenuItem = {
-  var name: String;
-  var title: String;
-  var ?shortcut: String;
-  var ?icon: String;
-  var ?subMenu: Array<ContextMenuItem>;
-  var ?onClick: Void -> Void;
+import haxe.ui.containers.menus.MenuItem;
+
+class ContextMenuItem extends MenuItem {
+  public var subMenu(default, set): Array<ContextMenuEntry> = [];
+  @:isVar public var isSubMenu(get, null): Bool = false;
+
+  function set_subMenu(value: Array<ContextMenuEntry>) {
+    this.subMenu = value;
+    if (value != null && value.length > 0) {
+      this.isSubMenu = true;
+    }
+    return value;
+  }
+
+  public function get_isSubMenu(): Bool {
+    return isSubMenu;
+  }
 }
