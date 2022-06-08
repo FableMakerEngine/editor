@@ -1,6 +1,6 @@
 package renderer;
 
-class MapRenderer extends h2d.Scene {
+class Tilemap extends h2d.Scene {
   public var background: h2d.Graphics;
 
   public function new() {
