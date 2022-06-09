@@ -3,7 +3,6 @@ package views;
 import haxe.ui.core.Screen;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenu;
-import haxe.ui.Toolkit;
 import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('assets/main/main-view.xml'))
@@ -12,8 +11,6 @@ class MainView extends VBox {
 
   public function new() {
     super();
-    Toolkit.init();
-    Toolkit.theme = 'dark';
     contextMenu = new ContextMenu();
     
     Screen.instance.registerEvent(MouseEvent.MOUSE_DOWN, function(e) {
