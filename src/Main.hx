@@ -1,18 +1,23 @@
 package;
 
-import views.MainView;
 import haxe.ui.Toolkit;
 import haxe.ui.core.Screen;
+import views.MainView;
 
-class Main extends hxd.App {
+class Main extends cyclops.Game {
+  public var root: RootScene;
+
   override function init() {
-    hxd.Res.initEmbed();
+    super.init();
+    root = new RootScene();
+    changeScene(root);
     Toolkit.init({
-      root: s2d
+      root: scene
     });
     Toolkit.theme = 'dark';
     engine.backgroundColor = 0x3d3f41;
-    Screen.instance.addComponent(new MainView());
+    root.mainView = new MainView();
+    Screen.instance.addComponent(root.mainView);
   }
 
   static function main() {
