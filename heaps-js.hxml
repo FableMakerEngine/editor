@@ -6,6 +6,7 @@
 -lib heaps
 -lib haxeui-core
 -lib haxeui-heaps
+-lib cyclops
 
 -D resourcesPath=assets
 
