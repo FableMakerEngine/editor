@@ -21,4 +21,8 @@ class MapEditor extends VBox {
   public override function onResized() {
     tilemap.resize(Math.floor(width), Math.floor(height));
   }
+
+  public function update(dt: Float) {
+    tilemap.update(dt);
+  }
 }
