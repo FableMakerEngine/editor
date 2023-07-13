@@ -3,16 +3,20 @@ package renderer;
 import renderer.objects.TileCursor;
 
 class Tilemap extends cyclops.Scene {
+  public var parentView: haxe.ui.core.Component;
   public var background: h2d.Graphics;
   public var title: h2d.Text;
   public var isRotatingLeft: Bool = true;
   public var tileSize: Int = 32;
   private var tileCursor: TileCursor;
 
-  public function new() {
+  public function new(?parentView) {
     super();
     background = new h2d.Graphics(this);
     tileCursor = new TileCursor(this, tileSize, tileSize);
+    if (parentView != null) {
+      this.parentView = parentView;
+    }
 
     var font: h2d.Font = hxd.res.DefaultFont.get();
     font.resizeTo(62);
@@ -20,17 +24,22 @@ class Tilemap extends cyclops.Scene {
     title.text = 'FABLE MAKER!';
     title.textAlign = Center;
     addChild(title);
+    resize(50, 50);
   }
 
-  public function resize(width, height) {
-    title.x = width / 2;
-    title.y = height / 2;
-    this.width = width;
-    this.height = height;
+  public function resize(tilesX, tilesY) {
+    this.width = tilesX * tileSize;
+    this.height = tilesY * tileSize;
     onResized();
   }
 
   function onResized() {
+    title.x = width / 2;
+    title.y = height / 2;
+    if (parentView != null) {
+      parentView.width = width;
+      parentView.height = height;
+    }
     background.clear();
     background.beginFill(0x000000);
     background.drawRect(0, 0, width, height);

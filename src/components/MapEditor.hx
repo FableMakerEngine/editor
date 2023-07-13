@@ -8,17 +8,12 @@ class MapEditor extends VBox {
   public var tilemap: Tilemap;
   public function new() {
     super();
-    tilemap = new Tilemap();
+    tilemap = new Tilemap(tileView);
   }
 
   public override function onReady() {
     super.onReady();
-    mapeditor.addChild(tilemap);
-    tilemap.resize(Math.floor(mapeditor.width), Math.floor(mapeditor.height));
-  }
-  
-  public override function onResized() {
-    tilemap.resize(Math.floor(mapeditor.width), Math.floor(mapeditor.height));
+    tileView.addChild(tilemap);
   }
 
   public function update(dt: Float) {
