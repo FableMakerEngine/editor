@@ -13,13 +13,12 @@ class MapEditor extends VBox {
 
   public override function onReady() {
     super.onReady();
-    tilemapView.addChild(tilemap);
-    tilemap.move(tilemapView.left, tilemapView.top);
-    tilemap.resize(Math.floor(width), Math.floor(height));
+    mapeditor.addChild(tilemap);
+    tilemap.resize(Math.floor(mapeditor.width), Math.floor(mapeditor.height));
   }
   
   public override function onResized() {
-    tilemap.resize(Math.floor(width), Math.floor(height));
+    tilemap.resize(Math.floor(mapeditor.width), Math.floor(mapeditor.height));
   }
 
   public function update(dt: Float) {
