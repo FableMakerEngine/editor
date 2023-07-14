@@ -1,22 +1,22 @@
 package components;
 
-import renderer.Tilemap;
+import renderer.TilemapViewport;
 import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.macros.ComponentMacros.build('assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
-  public var tilemap: Tilemap;
+  public var viewport: TilemapViewport;
   public function new() {
     super();
-    tilemap = new Tilemap(tileView);
+    viewport = new TilemapViewport(tileView);
   }
 
   public override function onReady() {
     super.onReady();
-    tileView.addChild(tilemap);
+    tileView.addChild(viewport);
   }
 
   public function update(dt: Float) {
-    tilemap.update(dt);
+    viewport.update(dt);
   }
 }
