@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<vbox width="100%" height="100%">
-    <tabview id="workspace" width="100%" height="100%" closable="true">
-    <box text="Map Editor" icon="haxeui-core/styles/default/haxeui_tiny.png">
-      <button text="Page 1" />
+<vbox height="100%" width="100%">
+  <tabview id="workspace" width="100%" height="100%" closable="true">
+    <box id="mapeditor" text="Map Editor" width="100%" height="100%"
+      icon="haxeui-core/styles/default/haxeui_tiny.png">
+      <scrollview height="100%" width="100%">
+        <box id="tileView"></box>
+      </scrollview>
     </box>
     <box text="Database" icon="haxeui-core/styles/default/haxeui_tiny.png">
       <button text="Page 2" />

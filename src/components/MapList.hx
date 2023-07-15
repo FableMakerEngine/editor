@@ -11,7 +11,6 @@ class MapList extends TreeView {
 
   public function new() {
     super();
-    allowRightClick = true;
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
   }
