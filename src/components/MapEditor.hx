@@ -1,6 +1,9 @@
 package components;
 
+import components.menus.ContextMenu;
+import components.windows.MapProperties;
 import haxe.ui.events.MouseEvent;
+import haxe.ui.containers.windows.WindowManager;
 import components.menus.ContextMenuEntry;
 import renderer.objects.TileCursor;
 import cyclops.Utils;
@@ -12,13 +15,17 @@ import cyclops.tilemap.ITilemapConfig;
 
 @:build(haxe.ui.macros.ComponentMacros.build('assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
+  public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
   public var tilemap: Tilemap;
   public var tilemapConfig: ITilemapConfig;
+  
   private var tileCursor: TileCursor;
 
   public function new() {
     super();
+    contextMenu = new ContextMenu();
+    contextMenu.items = menu();
     loadTilemapData();
     viewport = new TilemapViewport(tileView);
     viewport.tilemap = new Tilemap(viewport, tilemapConfig);
@@ -74,6 +81,13 @@ class MapEditor extends VBox {
         action: onMapProperties
       }
     ];
+  }
+
+  @:bind(tileView, MouseEvent.RIGHT_MOUSE_DOWN)
+  private function onContextMenu(e: MouseEvent) {
+    contextMenu.left = e.screenX;
+    contextMenu.top = e.screenY;
+    contextMenu.show();
   }
 
   public function onNewEvent(event: MouseEvent) {}
