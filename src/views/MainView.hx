@@ -1,5 +1,6 @@
 package views;
 
+import haxe.ui.containers.windows.WindowManager;
 import components.MapEditor;
 import haxe.ui.core.Screen;
 import haxe.ui.events.MouseEvent;
@@ -12,6 +13,7 @@ class MainView extends VBox {
 
   public function new() {
     super();
+    WindowManager.instance.container = mainView;
     contextMenu = new ContextMenu();
 
     Screen.instance.registerEvent(MouseEvent.MOUSE_DOWN, function(e) {
