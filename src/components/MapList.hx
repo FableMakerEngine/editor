@@ -50,8 +50,22 @@ class MapList extends TreeView {
     ];
   }
 
+  private function forceSelectNode(x, y) {
+    // A hacky way to ensure the TreeViewNode is selected before right click
+    // actions
+    var nodesUnderPoint = findComponentsUnderPoint(x, y);
+    var treeNode = nodesUnderPoint.filter(node -> {
+      return Std.isOfType(node, TreeViewNode);
+    })[0];
+
+    if (treeNode != null) {
+      selectedNode = cast treeNode;
+    }
+  }
+
   @:bind(this, MouseEvent.RIGHT_MOUSE_DOWN)
   private function onContextMenu(e: MouseEvent) {
+    forceSelectNode(e.screenX, e.screenY);
     if (selectedNode != null) {
       if (selectedNode.hitTest(e.screenX, e.screenY)) {
         contextMenu.left = e.screenX;
