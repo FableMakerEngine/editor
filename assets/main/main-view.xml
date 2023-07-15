@@ -6,9 +6,6 @@
     }
   </style>
   <topmenu id="topMenu" verticalAlign="top"></topmenu>
-  <box width="100%" height="30">
-    <window-list id="windowList" height="30" />
-  </box>
   <box id="workspace" width="100%" height="100%">
     <mapeditor id="mapEditor"></mapeditor>
   </box>
