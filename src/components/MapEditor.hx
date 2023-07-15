@@ -1,9 +1,7 @@
 package components;
 
 import components.menus.ContextMenu;
-import components.windows.MapProperties;
 import haxe.ui.events.MouseEvent;
-import haxe.ui.containers.windows.WindowManager;
 import components.menus.ContextMenuEntry;
 import renderer.objects.TileCursor;
 import cyclops.Utils;
