@@ -9,7 +9,7 @@ class MainView extends VBox {
 
   public function new() {
     super();
-    WindowManager.instance.container = mainView;
+    WindowManager.instance.container = workspace;
   }
 
   public function update(dt) {
