@@ -1,5 +1,7 @@
 package components;
 
+import haxe.ui.events.MouseEvent;
+import components.menus.ContextMenuEntry;
 import renderer.objects.TileCursor;
 import cyclops.Utils;
 import haxe.Json;
@@ -34,6 +36,57 @@ class MapEditor extends VBox {
       level: parsedData.levels[0]
     }
   }
+
+  public function menu(): Array<ContextMenuEntry> {
+    return [
+      {
+        name: 'edit',
+        text: 'Edit',
+        action: onEventEdit
+      },
+      {
+        name: 'new',
+        text: 'New',
+        action: onNewEvent
+      },
+      {
+        name: 'seperator',
+        text: 'Seperator'
+      },
+      {
+        name: 'cut',
+        text: 'Cut',
+        action: onEventCut
+      },
+      {
+        name: 'copy',
+        text: 'Copy',
+        action: onEventCopy
+      },
+      {
+        name: 'paste',
+        text: 'Paste',
+        action: onEventPaste
+      },
+      {
+        name: 'properties',
+        text: 'Properties',
+        action: onMapProperties
+      }
+    ];
+  }
+
+  public function onNewEvent(event: MouseEvent) {}
+
+  public function onEventEdit(event: MouseEvent) {}
+
+  public function onEventCut(event: MouseEvent) {}
+
+  public function onEventCopy(event: MouseEvent) {}
+
+  public function onEventPaste(event: MouseEvent) {}
+
+  public function onMapProperties(event: MouseEvent) {}
 
   public override function onReady() {
     super.onReady();
