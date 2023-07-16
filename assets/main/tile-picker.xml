@@ -1,0 +1,3 @@
+<vbox width="100%">
+  <scrollview id="tileView" width="100%" height="100%"></scrollview>
+</vbox>
