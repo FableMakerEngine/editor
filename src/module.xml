@@ -4,5 +4,6 @@
         <component class="components.StatusBar"/>
         <component class="components.MapList"/>
         <component class="components.MapEditor"/>
+        <component class="components.TilePicker"/>
     </components>  
 </module>
