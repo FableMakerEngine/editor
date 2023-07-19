@@ -1,5 +1,6 @@
 package components;
 
+import hxd.Res;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
@@ -31,9 +32,8 @@ class MapEditor extends VBox {
   }
 
   public function loadTilemapData() {
-    hxd.Res.loader = new hxd.res.Loader(hxd.fs.EmbedFileSystem.create('res'));
-    var data = hxd.Res.loader.load('data/maps/Map1.json');
-    var mapData = Json.parse(data.toText());
+    var data = Res.data.maps.Map1.entry.getText();
+    var mapData = Json.parse(data);
     var parsedData: Dynamic = Utils.parseLdtkData(mapData);
     tilemapConfig = {
       tilesets: parsedData.tilesets,
