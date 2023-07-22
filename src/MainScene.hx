@@ -10,7 +10,7 @@ class MainScene extends ceramic.Scene {
   }
 
   public override function update(delta: Float) {
-    super.update(dt);
+    super.update(delta);
     if (mainView != null) {
       mainView.update(delta);
     }
