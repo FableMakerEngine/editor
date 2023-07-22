@@ -1,16 +1,11 @@
 package components;
 
-import hxd.Res;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
 import renderer.objects.TileCursor;
-import cyclops.Utils;
-import haxe.Json;
 import renderer.TilemapViewport;
 import haxe.ui.containers.VBox;
-import cyclops.tilemap.Tilemap;
-import cyclops.tilemap.ITilemapConfig;
 
 @:build(haxe.ui.macros.ComponentMacros.build('../../assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
@@ -25,21 +20,9 @@ class MapEditor extends VBox {
     super();
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
-    loadTilemapData();
     viewport = new TilemapViewport(tileView);
-    viewport.tilemap = new Tilemap(viewport, tilemapConfig);
+    // viewport.tilemap = new Tilemap(viewport, tilemapConfig);
     viewport.tileCursor = new TileCursor(viewport, 32, 32);
-  }
-
-  public function loadTilemapData() {
-    var data = Res.data.maps.Map1.entry.getText();
-    var mapData = Json.parse(data);
-    var parsedData: Dynamic = Utils.parseLdtkData(mapData);
-    tilemapConfig = {
-      tilesets: parsedData.tilesets,
-      layers: parsedData.layers,
-      level: parsedData.levels[0]
-    }
   }
 
   public function menu(): Array<ContextMenuEntry> {

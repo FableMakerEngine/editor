@@ -1,15 +1,14 @@
 package renderer;
 
 import renderer.objects.TileCursor;
-import cyclops.tilemap.Tilemap;
 
-class TilemapViewport extends cyclops.Scene {
+class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: h2d.Graphics;
   public var isRotatingLeft: Bool = true;
   public var tileSize: Int = 32;
   public var tileCursor: TileCursor;
-  public var tilemap: Tilemap;
+  // public var tilemap: Tilemap;
   
   public function new(?parentView) {
     super();
@@ -43,7 +42,7 @@ class TilemapViewport extends cyclops.Scene {
     interaction.height = height;
   }
 
-  public override function onMove(e: hxd.Event) {
+  public function onMove(e: hxd.Event) {
     var x = Math.floor(e.relX / tileSize) * tileSize;
     var y = Math.floor(e.relY / tileSize) * tileSize;
     tileCursor.setPosition(x, y);
