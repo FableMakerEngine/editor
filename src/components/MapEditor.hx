@@ -12,7 +12,7 @@ import haxe.ui.containers.VBox;
 import cyclops.tilemap.Tilemap;
 import cyclops.tilemap.ITilemapConfig;
 
-@:build(haxe.ui.macros.ComponentMacros.build('assets/main/mapeditor.xml'))
+@:build(haxe.ui.macros.ComponentMacros.build('../../assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
