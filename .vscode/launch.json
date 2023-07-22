@@ -2,42 +2,19 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Web - Browser Debug",
-      "request": "launch",
-      "type": "pwa-msedge",
-      "file": "./build/heaps/js/index.html",
-      "webRoot": "${workspaceFolder}",
-      "preLaunchTask": "haxe: heaps-js.hxml"
+      "name": "Debug Web",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9223,
+      "webRoot": "${workspaceFolder}/project/web",
+      "sourceMaps": true,
+      "disableNetworkCache": true,
+      "smartStep": true
     },
     {
-      "name": "Desktop - Debug",
-      "request": "launch",
-      "type": "hl",
-      "cwd": "${workspaceFolder}",
-      "preLaunchTask": {
-        "type": "haxe",
-        "args": "active configuration"
-      }
-    },
-    {
-      "name": "Build Debug - Web",
+      "name": "Haxe Interpreter",
       "type": "haxe-eval",
-      "request": "launch",
-      "args": [
-        "--run",
-        "Build",
-        "--web"
-      ]
-    },
-    {
-      "name": "Build Debug - Hashlink",
-      "type": "haxe-eval",
-      "request": "launch",
-      "args": [
-        "--run",
-        "Build",
-        "--desktop"
-      ]
-    },
+      "request": "launch"
+    }
   ]
 }
