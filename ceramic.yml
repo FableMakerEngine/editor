@@ -1,8 +1,8 @@
 app:
-    package: mycompany.ceramic-test
-    name: ceramic-test
-    displayName: ceramic-test
-    author: My Company
+    package: cartographergames.fable-maker
+    name: fable-maker
+    displayName: FableMaker
+    author: Cartographer Games
     version: '1.0'
 
     plugins:
