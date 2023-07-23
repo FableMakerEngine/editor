@@ -11,10 +11,10 @@ class Project extends Entity {
     super();
 
     settings.antialiasing = 2;
-    settings.background = Color.BLACK;
+    settings.background = Color.fromRGB(49, 52, 53);
     settings.targetWidth = 640;
     settings.targetHeight = 480;
-    settings.scaling = FIT;
+    settings.scaling = RESIZE;
     settings.resizable = true;
 
     app.onceReady(this, ready);
