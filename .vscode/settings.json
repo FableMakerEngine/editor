@@ -1,11 +1,11 @@
 {
-    "window.title": "${activeEditorShort} — ceramic-test",
+    "window.title": "${activeEditorShort} — fable-maker-editor",
     "search.exclude": {
         "**/.git": true,
         "**/node_modules": true,
         "**/tmp": true,
         "**/out": true
     },
-    "haxe.executable": "C:/Users/authe/ceramic/tools/haxe.cmd",
-    "haxelib.executable": "C:/Users/authe/ceramic/tools/haxelib.cmd"
+    "haxe.executable": "libs/ceramic/tools/haxe.cmd",
+    "haxelib.executable": "libs/ceramic/tools/haxelib.cmd"
 }
