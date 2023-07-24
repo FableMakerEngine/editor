@@ -14,19 +14,19 @@ git clone https://gitlab.com/FableMakerEngiine/editor
 
 Install [Haxe](https://haxe.org/)
 
-### Install ceramic globally
+### Install ceramic
 
 ```sh
 haxelib install ceramic
 ```
 
-Now install ceramic globally
+install ceramic globally
 
 ```sh
 haxelib run ceramic setup
 ```
 
-### Also Install ceramic locally
+### Install ceramic locally
 
 ```sh
 haxelib run ceramic setup -cwd path/to/project/libs/ceramic
