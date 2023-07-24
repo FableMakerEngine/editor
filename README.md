@@ -10,39 +10,45 @@ The game editor used by Fable Maker
 git clone https://gitlab.com/FableMakerEngiine/editor
 ```
 
-- Install dependencies
+### Install dependencies
 
 Install [Haxe](https://haxe.org/)
 
+### Install ceramic globally
+
 ```sh
-haxelib git heaps https://github.com/HeapsIO/heaps.git
+haxelib install ceramic
+```
+
+Now install ceramic globally
+
+```sh
+haxelib run ceramic setup
+```
+
+### Also Install ceramic locally
+
+```sh
+haxelib run ceramic setup -cwd path/to/project/libs/ceramic
+```
+
+### Install HaxeUI
+
+```sh
+haxelib git haxeui-core https://github.com/haxeui/haxeui-core
 ```
 
 ```sh
-haxelib install haxeui-core
+haxelib git haxeui-ceramic https://github.com/Jarrio/haxeui-ceramic
 ```
+
+### Test Editor
 
 ```sh
-haxelib install haxeui-heaps
+ceramic clay run web --setup --assets
 ```
 
-### Build Editor
-
-```sh
-haxe ./heaps-hl.hxml
-```
-
-### Test the Editor
-
-To test the editor you have to use the vscode debug launcher to run the hashlink debug config
-
-We do have the proper `launch.json` in this repository so if you open up vscode and hit the debug play button, the game will run for you.
-
-Alternatively you could run HashLink directly
-
-```sh
-hl ./build/heaps/hl/Main.hl
-```
+or just run the build task within VSCode.
 
 ## Contribute
 Read the [Contribution guide](./CONTRIBUTING.md)
