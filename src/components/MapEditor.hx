@@ -84,7 +84,11 @@ class MapEditor extends VBox {
 
   public override function onReady() {
     super.onReady();
-    // tileView.addChild(viewport);
+    tileView.add(viewport);
+  }
+  
+  public override function onResized() {
+    viewport.resize(48 * 20, 48 * 16);
   }
 
   public function update(dt: Float) {

@@ -2,31 +2,46 @@ package renderer;
 
 import renderer.objects.TileCursor;
 
+using ceramic.TilemapPlugin;
+
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
-  // public var background: h2d.Graphics;
+  public var background: ceramic.Quad;
   public var isRotatingLeft: Bool = true;
+  public var mapWidth: Int = 16;
+  public var mapHeight: Int = 16;
   public var tileSize: Int = 32;
   public var tileCursor: TileCursor;
-  // public var tilemap: Tilemap;
+  public var tilemap: ceramic.Tilemap;
   public function new(?parentView) {
     super();
     if (parentView != null) {
       this.parentView = parentView;
     }
-    initialize();
+    depth = 1;
   }
 
-  private function initialize() {}
+  public override function preload() {}
+  
+  private override function create() {
+    createBackground();
+  }
+
+  private function createBackground() {
+    background = new ceramic.Quad();
+    background.color = ceramic.Color.BLACK;
+    background.size(500, 500);
+    add(background);
+  }
 
   public override function resize(width, height) {
-    onResized();
-  }
-
-  function onResized() {
+    // size(tileSize * mapWidth, height);
+    if (background != null) {
+      background.size(tileSize * mapWidth, tileSize * mapHeight);
+    }
     if (parentView != null) {
-      parentView.width = width;
-      parentView.height = height;
+      parentView.width = tileSize * mapWidth;
+      parentView.height = tileSize * mapHeight;
     }
   }
 
