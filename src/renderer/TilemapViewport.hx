@@ -40,7 +40,7 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function createTileCursor() {
-    tileCursor = new TileCursor();
+    tileCursor = new TileCursor(tileSize, tileSize, 2);
     tileCursor.size(tileSize, tileSize);
     tileCursor.depth = 99;
     add(tileCursor);
