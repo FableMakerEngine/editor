@@ -6,6 +6,6 @@ class TileCursor extends ceramic.Quad{
 
   public function new() {
     super();
-    anchor(0.5, 0.5);
+    color = ceramic.Color.WHITE;
   }
 }

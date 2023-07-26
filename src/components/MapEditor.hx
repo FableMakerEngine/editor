@@ -11,8 +11,6 @@ import haxe.ui.containers.VBox;
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
-  // public var tilemap: Tilemap;
-  // public var tilemapConfig: ITilemapConfig;
   private var tileCursor: TileCursor;
 
   public function new() {
@@ -20,8 +18,6 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     viewport = new TilemapViewport(tileView);
-    // viewport.tilemap = new Tilemap(viewport, tilemapConfig);
-    viewport.tileCursor = new TileCursor();
   }
 
   public function menu(): Array<ContextMenuEntry> {
