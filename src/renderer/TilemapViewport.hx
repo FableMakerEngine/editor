@@ -4,8 +4,6 @@ import ceramic.Point;
 import ceramic.TouchInfo;
 import renderer.objects.TileCursor;
 
-using ceramic.TilemapPlugin;
-
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
@@ -14,7 +12,6 @@ class TilemapViewport extends ceramic.Scene {
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
   public var tileCursor: TileCursor;
-  public var tilemap: ceramic.Tilemap;
 
   public function new(?parentView) {
     super();
