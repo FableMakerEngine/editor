@@ -6,7 +6,7 @@ import haxe.ui.containers.TreeView;
 import components.menus.ContextMenu;
 import components.menus.ContextMenuEntry;
 
-@:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('assets/main/maplist.xml'))
+@:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('../../assets/main/maplist.xml'))
 class MapList extends TreeView {
   public var contextMenu: ContextMenu;
   public var worldNode: TreeViewNode;

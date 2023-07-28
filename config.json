@@ -1,9 +1,0 @@
-{
-  "name": "FableMaker",
-  "version": "0.1.0",
-  "icon": "./static/icon.png",
-  "width": 1280,
-  "height": 720,
-  "indexHtml": "./static/index.html",
-  "buildDir": "./build/heaps/"
-}

@@ -1,0 +1,13 @@
+{
+    "window.title": "${activeEditorShort} — fable-maker-editor",
+    "search.exclude": {
+        "**/.git": true,
+        "**/node_modules": true,
+        "**/tmp": true,
+        "**/out": true,
+        "**/sample": true,
+        "**/libs": true
+    },
+    "haxe.executable": "libs/ceramic/tools/haxe.cmd",
+    "haxelib.executable": "libs/ceramic/tools/haxelib.cmd"
+}
