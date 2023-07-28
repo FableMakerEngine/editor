@@ -4,7 +4,9 @@
         "**/.git": true,
         "**/node_modules": true,
         "**/tmp": true,
-        "**/out": true
+        "**/out": true,
+        "**/sample": true,
+        "**/libs": true
     },
     "haxe.executable": "libs/ceramic/tools/haxe.cmd",
     "haxelib.executable": "libs/ceramic/tools/haxelib.cmd"
