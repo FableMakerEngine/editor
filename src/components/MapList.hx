@@ -23,11 +23,11 @@ class MapList extends TreeView {
     return [
       {
         name: 'edit',
-        text: 'Edit'
+        text: '{{menu.edit}}'
       },
       {
         name: 'new',
-        text: 'New',
+        text: '{{menu.new}}',
         action: onNewMap
       },
       {
@@ -36,15 +36,15 @@ class MapList extends TreeView {
       },
       {
         name: 'copy',
-        text: 'Copy'
+        text: '{{menu.copy}}'
       },
       {
         name: 'paste',
-        text: 'Paste'
+        text: '{{menu.paste}}'
       },
       {
         name: 'delete',
-        text: 'Delete',
+        text: '{{menu.delete}}',
         action: onDeleteMap
       }
     ];

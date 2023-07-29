@@ -1,9 +1,19 @@
 <module>
-    <components>
-        <component class="components.TopMenu"/>
-        <component class="components.StatusBar"/>
-        <component class="components.MapList"/>
-        <component class="components.MapEditor"/>
-        <component class="components.TilePicker"/>
-    </components>  
+  <components>
+    <component class="components.TopMenu" />
+    <component class="components.StatusBar" />
+    <component class="components.MapList" />
+    <component class="components.MapEditor" />
+    <component class="components.TilePicker" />
+  </components>
+
+  <resources>
+    <resource path="locale/" prefix="/locale" />
+  </resources>
+
+  <locales>
+    <locale id="en_US">
+      <resource path="locale/en_US/menus.properties" />
+    </locale>
+  </locales>
 </module>

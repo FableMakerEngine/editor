@@ -1,5 +1,6 @@
 package components;
 
+import stores.MapEditorStore;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
@@ -24,12 +25,12 @@ class MapEditor extends VBox {
     return [
       {
         name: 'edit',
-        text: 'Edit',
+        text: '{{menu.edit}}',
         action: onEventEdit
       },
       {
         name: 'new',
-        text: 'New',
+        text: '{{menu.new}}',
         action: onNewEvent
       },
       {
@@ -38,22 +39,22 @@ class MapEditor extends VBox {
       },
       {
         name: 'cut',
-        text: 'Cut',
+        text: '{{menu.cut}}',
         action: onEventCut
       },
       {
         name: 'copy',
-        text: 'Copy',
+        text: '{{menu.copy}}',
         action: onEventCopy
       },
       {
         name: 'paste',
-        text: 'Paste',
+        text: '{{menu.paste}}',
         action: onEventPaste
       },
       {
         name: 'properties',
-        text: 'Properties',
+        text: '{{menu.properties}}',
         action: onMapProperties
       }
     ];
