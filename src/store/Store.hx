@@ -3,11 +3,6 @@ package store;
 import tracker.Observable;
 import ceramic.Entity;
 
-typedef MapSize = {
-  var cols: Int;
-  var rows: Int;
-}
-
 class Store extends Entity implements Observable {
   public static final store: Store = new Store();
   public var state: AppState = new AppState();
