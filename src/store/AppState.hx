@@ -1,9 +1,9 @@
 package store;
 
-class AppState {
-  public var projectPath: String;
+import tracker.Observable;
 
-  public function new() {
-    projectPath = '';
-  }
+class AppState implements Observable {
+  @observe private var projectPath: String = '';
+
+  public function new() {}
 }

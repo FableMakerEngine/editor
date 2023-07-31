@@ -1,9 +1,8 @@
 package store;
 
-@:access(store.Store)
+@:access(store.AppState)
 class Mutations {
   private static function updateProjectPath(payload: String) {
-    Store.state.projectPath = payload;
-    trace('new path', Store.state.projectPath);
+    store.state.projectPath = payload;
   }
 }

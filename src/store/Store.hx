@@ -1,5 +1,6 @@
 package store;
 
+import tracker.Observable;
 import ceramic.Entity;
 
 typedef MapSize = {
@@ -7,15 +8,16 @@ typedef MapSize = {
   var rows: Int;
 }
 
-class Store extends Entity {
-  private static var state: AppState = new AppState();
-  private static var status: String;
+class Store extends Entity implements Observable {
+  public static final store: Store = new Store();
+  public var state: AppState = new AppState();
+  private var status: String;
 
   private function new() {
     super();
   }
 
-  public static function commit(type: String, payload: Dynamic) {
+  public function commit(type: String, payload: Dynamic) {
     var exists = Reflect.hasField(Mutations, type);
 
     if (exists) {
