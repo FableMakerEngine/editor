@@ -1,6 +1,5 @@
 package components;
 
-import stores.MapEditorStore;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
