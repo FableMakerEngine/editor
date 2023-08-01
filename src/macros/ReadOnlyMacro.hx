@@ -1,7 +1,6 @@
 package macros;
 
 import haxe.macro.Context;
-import haxe.macro.Expr;
 
 using Lambda;
 
@@ -10,7 +9,7 @@ using Lambda;
  * read only. Used for the AppState of a Store.
  */
 class ReadOnlyMacro {
-  macro public static function apply(): Array<Field> {
+  macro public static function apply(): Array<haxe.macro.Expr.Field> {
     var fields = Context.getBuildFields();
 
     for (field in fields) {
@@ -22,7 +21,7 @@ class ReadOnlyMacro {
             var params = field.kind.getParameters();
             var complexType = params[0];
             var expr = params[1];
-            var newProp = FProp('default', 'null', complexType, expr);
+            var newProp = haxe.macro.Expr.FieldType.FProp('default', 'null', complexType, expr);
             field.kind = newProp;
           }
         }
