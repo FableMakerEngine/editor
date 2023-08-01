@@ -1,11 +1,11 @@
 <vbox width="100%">
   <menubar width="100%">
     <menu text="{{menu.file}}" id="fileMenu">
-      <menuitem text="{{menu.newProject}}" shortcutText="Ctrl+N" />
-      <menuitem text="{{menu.open}}" shortcutText="Ctrl+O" />
-      <menuitem text="{{menu.save}}" shortcutText="Ctrl+S" />
+      <menuitem id="menuItemNewProject" text="{{menu.newProject}}" shortcutText="Ctrl+N" />
+      <menuitem id="menuItemOpenProject" text="{{menu.open}}" shortcutText="Ctrl+O" />
+      <menuitem id="menuItemSave" text="{{menu.save}}" shortcutText="Ctrl+S" />
       <menuseparator />
-      <menuitem text="{{menu.exit}}" shortcutText="Ctrl+Q" />
+      <menuitem id="menuItemExit" text="{{menu.exit}}" shortcutText="Ctrl+Q" />
     </menu>
     
     <menu text="{{menu.edit}}">

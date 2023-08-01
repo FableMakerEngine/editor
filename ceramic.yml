@@ -40,10 +40,10 @@ app:
         #- gif
 
         # Native dialogs
-        #- dialogs
+        - dialogs
 
         # Extended support of Electron
-        #- electron
+        - electron
 
         # Spine animation support
         #- spine
