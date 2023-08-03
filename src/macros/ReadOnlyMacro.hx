@@ -41,7 +41,7 @@ class ReadOnlyMacro {
     var data = { expr: EObjectDecl(allGetters.array()), pos: Context.currentPos() };
     var block = [];
     block.push(macro var data = $data);
-    block.push(macro return haxe.Json.stringify(data));
+    block.push(macro return data);
 
     var method: Function = {
       expr: macro $b{block},
@@ -50,7 +50,7 @@ class ReadOnlyMacro {
     };
 
     fields.push({
-      name: 'dataToJson',
+      name: 'serializeableData',
       access: [Access.APublic, Access.AInline],
       kind: FFun(method),
       pos: Context.currentPos()

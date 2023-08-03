@@ -25,6 +25,7 @@ class Project extends Entity {
     app.scenes.main = new MainScene();
     Toolkit.init();
     Toolkit.theme = 'dark';
+    store.initializeStorage();
     var mainView = new views.MainView();
     Screen.instance.addComponent(mainView);
   }
