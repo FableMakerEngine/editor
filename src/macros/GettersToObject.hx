@@ -17,8 +17,6 @@ class GettersToObject {
     var allGetters = new Map<String, ObjectField>();
 
     for (field in localFields) { 
-      var name = field.name;
-
       if (field.name.contains('get_')) {
         var name = field.name.substr(4);
         allGetters.set(name, { field: name, expr: macro $i{name} });
