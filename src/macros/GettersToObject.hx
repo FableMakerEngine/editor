@@ -7,7 +7,7 @@ using Lambda;
 using StringTools;
 
 /**
- * Makes an object from all setter fields and returns it
+ * Makes an object from all getter fields and returns it
  * 
  */
 class GettersToObject {
