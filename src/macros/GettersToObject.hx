@@ -10,7 +10,7 @@ using StringTools;
  * Makes an object from all setter fields and returns it
  * 
  */
-class SettersToObject {
+class GettersToObject {
   macro public static function create(): Expr {
     var localClass = Context.getLocalClass().get();
     var localFields = localClass.fields.get();
