@@ -21,12 +21,4 @@ class Mutations {
   private static function updateProjectPath(payload: String) {
     store.state.projectPath = payload;
   }
-
-  private static function addRecentProject(payload: String) {
-    var recentProjects = store.state.recentlyOpenedProjects;
-    var projectExists = recentProjects.exists(project -> project == payload);
-    if (!projectExists) {
-      store.state.recentlyOpenedProjects.push(payload);
-    }
-  }
 }
