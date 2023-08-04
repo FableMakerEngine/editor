@@ -1,12 +1,14 @@
 package macros;
 
 import haxe.macro.Context;
+import haxe.macro.Expr;
 
 using Lambda;
+using StringTools;
 
 /**
- * Makes all field vars with the @observe metadata into field props which are
- * read only. Used for the AppState of a Store.
+ * Makes all fields with the @observe metadata into readonly properties.
+ * 
  */
 class ReadOnlyMacro {
   macro public static function apply(): Array<haxe.macro.Expr.Field> {

@@ -2,14 +2,23 @@ package store;
 
 import tracker.Observable;
 import ceramic.Entity;
+import ceramic.PersistentData;
 
 class Store extends Entity implements Observable {
   public static final store: Store = new Store();
   public var state: AppState = new AppState();
+  public var storage: PersistentData;
   private var status: String = 'resting';
 
   private function new() {
     super();
+  }
+
+  public function initializeStorage() {
+    storage = new PersistentData('AppSettings');
+    if (storage.keys().length > 0) {
+      commit('loadStateWithStorage', null);
+    }
   }
 
   public function commit(type: String, payload: Dynamic) {
@@ -25,5 +34,14 @@ class Store extends Entity implements Observable {
     } else { 
       trace('Unable to find field $type');
     }
+  }
+
+  public function saveStateToStorage() {
+    var data = store.state.serializeableData();
+    for (key in Reflect.fields(data)) {
+      var value = Reflect.field(data, key);
+      store.storage.set(key, value);
+    }
+    store.storage.save();
   }
 }

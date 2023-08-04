@@ -8,12 +8,16 @@ class MainView extends VBox {
 
   public function new() {
     super();
-    LocaleManager.instance.language = 'en_US';
+    store.initializeStorage();
+    if (!store.storage.exists('locale')) {
+      store.storage.set('locale', 'en_US');
+    }
+    LocaleManager.instance.language = store.storage.get('locale');
     store.state.onProjectPathChange(null, onProjectPathChanged);
   }
-
-  public function onProjectPathChanged(currentPath, newPath) {
-    trace('project path has been updated from $currentPath to $newPath');
+  
+  public function onProjectPathChanged(newPath, prevPath) {
+    trace('project path has been updated from $prevPath to $newPath');
   }
 
   public function update(dt) {
