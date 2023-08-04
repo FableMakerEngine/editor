@@ -6,4 +6,7 @@ class AppState implements ReadOnly implements Observable {
   @observe public var projectPath: String = '';
   @observe public var recentlyOpenedProjects: Array<String> = [];
   public function new() {}
+  public function serializeableData() {
+    macros.SettersToObject.create();
+  }
 }

@@ -15,15 +15,9 @@ using StringTools;
 class ReadOnlyMacro {
   macro public static function apply(): Array<haxe.macro.Expr.Field> {
     var fields = Context.getBuildFields();
-    var allGetters = new Map<String, ObjectField>();
 
     for (field in fields) {
       var name = field.name;
-
-      if (field.name.contains('get_')) {
-        var name = field.name.substr(4);
-        allGetters.set(name, { field: name, expr: macro $i{name} });
-      }
 
       if (field.meta.length > 0) {
         for (meta in field.meta) {
@@ -37,24 +31,6 @@ class ReadOnlyMacro {
         }
       }
     }
-
-    var data = { expr: EObjectDecl(allGetters.array()), pos: Context.currentPos() };
-    var block = [];
-    block.push(macro var data = $data);
-    block.push(macro return data);
-
-    var method: Function = {
-      expr: macro $b{block},
-      ret: (macro : Dynamic),
-      args: []
-    };
-
-    fields.push({
-      name: 'serializeableData',
-      access: [Access.APublic, Access.AInline],
-      kind: FFun(method),
-      pos: Context.currentPos()
-    });
 
     return fields;
   }
