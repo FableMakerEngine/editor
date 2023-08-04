@@ -7,9 +7,7 @@ using Lambda;
 using StringTools;
 
 /**
- * Makes all fields with the @observe metadata into readonly properties. We
- * also create a method that returns a stringified Json of all properties with
- * a getter. Used for the AppState of a Store.
+ * Makes all fields with the @observe metadata into readonly properties.
  * 
  */
 class ReadOnlyMacro {
