@@ -1,13 +1,34 @@
 package components;
 
-import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.VBox;
+import haxe.ui.containers.menus.MenuItem;
+import haxe.ui.events.MouseEvent;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/topmenu.xml'))
 class TopMenu extends VBox {
   public function new() {
     super();
+    buildRecentProjectItems();
     assignClickEvents();
+    store.state.onRecentlyOpenedProjectsChange(null, buildRecentProjectItems);
+  }
+
+  private function buildRecentProjectItems(?newList, ?oldList) {
+    var recentProjects = newList != null ? newList : store.state.recentlyOpenedProjects;
+    var children = menuOpenRecentProject.childComponents;
+    if (recentProjects.length <= 0) {
+      menuOpenRecentProject.disabled = true;
+      return;
+    }
+    if (recentProjects.length != children.length) {
+      menuOpenRecentProject.removeAllComponents(true);
+      for (project in recentProjects) {
+        var recentProjectMenuItem = new MenuItem();
+        recentProjectMenuItem.text = project;
+
+        menuOpenRecentProject.addComponent(recentProjectMenuItem);
+      }
+    }
   }
 
   private function assignClickEvents() {
