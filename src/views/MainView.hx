@@ -17,7 +17,8 @@ class MainView extends VBox {
   }
   
   public function onProjectPathChanged(newPath, prevPath) {
-    trace('project path has been updated from $prevPath to $newPath');
+    store.commit('addRecentProject', newPath);
+    store.saveStateToStorage();
   }
 
   public function update(dt) {
