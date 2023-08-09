@@ -2,7 +2,11 @@
   <menubar width="100%">
     <menu text="{{menu.file}}" id="fileMenu">
       <menuitem id="menuItemNewProject" text="{{menu.newProject}}" shortcutText="Ctrl+N" />
+      <menuseparator />
       <menuitem id="menuItemOpenProject" text="{{menu.open}}" shortcutText="Ctrl+O" />
+      <menu id="menuOpenRecentProject" text="Open Recent" styleName="auto-width">
+      </menu>
+      <menuseparator />
       <menuitem id="menuItemSave" text="{{menu.save}}" shortcutText="Ctrl+S" />
       <menuseparator />
       <menuitem id="menuItemExit" text="{{menu.exit}}" shortcutText="Ctrl+Q" />
