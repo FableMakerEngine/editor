@@ -25,6 +25,9 @@ class TopMenu extends VBox {
       for (project in recentProjects) {
         var recentProjectMenuItem = new MenuItem();
         recentProjectMenuItem.text = project;
+        recentProjectMenuItem.onClick = (e: MouseEvent) -> {
+          onOpenRecentProject(recentProjectMenuItem, e);
+        };
 
         menuOpenRecentProject.addComponent(recentProjectMenuItem);
       }
@@ -53,6 +56,11 @@ class TopMenu extends VBox {
     ceramic.Dialogs.openDirectory('Open Project', (path -> {
       store.commit('updateProjectPath', path);
     }));
+  }
+
+  private function onOpenRecentProject(menuItem: MenuItem, e: MouseEvent) {
+    var selectedPath = menuItem.text;
+    store.commit('updateProjectPath', selectedPath);
   }
 
   private function onSave(e: MouseEvent) {}
