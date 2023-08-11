@@ -10,11 +10,11 @@ class AppState implements ReadOnly implements Observable {
 
   public function new() {}
 
-  public function get_dataDir() {
+  private function get_dataDir() {
     return '$projectPath\\data\\';
   }
 
-  public function get_assetsDir() {
+  private function get_assetsDir() {
     return '$projectPath\\assets\\';
   }
 
