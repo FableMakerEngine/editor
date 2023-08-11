@@ -29,7 +29,7 @@ class MapList extends TreeView {
     var mapInfoPath = '$dataPath\\MapInfo.xml';
 
     if (Files.exists(mapInfoPath)) {
-      var mapInfo = Files.getContent('$dataPath\\MapInfo.xml');
+      var mapInfo = Files.getContent(mapInfoPath);
       var data = Xml.parse(mapInfo);
       removeAllChildNodes(worldNode);
       createNodesFromXml(data.firstElement());
