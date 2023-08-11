@@ -68,14 +68,6 @@ class MapList extends TreeView {
     }
   }
 
-  private function createNode(parent, data: Dynamic): TreeViewNode {
-    var node = new TreeViewNode();
-    node.data = { text: data.text };
-    node.parentNode = parent;
-    parent.addComponent(node);
-    return node;
-  }
-
   public function menu(): Array<ContextMenuEntry> {
     return [
       {
