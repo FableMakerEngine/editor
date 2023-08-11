@@ -31,6 +31,7 @@ class MapList extends TreeView {
     if (Files.exists(mapInfoPath)) {
       var mapInfo = Files.getContent('$dataPath\\MapInfo.xml');
       var data = Xml.parse(mapInfo);
+      removeAllChildNodes(worldNode);
       createNodesFromXml(data.firstElement());
     } else {
       trace('unable to find the MapInfo.xml');
@@ -54,6 +55,15 @@ class MapList extends TreeView {
 
       if (children.hasNext()) {
         createNodesFromXml(map, node);
+      }
+    }
+  }
+
+  private function removeAllChildNodes(parent: TreeViewNode) {
+    var children = parent.childComponents;
+    for (child in children) {
+      if (Std.isOfType(child, TreeViewNode)) {
+        parent.removeNode(cast child);
       }
     }
   }
