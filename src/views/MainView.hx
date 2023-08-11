@@ -5,8 +5,6 @@ import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/main-view.xml'))
 class MainView extends VBox {
-  public var editorReady: Bool = false;
-
   public function new() {
     super();
   }
