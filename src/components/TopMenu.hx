@@ -1,5 +1,6 @@
 package components;
 
+import ceramic.DialogsFileFilter;
 import haxe.ui.containers.VBox;
 import haxe.ui.containers.menus.MenuItem;
 import haxe.ui.events.MouseEvent;
@@ -53,9 +54,14 @@ class TopMenu extends VBox {
   private function onNewProject(e: MouseEvent) {}
   
   private function onOpenProject(e: MouseEvent) {
-    ceramic.Dialogs.openDirectory('Open Project', (path -> {
-      store.commit('updateProjectPath', path);
-    }));
+    var filter: DialogsFileFilter = {
+      extensions: ['fable'],
+      name: 'Fable Maker Project'
+    }
+    ceramic.Dialogs.openFile('Open Project', [filter], (filePath) -> {
+      var projectDir = haxe.io.Path.directory(filePath);
+      store.commit('updateProjectPath', projectDir);
+    });
   }
 
   private function onOpenRecentProject(menuItem: MenuItem, e: MouseEvent) {
