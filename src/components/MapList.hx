@@ -18,6 +18,9 @@ class MapList extends TreeView {
     contextMenu.items = menu();
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
+  }
+
+  public override function onReady() {
     store.state.onProjectPathChange(null, onProjectPathChanged);
   }
 
