@@ -29,4 +29,8 @@ class Mutations {
       store.state.recentlyOpenedProjects.push(payload);
     }
   }
+
+  private static function updateActiveMap(payload: MapInfo) {
+    store.state.activeMap = payload;
+  }
 }
