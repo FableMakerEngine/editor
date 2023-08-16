@@ -1,8 +1,6 @@
 <vbox width="100%">
+  <tabbar id="tabBar" width="100%" tabPosition="top"></tabbar>
   <scrollview id="tileView" width="100%" height="100%" styleName="classic-scrolls">
-    <image id="tilesetImage"/>
+    <image id="tilesetImage" />
   </scrollview>
-  <vbox>
-    <tabbar id="tabBar" width="100%" tabPosition="bottom" />
-  </vbox>
 </vbox>
