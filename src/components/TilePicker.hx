@@ -13,27 +13,44 @@ class TilePicker extends VBox {
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     var dataDir = store.state.dataDir;
-    var assetDir = store.state.assetsDir;
     var mapFilename = newMap.path;
     var mapPath = '$dataDir\\$mapFilename';
     var mapData = Files.getContent(mapPath);
     var mapXml = Xml.parse(mapData).firstElement();
     var tilesetElements = mapXml.elementsNamed('tileset');
-    var imageSource = '';
 
+    tilesetImage.resource = '';
     for (index in 0 ... tabBar.tabCount) {
       tabBar.removeTab(index);
     }
-    // for testing
+
     for (tileset in tilesetElements) {
-      var tabButton = new Button();
-      var tabCount = tabBar.tabCount;
-      tabButton.text = 'Tileset $tabCount';
-      var imageElement = tileset.firstElement();
-      imageSource = imageElement.get('source');
-      tabBar.addComponent(tabButton);
+      var sourceElement = tileset.firstElement();
+      var tilesetName = tileset.get('name');
+      var tilesetSource = sourceElement.get('source');
+      var button = new Button();
+      var data = {
+        name: tilesetName,
+        source: tilesetSource
+      }; 
+      button.text = tilesetName;
+
+      button.onClick = (e) -> {
+        onTilesetTabClick(button, data);
+      }
+  
+      if (tabBar.tabCount == 0) {
+        onTilesetTabClick(button, data);
+      }
+
+      tabBar.addComponent(button);
     }
-    var filename = haxe.io.Path.withoutDirectory(imageSource);
+
+  }
+
+  public function onTilesetTabClick(tabButton: Button, data: Dynamic) {
+    var assetDir = store.state.assetsDir;
+    var filename = haxe.io.Path.withoutDirectory(data.source);
     var tilesetrPath = '$assetDir\\img\\tilesets';
     tilesetImage.resource = 'file://$tilesetrPath\\$filename';
   }
