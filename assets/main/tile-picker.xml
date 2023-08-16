@@ -1,5 +1,5 @@
 <vbox width="100%">
-  <scrollview id="tileView" width="100%" height="100%">
+  <scrollview id="tileView" width="100%" height="100%" styleName="classic-scrolls">
     <image id="tilesetImage"/>
   </scrollview>
   <vbox>
