@@ -10,12 +10,12 @@
       <map id="4" name="Map Child Test 3" path="./MapTest.tmx"></map>
     </map>
   </map>
-  <map id="1" name="Map Test" path="./MapTest.tmx">
-    <map id="2" name="Map Child Test" path="./MapTest.tmx">
+  <map id="1" name="Map Test" path="./MapTest2.tmx">
+    <map id="2" name="Map Child Test" path="./MapTest2.tmx">
       <map id="3" name="Map Child Test 2" path="./MapTest.tmx"></map>
       <map id="4" name="Map Child Test 3" path="./MapTest.tmx"></map>
     </map>
-    <map id="2" name="Map Child Test" path="./MapTest.tmx">
+    <map id="2" name="Map Child Test" path="./MapTest2.tmx">
       <map id="3" name="Map Child Test 2" path="./MapTest.tmx"></map>
       <map id="4" name="Map Child Test 3" path="./MapTest.tmx"></map>
     </map>

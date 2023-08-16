@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="20" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" name="tileset" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
-  <image source="../img/tilesets/tileset.png" width="1024" height="1024"/>
+ <tileset firstgid="1" name="Sunnyside" tilewidth="16" tileheight="16" tilecount="4096" columns="64">
+  <image source="../assets/img/tilesets/tileset.png" width="1024" height="1024"/>
+ </tileset>
+ <tileset firstgid="4097" name="KennyTileset" tilewidth="16" tileheight="16" tilecount="132" columns="12">
+  <image source="../assets/img/tilesets/kenny-tileset.png" width="192" height="176"/>
  </tileset>
  <layer id="1" name="lower_ground" width="20" height="20">
   <data encoding="csv">
@@ -107,8 +110,8 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,1652,1653,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,1716,1717,0,1652,1653,0,0,1908,1909,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,1716,1717,0,0,1972,1973,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,4100,0,0,0,0,0,0,0,1716,1717,0,4100,1972,1973,
+0,0,0,0,0,0,4112,0,0,0,0,0,0,0,0,0,0,4112,0,0,
 0,0,0,0,0,0,0,0,0,436,437,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,500,501,0,0,0,0,0,0,436,437,0,
 0,0,0,0,0,0,0,0,0,564,565,0,0,0,0,0,0,500,501,0,
