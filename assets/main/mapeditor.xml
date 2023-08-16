@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vbox height="100%" width="100%">
-  <style>
-    .scroll .button {
-    width: 14px;
-    height: 14px;
-    }
-
-    .vertical-scroll {
-    width: 14px;
-    }
-
-    .horizontal-scroll {
-    height: 14px;
-    }
-  </style>
   <splitter id="splitView" width="100%" height="100%">
     <box width="25%" height="100%">
       <splitter id="tilesetSplitter" direction="vertical" width="100%" height="100%">
