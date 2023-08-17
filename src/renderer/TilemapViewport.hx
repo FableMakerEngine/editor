@@ -7,7 +7,7 @@ import renderer.objects.TileCursor;
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
-  public var isRotatingLeft: Bool = true;
+  public var tilemap: Tilemap;
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
@@ -20,6 +20,7 @@ class TilemapViewport extends ceramic.Scene {
     }
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
+    tilemap = new Tilemap();
   }
 
   public override function preload() {}
