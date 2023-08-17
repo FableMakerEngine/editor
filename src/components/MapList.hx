@@ -47,8 +47,17 @@ class MapList extends TreeView {
 
     for (map in maps) {
       var name = map.get('name');
+      var id = map.get('id');
+      var path = map.get('path');
       var children = map.elements();
-      var node = parentNode.addNode({ text: name });
+      var node = parentNode.addNode({
+        text: name,
+        id: id,
+        path: path
+      });
+      node.onClick = (e: MouseEvent) -> {
+        onNodeClick(node, e);
+      }
 
       // We only expand as a temp fix for a bug in the ceramic backend of haxeui
       node.expanded = true;
@@ -97,6 +106,15 @@ class MapList extends TreeView {
         action: onDeleteMap
       }
     ];
+  }
+
+  private function onNodeClick(node: TreeViewNode, e: MouseEvent) {
+    var mapInfo: MapInfo = {
+      name: node.text,
+      id: node.data.id,
+      path: node.data.path
+    }
+    store.commit('updateActiveMap', mapInfo);
   }
 
   private function forceSelectNode(x, y) {
