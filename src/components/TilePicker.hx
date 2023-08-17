@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.events.MouseEvent;
 import haxe.ui.components.Button;
 import ceramic.Files;
 import haxe.ui.containers.VBox;
@@ -33,22 +34,29 @@ class TilePicker extends VBox {
         name: tilesetName,
         source: tilesetSource
       }; 
-      button.text = tilesetName;
 
-      button.onClick = (e) -> {
-        onTilesetTabClick(button, data);
-      }
+      button.text = tilesetName;
+      button.userData = data;
   
       if (tabBar.tabCount == 0) {
-        onTilesetTabClick(button, data);
+        onTilesetTabClick(button);
       }
 
       tabBar.addComponent(button);
     }
 
+    for (i in 0 ... tabBar.tabCount) {
+      var button = tabBar.getTab(i);
+      if (button != null) {
+        button.registerEvent(MouseEvent.CLICK, (e) -> {
+          onTilesetTabClick(cast (button, Button));
+        });
+      }
+    }
   }
 
-  public function onTilesetTabClick(tabButton: Button, data: Dynamic) {
+  public function onTilesetTabClick(button: Button) {
+    var data = button.userData;
     var assetDir = store.state.assetsDir;
     var filename = haxe.io.Path.withoutDirectory(data.source);
     var tilesetrPath = '$assetDir\\img\\tilesets';
