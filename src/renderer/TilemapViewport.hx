@@ -1,13 +1,17 @@
 package renderer;
 
+import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
 import renderer.objects.TileCursor;
 
+using ceramic.TilemapPlugin;
+
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
+  public var mapPath(default, set): String;
   public var background: ceramic.Quad;
-  public var tilemap: Tilemap;
+  public var tilemap(default, null): ceramic.Tilemap;
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
@@ -18,9 +22,16 @@ class TilemapViewport extends ceramic.Scene {
     if (parentView != null) {
       this.parentView = parentView;
     }
+    // assets = new Asset();
+    assets.runtimeAssets = RuntimeAssets.fromPath(store.state.projectPath);
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
-    tilemap = new Tilemap();
+  }
+
+  private function set_mapPath(path) {
+    mapPath = path;
+    loadMapData(path);
+    return mapPath;
   }
 
   public override function preload() {}
@@ -28,6 +39,7 @@ class TilemapViewport extends ceramic.Scene {
   private override function create() {
     createBackground();
     createTileCursor();
+    createTilemap();
   }
 
   private function createBackground() {
@@ -42,6 +54,11 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize, tileSize);
     tileCursor.depth = 99;
     add(tileCursor);
+  }
+
+  private function createTilemap() {
+    tilemap = new ceramic.Tilemap();
+    add(tilemap);
   }
 
   public function mapWidth() {
@@ -75,4 +92,16 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public override function update(dt: Float) {}
+
+  private function loadMapData(path: String) {
+    assets.addTilemap(path);
+    assets.onComplete(this, onMapDataLoaded);
+    assets.load();
+  }
+
+  private function onMapDataLoaded(success: Bool) {
+    if (success) {
+      tilemap.tilemapData = assets.tilemap(mapPath);
+    }
+  }
 }

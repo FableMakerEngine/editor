@@ -89,10 +89,8 @@ class MapEditor extends VBox {
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
-    var dataDir = store.state.dataDir;
     var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
-    var mapPath = '$dataDir\\$mapFilename';
-    viewport.tilemap.mapPath = mapPath;
+    viewport.mapPath = 'data/${mapFilename}';
   }
 
   public function update(dt: Float) {
