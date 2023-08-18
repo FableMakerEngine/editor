@@ -1,17 +1,22 @@
 package renderer;
 
+import ceramic.Color;
+import ceramic.Border;
+import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
-import renderer.objects.TileCursor;
+
+using ceramic.TilemapPlugin;
 
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
-  public var isRotatingLeft: Bool = true;
+  public var tilemap(default, null): ceramic.Tilemap;
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
-  public var tileCursor: TileCursor;
+  public var tileCursor: ceramic.Border;
+  private var mapPath: String;
 
   public function new(?parentView) {
     super();
@@ -20,6 +25,18 @@ class TilemapViewport extends ceramic.Scene {
     }
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
+    store.state.onProjectPathChange(null, onProjectPathChanged);
+    store.state.onActiveMapChange(null, onActiveMapChanged);
+  }
+
+  private function onProjectPathChanged(newPath, oldPath) {
+    assets.runtimeAssets = RuntimeAssets.fromPath(newPath);
+  }
+
+  private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
+    mapPath = 'data/${mapFilename}';
+    loadMapData(mapPath);
   }
 
   public override function preload() {}
@@ -27,6 +44,7 @@ class TilemapViewport extends ceramic.Scene {
   private override function create() {
     createBackground();
     createTileCursor();
+    createTilemap();
   }
 
   private function createBackground() {
@@ -37,10 +55,17 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function createTileCursor() {
-    tileCursor = new TileCursor(tileSize, tileSize, 2);
+    tileCursor = new Border();
+    tileCursor.borderColor = Color.SNOW;
+    tileCursor.borderSize = 2;
     tileCursor.size(tileSize, tileSize);
     tileCursor.depth = 99;
     add(tileCursor);
+  }
+
+  private function createTilemap() {
+    tilemap = new ceramic.Tilemap();
+    add(tilemap);
   }
 
   public function mapWidth() {
@@ -74,4 +99,21 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public override function update(dt: Float) {}
+
+  private function loadMapData(path: String) {
+    assets.addTilemap(path);
+    assets.onComplete(this, onMapDataLoaded);
+    assets.load();
+  }
+
+  private function onMapDataLoaded(success: Bool) {
+    if (success) {
+      tilemap.tilemapData = assets.tilemap(mapPath);
+      tileSize = tilemap.tilemapData.maxTileHeight;
+      mapCols = Math.round(tilemap.width / tileSize);
+      mapRows = Math.round(tilemap.height / tileSize);
+      resize(tilemap.width, tilemap.height);
+      tileCursor.size(tileSize, tileSize);
+    }
+  }
 }

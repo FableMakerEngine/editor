@@ -22,7 +22,7 @@ app:
         #- sprite
 
         # Tilemap support (.tmx/.tsx loading included, requires ldtk plugin to create tilemaps from .ldtk files)
-        #- tilemap
+        - tilemap
 
         # LDtk support (requires tilemap and ase plugins)
         #- ldtk
