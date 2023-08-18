@@ -22,16 +22,19 @@ class TilemapViewport extends ceramic.Scene {
     if (parentView != null) {
       this.parentView = parentView;
     }
-    // assets = new Asset();
-    assets.runtimeAssets = RuntimeAssets.fromPath(store.state.projectPath);
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
+    store.state.onProjectPathChange(null, onProjectPathChanged);
   }
 
   private function set_mapPath(path) {
     mapPath = path;
     loadMapData(path);
     return mapPath;
+  }
+
+  private function onProjectPathChanged(newPath, oldPath) {
+    assets.runtimeAssets = RuntimeAssets.fromPath(newPath);
   }
 
   public override function preload() {}
