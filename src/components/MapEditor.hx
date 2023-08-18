@@ -18,7 +18,6 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     viewport = new TilemapViewport(tileView);
-    store.state.onActiveMapChange(null, onActiveMapChanged);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -86,11 +85,6 @@ class MapEditor extends VBox {
   
   public override function onResized() {
     viewport.resize(48 * 20, 48 * 16);
-  }
-
-  private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
-    var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
-    viewport.mapPath = 'data/${mapFilename}';
   }
 
   public function update(dt: Float) {

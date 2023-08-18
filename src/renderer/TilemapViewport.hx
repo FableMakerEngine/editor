@@ -9,13 +9,13 @@ using ceramic.TilemapPlugin;
 
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
-  public var mapPath(default, set): String;
   public var background: ceramic.Quad;
   public var tilemap(default, null): ceramic.Tilemap;
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
   public var tileCursor: TileCursor;
+  private var mapPath: String;
 
   public function new(?parentView) {
     super();
@@ -25,16 +25,17 @@ class TilemapViewport extends ceramic.Scene {
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
     store.state.onProjectPathChange(null, onProjectPathChanged);
-  }
-
-  private function set_mapPath(path) {
-    mapPath = path;
-    loadMapData(path);
-    return mapPath;
+    store.state.onActiveMapChange(null, onActiveMapChanged);
   }
 
   private function onProjectPathChanged(newPath, oldPath) {
     assets.runtimeAssets = RuntimeAssets.fromPath(newPath);
+  }
+
+  private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
+    mapPath = 'data/${mapFilename}';
+    loadMapData(mapPath);
   }
 
   public override function preload() {}
