@@ -1,9 +1,10 @@
 package renderer;
 
+import ceramic.Color;
+import ceramic.Border;
 import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
-import renderer.objects.TileCursor;
 
 using ceramic.TilemapPlugin;
 
@@ -14,7 +15,7 @@ class TilemapViewport extends ceramic.Scene {
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
-  public var tileCursor: TileCursor;
+  public var tileCursor: ceramic.Border;
   private var mapPath: String;
 
   public function new(?parentView) {
@@ -54,7 +55,9 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function createTileCursor() {
-    tileCursor = new TileCursor(tileSize, tileSize, 2);
+    tileCursor = new Border();
+    tileCursor.borderColor = Color.SNOW;
+    tileCursor.borderSize = 2;
     tileCursor.size(tileSize, tileSize);
     tileCursor.depth = 99;
     add(tileCursor);
@@ -106,6 +109,11 @@ class TilemapViewport extends ceramic.Scene {
   private function onMapDataLoaded(success: Bool) {
     if (success) {
       tilemap.tilemapData = assets.tilemap(mapPath);
+      tileSize = tilemap.tilemapData.maxTileHeight;
+      mapCols = Math.round(tilemap.width / tileSize);
+      mapRows = Math.round(tilemap.height / tileSize);
+      resize(tilemap.width, tilemap.height);
+      tileCursor.size(tileSize, tileSize);
     }
   }
 }
