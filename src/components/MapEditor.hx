@@ -3,7 +3,6 @@ package components;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
-import renderer.objects.TileCursor;
 import renderer.TilemapViewport;
 import haxe.ui.containers.VBox;
 
@@ -11,7 +10,6 @@ import haxe.ui.containers.VBox;
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
-  private var tileCursor: TileCursor;
 
   public function new() {
     super();
