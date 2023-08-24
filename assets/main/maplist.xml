@@ -1,1 +1,3 @@
-<tree-view id="maplist" width="100%"/>
+<vbox width="100%" height="100%">
+  <tree-view id="mapTree" width="100%"/>
+</vbox>

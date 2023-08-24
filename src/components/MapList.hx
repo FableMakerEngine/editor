@@ -1,22 +1,21 @@
 package components;
 
+import haxe.ui.containers.VBox;
+import haxe.ui.core.Screen;
 import ceramic.Files;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.TreeViewNode;
-import haxe.ui.containers.TreeView;
 import components.menus.ContextMenu;
 import components.menus.ContextMenuEntry;
 
 @:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('../../assets/main/maplist.xml'))
-class MapList extends TreeView {
+class MapList extends VBox {
   public var contextMenu: ContextMenu;
   public var worldNode: TreeViewNode;
 
   public function new() {
     super();
-    contextMenu = new ContextMenu();
-    contextMenu.items = menu();
-    worldNode = addNode({ text: 'World' });
+    worldNode = mapTree.addNode({ text: 'World' });
     worldNode.expanded = true;
   }
 
@@ -54,13 +53,6 @@ class MapList extends TreeView {
         text: name,
         id: id,
         path: path
-      });
-      node.onClick = (e: MouseEvent) -> {
-        onNodeClick(node, e);
-      };
-
-      node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
-        onNodeRightClick(node, e);
       });
 
       // We only expand as a temp fix for a bug in the ceramic backend of haxeui
@@ -112,43 +104,41 @@ class MapList extends TreeView {
     ];
   }
 
-  private function onNodeRightClick(node: TreeViewNode, e: MouseEvent) {
+  @:bind(mapTree, MouseEvent.RIGHT_MOUSE_DOWN)
+  private function onNodeRightClick(e: MouseEvent) {
+    contextMenu = new ContextMenu();
+    contextMenu.items = menu();
     contextMenu.left = e.screenX + 2;
     contextMenu.top = e.screenY + 2;
-    contextMenu.show();
-    onNodeClick(node, e);
+    Screen.instance.addComponent(contextMenu);
   }
 
-  private function onNodeClick(node: TreeViewNode, e: MouseEvent) {
+  @:bind(mapTree, MouseEvent.MOUSE_DOWN)
+  private function onNodeClick(e: MouseEvent) {
     var mapInfo: MapInfo = {
-      name: node.text,
-      id: node.data.id,
-      path: node.data.path
+      name: mapTree.selectedNode.text,
+      id: mapTree.selectedNode.data.id,
+      path: mapTree.selectedNode.data.path
     }
     store.commit('updateActiveMap', mapInfo);
   }
 
   public function onNewMap(event: MouseEvent) {
-    var node = selectedNode.addNode({
+    var node = mapTree.selectedNode.addNode({
       text: 'New Map',
       // @TODO figure out how to assign an ID. Maybe loop through all nodes?
       // Assign id based on id of main parent and then the amounr of children?
       id: null,
       path: null
     });
-    node.onClick = (e: MouseEvent) -> {
-      onNodeClick(node, e);
-    };
-    node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
-      onNodeRightClick(node, e);
-    });
+    mapTree.selectedNode = node;
   }
 
   public function onDeleteMap(event: MouseEvent) {
-    if (selectedNode.parentNode == worldNode) {
-      worldNode.removeNode(selectedNode);
+    if (mapTree.selectedNode.parentNode == worldNode) {
+      worldNode.removeNode(mapTree.selectedNode);
     } else {
-      selectedNode.parentNode.removeNode(selectedNode);
+      mapTree.selectedNode.parentNode.removeNode(mapTree.selectedNode);
     }
   }
 }
