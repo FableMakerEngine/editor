@@ -12,6 +12,13 @@ class TilePicker extends VBox {
     store.state.onActiveMapChange(null, onActiveMapChanged);
   }
 
+  private function clearTilesets() {
+    tilesetImage.resource = '';
+    for (index in 0 ... tabBar.tabCount) {
+      tabBar.removeTab(0);
+    }
+  }
+
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     var dataDir = store.state.dataDir;
     var mapFilename = newMap.path;
@@ -20,10 +27,7 @@ class TilePicker extends VBox {
     var mapXml = Xml.parse(mapData).firstElement();
     var tilesetElements = mapXml.elementsNamed('tileset');
 
-    tilesetImage.resource = '';
-    for (index in 0 ... tabBar.tabCount) {
-      tabBar.removeTab(index);
-    }
+    clearTilesets();
 
     for (tileset in tilesetElements) {
       var sourceElement = tileset.firstElement();
