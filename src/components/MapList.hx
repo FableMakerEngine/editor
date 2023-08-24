@@ -129,7 +129,13 @@ class MapList extends TreeView {
   }
 
   public function onNewMap(event: MouseEvent) {
-    selectedNode.addNode({ text: 'New Map' });
+    var node = selectedNode.addNode({ text: 'New Map' });
+    node.onClick = (e: MouseEvent) -> {
+      onNodeClick(node, e);
+    };
+    node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
+      onNodeRightClick(node, e);
+    });
   }
 
   public function onDeleteMap(event: MouseEvent) {
