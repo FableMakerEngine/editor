@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.events.UIEvent;
 import haxe.ui.containers.TreeView;
 import haxe.ui.core.Screen;
 import ceramic.Files;
@@ -17,6 +18,7 @@ class MapList extends TreeView {
     super();
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
+    registerEvent(UIEvent.CHANGE, onNodeClick);
   }
 
   public override function onReady() {
@@ -45,23 +47,36 @@ class MapList extends TreeView {
     }
 
     for (map in maps) {
-      var name = map.get('name');
-      var id = map.get('id');
-      var path = map.get('path');
       var children = map.elements();
-      var node = parentNode.addNode({
-        text: name,
-        id: id,
-        path: path
+      var node = addMapNode(parentNode, {
+        name: map.get('name'),
+        id: Std.parseInt(map.get('id')),
+        path: map.get('path')
       });
-
-      // We only expand as a temp fix for a bug in the ceramic backend of haxeui
-      node.expanded = true;
 
       if (children.hasNext()) {
         createNodesFromXml(map, node);
       }
     }
+  }
+
+  private function addMapNode(?parentNode: TreeViewNode, mapInfo: MapInfo): TreeViewNode {
+    if (parentNode == null) {
+      parentNode = worldNode;
+    }
+
+    var node = parentNode.addNode({
+      text: mapInfo.name,
+      id: mapInfo.id,
+      path: mapInfo.path
+    });
+
+    node.onRightClick = onNodeRightClick;
+
+    // We only expand as a temp fix for a bug in the ceramic backend of haxeui
+    node.expanded = true;
+
+    return node;
   }
 
   private function removeAllChildNodes(parent: TreeViewNode) {
@@ -104,17 +119,16 @@ class MapList extends TreeView {
     ];
   }
 
-  @:bind(this, MouseEvent.RIGHT_MOUSE_DOWN)
   private function onNodeRightClick(e: MouseEvent) {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     contextMenu.left = e.screenX + 2;
     contextMenu.top = e.screenY + 2;
     Screen.instance.addComponent(contextMenu);
+    trace('created conterxt menu');
   }
 
-  @:bind(this, MouseEvent.MOUSE_DOWN)
-  private function onNodeClick(e: MouseEvent) {
+  private function onNodeClick(e: UIEvent) {
     var mapInfo: MapInfo = {
       name: selectedNode.text,
       id: selectedNode.data.id,
@@ -124,8 +138,8 @@ class MapList extends TreeView {
   }
 
   public function onNewMap(event: MouseEvent) {
-    var node = selectedNode.addNode({
-      text: 'New Map',
+    var node = addMapNode(selectedNode, {
+      name: 'New Map',
       // @TODO figure out how to assign an ID. Maybe loop through all nodes?
       // Assign id based on id of main parent and then the amounr of children?
       id: null,
