@@ -34,6 +34,10 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    if (newMap.path == null) {
+      loadEmptyMap(newMap);
+      return;
+    }
     var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
     mapPath = 'data/${mapFilename}';
     loadMapData(mapPath);
@@ -99,6 +103,24 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public override function update(dt: Float) {}
+
+  private function emptyTilemapData(name: String) {
+    var data = new ceramic.TilemapData();
+    data.name = name;
+    data.width = 20 * tileSize;
+    data.height = 20 * tileSize;
+    return data;
+  }
+  
+  //@TODO assign better default values based on tilesize? or user settings
+  private function loadEmptyMap(mapInfo: MapInfo) {
+    tileSize = 16;
+    tilemap.tilemapData = emptyTilemapData(mapInfo.name);
+    mapCols = Math.round(tilemap.width / tileSize);
+    mapRows = Math.round(tilemap.height / tileSize);
+    resize(tilemap.width, tilemap.height);
+    tileCursor.size(tileSize, tileSize);
+  }
 
   private function loadMapData(path: String) {
     assets.addTilemap(path);
