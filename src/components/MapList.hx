@@ -1,6 +1,6 @@
 package components;
 
-import haxe.ui.containers.VBox;
+import haxe.ui.containers.TreeView;
 import haxe.ui.core.Screen;
 import ceramic.Files;
 import haxe.ui.events.MouseEvent;
@@ -9,13 +9,13 @@ import components.menus.ContextMenu;
 import components.menus.ContextMenuEntry;
 
 @:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('../../assets/main/maplist.xml'))
-class MapList extends VBox {
+class MapList extends TreeView {
   public var contextMenu: ContextMenu;
   public var worldNode: TreeViewNode;
 
   public function new() {
     super();
-    worldNode = mapTree.addNode({ text: 'World' });
+    worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
   }
 
@@ -104,7 +104,7 @@ class MapList extends VBox {
     ];
   }
 
-  @:bind(mapTree, MouseEvent.RIGHT_MOUSE_DOWN)
+  @:bind(this, MouseEvent.RIGHT_MOUSE_DOWN)
   private function onNodeRightClick(e: MouseEvent) {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
@@ -113,32 +113,32 @@ class MapList extends VBox {
     Screen.instance.addComponent(contextMenu);
   }
 
-  @:bind(mapTree, MouseEvent.MOUSE_DOWN)
+  @:bind(this, MouseEvent.MOUSE_DOWN)
   private function onNodeClick(e: MouseEvent) {
     var mapInfo: MapInfo = {
-      name: mapTree.selectedNode.text,
-      id: mapTree.selectedNode.data.id,
-      path: mapTree.selectedNode.data.path
+      name: selectedNode.text,
+      id: selectedNode.data.id,
+      path: selectedNode.data.path
     }
     store.commit('updateActiveMap', mapInfo);
   }
 
   public function onNewMap(event: MouseEvent) {
-    var node = mapTree.selectedNode.addNode({
+    var node = selectedNode.addNode({
       text: 'New Map',
       // @TODO figure out how to assign an ID. Maybe loop through all nodes?
       // Assign id based on id of main parent and then the amounr of children?
       id: null,
       path: null
     });
-    mapTree.selectedNode = node;
+    selectedNode = node;
   }
 
   public function onDeleteMap(event: MouseEvent) {
-    if (mapTree.selectedNode.parentNode == worldNode) {
-      worldNode.removeNode(mapTree.selectedNode);
+    if (selectedNode.parentNode == worldNode) {
+      worldNode.removeNode(selectedNode);
     } else {
-      mapTree.selectedNode.parentNode.removeNode(mapTree.selectedNode);
+      selectedNode.parentNode.removeNode(selectedNode);
     }
   }
 }
