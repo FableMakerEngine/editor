@@ -20,6 +20,10 @@ class TilePicker extends VBox {
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    if (newMap.path == null) {
+      clearTilesets();
+      return;
+    }
     var dataDir = store.state.dataDir;
     var mapFilename = newMap.path;
     var mapPath = '$dataDir\\$mapFilename';
