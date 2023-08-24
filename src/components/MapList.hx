@@ -57,7 +57,11 @@ class MapList extends TreeView {
       });
       node.onClick = (e: MouseEvent) -> {
         onNodeClick(node, e);
-      }
+      };
+
+      node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
+        onNodeRightClick(node, e);
+      });
 
       // We only expand as a temp fix for a bug in the ceramic backend of haxeui
       node.expanded = true;
@@ -108,6 +112,13 @@ class MapList extends TreeView {
     ];
   }
 
+  private function onNodeRightClick(node: TreeViewNode, e: MouseEvent) {
+    contextMenu.left = e.screenX + 2;
+    contextMenu.top = e.screenY + 2;
+    contextMenu.show();
+    onNodeClick(node, e);
+  }
+
   private function onNodeClick(node: TreeViewNode, e: MouseEvent) {
     var mapInfo: MapInfo = {
       name: node.text,
@@ -115,31 +126,6 @@ class MapList extends TreeView {
       path: node.data.path
     }
     store.commit('updateActiveMap', mapInfo);
-  }
-
-  private function forceSelectNode(x, y) {
-    // A hacky way to ensure the TreeViewNode is selected before right click
-    // actions
-    var nodesUnderPoint = findComponentsUnderPoint(x, y);
-    var treeNode = nodesUnderPoint.filter(node -> {
-      return Std.isOfType(node, TreeViewNode);
-    })[0];
-
-    if (treeNode != null) {
-      selectedNode = cast treeNode;
-    }
-  }
-
-  @:bind(this, MouseEvent.RIGHT_MOUSE_DOWN)
-  private function onContextMenu(e: MouseEvent) {
-    forceSelectNode(e.screenX, e.screenY);
-    if (selectedNode != null) {
-      if (selectedNode.hitTest(e.screenX, e.screenY)) {
-        contextMenu.left = e.screenX;
-        contextMenu.top = e.screenY;
-        contextMenu.show();
-      }
-    }
   }
 
   public function onNewMap(event: MouseEvent) {
