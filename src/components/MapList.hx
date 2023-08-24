@@ -129,7 +129,13 @@ class MapList extends TreeView {
   }
 
   public function onNewMap(event: MouseEvent) {
-    var node = selectedNode.addNode({ text: 'New Map' });
+    var node = selectedNode.addNode({
+      text: 'New Map',
+      // @TODO figure out how to assign an ID. Maybe loop through all nodes?
+      // Assign id based on id of main parent and then the amounr of children?
+      id: null,
+      path: null
+    });
     node.onClick = (e: MouseEvent) -> {
       onNodeClick(node, e);
     };
