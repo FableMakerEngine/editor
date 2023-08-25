@@ -1,9 +1,11 @@
 package components;
 
+import haxe.ui.events.UIEvent;
+import haxe.ui.containers.TreeView;
+import haxe.ui.core.Screen;
 import ceramic.Files;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.TreeViewNode;
-import haxe.ui.containers.TreeView;
 import components.menus.ContextMenu;
 import components.menus.ContextMenuEntry;
 
@@ -14,10 +16,9 @@ class MapList extends TreeView {
 
   public function new() {
     super();
-    contextMenu = new ContextMenu();
-    contextMenu.items = menu();
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
+    registerEvent(UIEvent.CHANGE, onNodeSelected);
   }
 
   public override function onReady() {
@@ -46,30 +47,41 @@ class MapList extends TreeView {
     }
 
     for (map in maps) {
-      var name = map.get('name');
-      var id = map.get('id');
-      var path = map.get('path');
       var children = map.elements();
-      var node = parentNode.addNode({
-        text: name,
-        id: id,
-        path: path
+      var node = addMapNode(parentNode, {
+        name: map.get('name'),
+        id: Std.parseInt(map.get('id')),
+        path: map.get('path')
       });
-      node.onClick = (e: MouseEvent) -> {
-        onNodeClick(node, e);
-      };
-
-      node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
-        onNodeRightClick(node, e);
-      });
-
-      // We only expand as a temp fix for a bug in the ceramic backend of haxeui
-      node.expanded = true;
 
       if (children.hasNext()) {
         createNodesFromXml(map, node);
       }
     }
+  }
+
+  private function addMapNode(?parentNode: TreeViewNode, mapInfo: MapInfo): TreeViewNode {
+    if (parentNode == null) {
+      parentNode = worldNode;
+    }
+
+    var node = parentNode.addNode({
+      text: mapInfo.name,
+      id: mapInfo.id,
+      path: mapInfo.path
+    });
+
+    /* @TODO disabled until ceramic haxeui backend is fixed since 
+    these events are called before selectedNode is updated. 
+    
+      node.onRightClick = onNodeRightClick;
+      node.onClick = onNodeClick;
+    */
+
+    // We only expand as a temp fix for a bug in the ceramic backend of haxeui
+    node.expanded = true;
+
+    return node;
   }
 
   private function removeAllChildNodes(parent: TreeViewNode) {
@@ -112,30 +124,34 @@ class MapList extends TreeView {
     ];
   }
 
-  private function onNodeRightClick(node: TreeViewNode, e: MouseEvent) {
+  private function onNodeRightClick(e: MouseEvent) {
+    trace(selectedNode.text);
+    contextMenu = new ContextMenu();
+    contextMenu.items = menu();
     contextMenu.left = e.screenX + 2;
     contextMenu.top = e.screenY + 2;
-    contextMenu.show();
-    onNodeClick(node, e);
+    Screen.instance.addComponent(contextMenu);
+    trace('created conterxt menu');
   }
 
-  private function onNodeClick(node: TreeViewNode, e: MouseEvent) {
+  private function onNodeSelected(e) {
     var mapInfo: MapInfo = {
-      name: node.text,
-      id: node.data.id,
-      path: node.data.path
+      name: selectedNode.text,
+      id: selectedNode.data.id,
+      path: selectedNode.data.path
     }
     store.commit('updateActiveMap', mapInfo);
   }
 
   public function onNewMap(event: MouseEvent) {
-    var node = selectedNode.addNode({ text: 'New Map' });
-    node.onClick = (e: MouseEvent) -> {
-      onNodeClick(node, e);
-    };
-    node.registerEvent(MouseEvent.RIGHT_MOUSE_UP, (e: MouseEvent) -> {
-      onNodeRightClick(node, e);
+    var node = addMapNode(selectedNode, {
+      name: 'New Map',
+      // @TODO figure out how to assign an ID. Maybe loop through all nodes?
+      // Assign id based on id of main parent and then the amounr of children?
+      id: null,
+      path: null
     });
+    selectedNode = node;
   }
 
   public function onDeleteMap(event: MouseEvent) {
