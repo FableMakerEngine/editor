@@ -36,6 +36,9 @@ class Mutations {
   }
 
   private static function updateTileSize(payload: Rect) {
-    store.state.tileSize = payload;
+    var tSize = store.state.tileSize;
+    if (tSize == null || payload.width != tSize.width || payload.height != tSize.height) {
+      store.state.tileSize = payload;
+    }
   }
 }
