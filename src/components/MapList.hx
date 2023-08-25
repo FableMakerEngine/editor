@@ -18,7 +18,7 @@ class MapList extends TreeView {
     super();
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
-    registerEvent(UIEvent.CHANGE, onNodeClick);
+    registerEvent(UIEvent.CHANGE, onNodeSelected);
   }
 
   public override function onReady() {
@@ -71,7 +71,12 @@ class MapList extends TreeView {
       path: mapInfo.path
     });
 
-    node.onRightClick = onNodeRightClick;
+    /* @TODO disabled until ceramic haxeui backend is fixed since 
+    these events are called before selectedNode is updated. 
+    
+      node.onRightClick = onNodeRightClick;
+      node.onClick = onNodeClick;
+    */
 
     // We only expand as a temp fix for a bug in the ceramic backend of haxeui
     node.expanded = true;
@@ -120,6 +125,7 @@ class MapList extends TreeView {
   }
 
   private function onNodeRightClick(e: MouseEvent) {
+    trace(selectedNode.text);
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     contextMenu.left = e.screenX + 2;
@@ -128,7 +134,7 @@ class MapList extends TreeView {
     trace('created conterxt menu');
   }
 
-  private function onNodeClick(e: UIEvent) {
+  private function onNodeSelected(e) {
     var mapInfo: MapInfo = {
       name: selectedNode.text,
       id: selectedNode.data.id,
