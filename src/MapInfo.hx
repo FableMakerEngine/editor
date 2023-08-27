@@ -1,5 +1,6 @@
 typedef MapInfo = {
   name: String,
   id: Int,
-  path: String
+  path: String,
+  ?children: Array<MapInfo>
 }

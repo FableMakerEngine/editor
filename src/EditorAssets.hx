@@ -1,3 +1,5 @@
+package;
+
 import ceramic.Files;
 import ceramic.TilemapAsset;
 import ceramic.RuntimeAssets;
@@ -10,14 +12,17 @@ class EditorAssets extends Assets {
 
   public var dataDir(get, null): String;
   public var assetsDir(get, null): String;
-
-
+  
+  private var mapInfoParser: MapInfoParser;
 
   @event function tilemapDataReady();
   @event function tilemapDataError();
+  @event function mapInfoDataReady(mapInfo: Array<MapInfo>);
+  @event function mapInfoDataError();
 
   private function new() {
     super();
+    mapInfoParser = new MapInfoParser();
   }
 
   private function get_dataDir() {
@@ -30,6 +35,25 @@ class EditorAssets extends Assets {
 
   public function setDirectory(path: String) {
     runtimeAssets = RuntimeAssets.fromPath(path);
+    loadMapInfo(path);
+  }
+
+  public function loadMapInfo(path) {
+    var mapXmlPath = '$dataDir\\MapInfo.xml';
+
+    if (Files.exists(mapXmlPath)) {
+      var mapXml = Files.getContent(mapXmlPath);
+      try {
+        var data = mapInfoParser.parse(mapXml);
+        var mapInfo = mapInfoParser.maps;
+        emitMapInfoDataReady(mapInfo);
+      } catch (error) {
+        app.logger.error('Unable to parse MapInfo.xml');
+        emitMapInfoDataError();
+      }
+    } else {
+      trace('unable to find the MapInfo.xml');
+    }
   }
 
   public function loadTilemap(path: String) {
