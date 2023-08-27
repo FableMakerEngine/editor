@@ -18,7 +18,9 @@ class MapList extends TreeView {
     super();
     worldNode = addNode({ text: 'World' });
     worldNode.expanded = true;
-    registerEvent(UIEvent.CHANGE, onNodeSelected);
+    // registerEvent(UIEvent.CHANGE, onNodeSelected);
+    registerEvent(MouseEvent.RIGHT_CLICK, onNodeRightClick);
+    registerEvent(MouseEvent.CLICK, onNodeSelected);
   }
 
   public override function onReady() {
@@ -72,11 +74,12 @@ class MapList extends TreeView {
     });
 
     /* @TODO disabled until ceramic haxeui backend is fixed since 
-    these events are called before selectedNode is updated. 
-    
-      node.onRightClick = onNodeRightClick;
+      these events are called before selectedNode is updated. 
+      but also haxeui-core has a problem with calling an event for each parent of a node
+
       node.onClick = onNodeClick;
-    */
+      node.onRightClick = onNodeRightClick;
+     */
 
     // We only expand as a temp fix for a bug in the ceramic backend of haxeui
     node.expanded = true;
@@ -125,22 +128,32 @@ class MapList extends TreeView {
   }
 
   private function onNodeRightClick(e: MouseEvent) {
-    trace(selectedNode.text);
-    contextMenu = new ContextMenu();
-    contextMenu.items = menu();
-    contextMenu.left = e.screenX + 2;
-    contextMenu.top = e.screenY + 2;
-    Screen.instance.addComponent(contextMenu);
-    trace('created conterxt menu');
+    // Timer to workaround a bug in haxeui-ceramic backend
+    haxe.Timer.delay(() -> {
+      if (!selectedNode.hitTest(e.screenX, e.screenY)) {
+        return;
+      }
+      contextMenu = new ContextMenu();
+      contextMenu.items = menu();
+      contextMenu.left = e.screenX + 2;
+      contextMenu.top = e.screenY + 2;
+      Screen.instance.addComponent(contextMenu);
+    }, 25);
   }
 
   private function onNodeSelected(e) {
-    var mapInfo: MapInfo = {
-      name: selectedNode.text,
-      id: selectedNode.data.id,
-      path: selectedNode.data.path
-    }
-    store.commit('updateActiveMap', mapInfo);
+    // Timer to workaround a bug in haxeui-ceramic backend
+    haxe.Timer.delay(() -> {
+      if (!selectedNode.hitTest(e.screenX, e.screenY)) {
+        return;
+      }
+      var mapInfo: MapInfo = {
+        name: selectedNode.text,
+        id: selectedNode.data.id,
+        path: selectedNode.data.path
+      }
+      store.commit('updateActiveMap', mapInfo);
+    }, 25);
   }
 
   public function onNewMap(event: MouseEvent) {
