@@ -27,7 +27,8 @@ class TilemapViewport extends ceramic.Scene {
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
     store.state.onActiveMapChange(null, onActiveMapChanged);
-    editorAssets.onTilemapReady(this, onTilemapReady);
+    editorAssets.onTilemapDataReady(this, onTilemapDataReady);
+    editorAssets.onTilemapDataError(this, onTilemapDataError);
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -125,12 +126,16 @@ class TilemapViewport extends ceramic.Scene {
     editorAssets.loadTilemap(path);
   }
 
-  private function onTilemapReady() {
+  private function onTilemapDataReady() {
     tilemap.tilemapData = editorAssets.tilemap(mapPath);
     tileSize = tilemap.tilemapData.maxTileHeight;
     mapCols = Math.round(tilemap.width / tileSize);
     mapRows = Math.round(tilemap.height / tileSize);
     resize(tilemap.width, tilemap.height);
     tileCursor.size(tileSize, tileSize);
+  }
+
+  private function onTilemapDataError() {
+    // send a notification reporting the error
   }
 }

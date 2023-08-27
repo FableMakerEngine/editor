@@ -7,7 +7,8 @@ using ceramic.TilemapPlugin;
 class EditorAssets extends Assets {
   public static final instance: EditorAssets = new EditorAssets();
 
-  @event function tilemapReady();
+  @event function tilemapDataReady();
+  @event function tilemapDataError();
 
   private function new() {
     super();
@@ -20,9 +21,11 @@ class EditorAssets extends Assets {
   public function loadTilemap(path: String) {
     this.addTilemap(path);
     onComplete(this, (success: Bool) -> {
-      if (success) {
-        emitTilemapReady();
+      if (!success) {
+        emitTilemapDataError();
+        return;
       }
+      emitTilemapDataReady();
      });
     load();
   }
