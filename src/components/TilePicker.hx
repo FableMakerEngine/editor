@@ -60,7 +60,7 @@ class TilePicker extends VBox {
     var data = button.userData;
     var assetDir = projectAssets.assetsPath;
     var filename = haxe.io.Path.withoutDirectory(data.source);
-    var tilesetrPath = '$assetDir\\img\\tilesets';
-    tilesetImage.resource = 'file://$tilesetrPath\\$filename';
+    var tilesetrPath = '$assetDir/img/tilesets';
+    tilesetImage.resource = 'file://$tilesetrPath/$filename';
   }
 }

@@ -1,5 +1,6 @@
 package components;
 
+import ceramic.Path;
 import ceramic.DialogsFileFilter;
 import haxe.ui.containers.VBox;
 import haxe.ui.containers.menus.MenuItem;
@@ -59,7 +60,7 @@ class TopMenu extends VBox {
       name: 'Fable Maker Project'
     }
     ceramic.Dialogs.openFile('Open Project', [filter], (filePath) -> {
-      var projectDir = haxe.io.Path.directory(filePath);
+      var projectDir = Path.normalize(Path.directory(filePath));
       store.commit('updateProjectPath', projectDir);
     });
   }

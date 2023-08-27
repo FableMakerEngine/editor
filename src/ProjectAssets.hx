@@ -14,6 +14,7 @@ class ProjectAssets extends Assets {
   public final DATA_DIR: String = 'data';
   public final ASSETS_DIR: String = 'assets';
 
+  public var projectLoaded: Bool = false;
   public var dataPath(get, null): String;
   public var assetsPath(get, null): String;
 
@@ -29,11 +30,11 @@ class ProjectAssets extends Assets {
   }
 
   private function get_dataPath() {
-    return '${runtimeAssets.path}\\$DATA_DIR';
+    return '${runtimeAssets.path}/$DATA_DIR';
   }
 
   private function get_assetsPath() {
-    return '${runtimeAssets.path}\\$ASSETS_DIR';
+    return '${runtimeAssets.path}/$ASSETS_DIR';
   }
 
   public function getMapAssetName(mapPath) {
@@ -51,7 +52,7 @@ class ProjectAssets extends Assets {
   }
 
   public function loadMapInfo(path) {
-    var mapXmlPath = '$dataPath\\MapInfo.xml';
+    var mapXmlPath = '$dataPath/MapInfo.xml';
 
     if (Files.exists(mapXmlPath)) {
       var mapXml = Files.getContent(mapXmlPath);
@@ -70,7 +71,7 @@ class ProjectAssets extends Assets {
 
   private function preloadMapAssets(mapInfo: Array<MapInfo>) {
     for (map in mapInfo) {
-      var mapPath = '$dataPath\\${map.path}';
+      var mapPath = '$dataPath/${map.path}';
       var children = map.children;
       if (Files.exists(mapPath) == false) {
         continue;
