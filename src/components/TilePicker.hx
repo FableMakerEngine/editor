@@ -24,7 +24,7 @@ class TilePicker extends VBox {
       clearTilesets();
       return;
     }
-    var dataDir = store.state.dataDir;
+    var dataDir = editorAssets.dataDir;
     var mapFilename = newMap.path;
     var mapPath = '$dataDir\\$mapFilename';
     var mapData = Files.getContent(mapPath);
@@ -65,7 +65,7 @@ class TilePicker extends VBox {
 
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
-    var assetDir = store.state.assetsDir;
+    var assetDir = editorAssets.assetsDir;
     var filename = haxe.io.Path.withoutDirectory(data.source);
     var tilesetrPath = '$assetDir\\img\\tilesets';
     tilesetImage.resource = 'file://$tilesetrPath\\$filename';
