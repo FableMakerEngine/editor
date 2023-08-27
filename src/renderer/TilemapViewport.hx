@@ -6,8 +6,6 @@ import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
 
-using ceramic.TilemapPlugin;
-
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
@@ -119,8 +117,7 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function loadMap(map: MapInfo) {
-    var mapAssetName = projectAssets.getMapAssetName(map.path);
-    var tilemapData = projectAssets.tilemap(mapAssetName);
+    var tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData != null) {
       tilemap.tilemapData = tilemapData;
       tileSize = tilemap.tilemapData.maxTileHeight;

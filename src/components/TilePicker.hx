@@ -24,26 +24,19 @@ class TilePicker extends VBox {
       clearTilesets();
       return;
     }
-    var dataDir = projectAssets.dataPath;
-    var mapFilename = newMap.path;
-    var mapPath = '$dataDir\\$mapFilename';
-    var mapData = Files.getContent(mapPath);
-    var mapXml = Xml.parse(mapData).firstElement();
-    var tilesetElements = mapXml.elementsNamed('tileset');
+    var tilemapData = projectAssets.tilemapData(newMap.path);
+    var tilesets = tilemapData.tilesets;
 
     clearTilesets();
 
-    for (tileset in tilesetElements) {
-      var sourceElement = tileset.firstElement();
-      var tilesetName = tileset.get('name');
-      var tilesetSource = sourceElement.get('source');
+    for (tileset in tilesets) {
       var button = new Button();
       var data = {
-        name: tilesetName,
-        source: tilesetSource
+        name: tileset.name,
+        source: tileset.image.source
       }; 
 
-      button.text = tilesetName;
+      button.text = tileset.name;
       button.userData = data;
   
       if (tabBar.tabCount == 0) {

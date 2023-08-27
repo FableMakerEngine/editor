@@ -1,5 +1,7 @@
 package;
 
+import ceramic.TilemapData;
+import ceramic.Asset;
 import ceramic.Files;
 import ceramic.TilemapAsset;
 import ceramic.RuntimeAssets;
@@ -41,6 +43,11 @@ class ProjectAssets extends Assets {
   public function setDirectory(path: String) {
     runtimeAssets = RuntimeAssets.fromPath(path);
     loadMapInfo(path);
+  }
+
+  public function tilemapData(mapPath: String): TilemapData {
+    var tilemapData = this.tilemap('$DATA_DIR/$mapPath');
+    return tilemapData != null ? tilemapData : null;
   }
 
   public function loadMapInfo(path) {
