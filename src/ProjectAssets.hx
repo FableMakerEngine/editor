@@ -17,8 +17,6 @@ class ProjectAssets extends Assets {
 
   private var mapInfoParser: MapInfoParser;
 
-  @event function tilemapDataReady();
-  @event function tilemapDataError();
   @event function mapInfoDataReady(mapInfo: Array<MapInfo>);
   @event function mapInfoDataError();
 
@@ -61,18 +59,6 @@ class ProjectAssets extends Assets {
     } else {
       trace('unable to find the MapInfo.xml');
     }
-  }
-
-  public function loadTilemap(path: String) {
-    this.addTilemap(path);
-    onComplete(this, (success: Bool) -> {
-      if (!success) {
-        emitTilemapDataError();
-        return;
-      }
-      emitTilemapDataReady();
-     });
-    load();
   }
 
   private function preloadMapAssets(mapInfo: Array<MapInfo>) {
