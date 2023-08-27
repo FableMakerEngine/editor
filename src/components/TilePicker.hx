@@ -1,19 +1,27 @@
 package components;
 
-import haxe.ui.events.MouseEvent;
+import ceramic.Quad;
+import ceramic.Visual;
+import ceramic.Line;
+import ceramic.Color;
 import haxe.ui.components.Button;
-import ceramic.Files;
+import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
+  private var tilesetImage: Quad;
+
   public function new() {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
+    tilesetImage = new Quad();
+    imageContainer.add(tilesetImage);
   }
 
   private function clearTilesets() {
-    tilesetImage.resource = '';
+    tilesetImage.texture = null;
+    tilesetImage.clear();
     for (index in 0 ... tabBar.tabCount) {
       tabBar.removeTab(0);
     }
@@ -33,7 +41,7 @@ class TilePicker extends VBox {
       var button = new Button();
       var data = {
         name: tileset.name,
-        source: tileset.image.source
+        texture: tileset.image.texture
       }; 
 
       button.text = tileset.name;
@@ -58,9 +66,8 @@ class TilePicker extends VBox {
 
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
-    var assetDir = projectAssets.assetsPath;
-    var filename = haxe.io.Path.withoutDirectory(data.source);
-    var tilesetrPath = '$assetDir/img/tilesets';
-    tilesetImage.resource = 'file://$tilesetrPath/$filename';
+    tilesetImage.texture = data.texture;
+    imageContainer.width = tilesetImage.width;
+    imageContainer.height = tilesetImage.height;
   }
 }
