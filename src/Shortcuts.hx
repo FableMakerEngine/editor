@@ -2,12 +2,12 @@ import store.Store;
 
 class Shortcuts {
   /**
-   * Shared assets instance
+   * Shared resources instance
    */
-  public static var editorAssets(get, never): EditorAssets;
+  public static var projectAssets(get, never): ProjectAssets;
 
-  #if !haxe_server inline #end static function get_editorAssets(): EditorAssets {
-    return EditorAssets.instance;
+  #if !haxe_server inline #end static function get_projectAssets(): ProjectAssets {
+    return ProjectAssets.instance;
   }
 
   /**

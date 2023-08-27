@@ -25,7 +25,7 @@ class MapList extends TreeView {
 
   public override function onReady() {
     // edfitorAssets.onMap
-    editorAssets.onMapInfoDataReady(null, (mapInfo) -> {
+    projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
       createNodes(mapInfo);
     });
   }

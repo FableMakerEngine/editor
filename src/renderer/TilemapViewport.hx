@@ -119,8 +119,8 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   private function loadMap(map: MapInfo) {
-    var mapAssetName = editorAssets.getMapAssetName(map.path);
-    var tilemapData = editorAssets.tilemap(mapAssetName);
+    var mapAssetName = projectAssets.getMapAssetName(map.path);
+    var tilemapData = projectAssets.tilemap(mapAssetName);
     if (tilemapData != null) {
       tilemap.tilemapData = tilemapData;
       tileSize = tilemap.tilemapData.maxTileHeight;

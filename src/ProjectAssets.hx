@@ -7,8 +7,8 @@ import ceramic.Assets;
 
 using ceramic.TilemapPlugin;
 
-class EditorAssets extends Assets {
-  public static final instance: EditorAssets = new EditorAssets();
+class ProjectAssets extends Assets {
+  public static final instance: ProjectAssets = new ProjectAssets();
   public final DATA_DIR: String = 'data';
   public final ASSETS_DIR: String = 'assets';
 

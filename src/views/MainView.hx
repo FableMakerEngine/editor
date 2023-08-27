@@ -21,7 +21,7 @@ class MainView extends VBox {
   
   public function onProjectPathChanged(newPath, prevPath) {
     store.commit('addRecentProject', newPath);
-    editorAssets.setDirectory(newPath);
+    projectAssets.setDirectory(newPath);
     store.saveStateToStorage();
   }
 
