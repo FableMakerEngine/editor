@@ -6,8 +6,6 @@ import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
 
-using ceramic.TilemapPlugin;
-
 class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
@@ -16,6 +14,7 @@ class TilemapViewport extends ceramic.Scene {
   public var mapRows: Int = 16;
   public var tileSize: Int = 32;
   public var tileCursor: ceramic.Border;
+
   private var mapPath: String;
 
   public function new(?parentView) {
@@ -25,12 +24,7 @@ class TilemapViewport extends ceramic.Scene {
     }
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
-    store.state.onProjectPathChange(null, onProjectPathChanged);
     store.state.onActiveMapChange(null, onActiveMapChanged);
-  }
-
-  private function onProjectPathChanged(newPath, oldPath) {
-    assets.runtimeAssets = RuntimeAssets.fromPath(newPath);
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -38,9 +32,7 @@ class TilemapViewport extends ceramic.Scene {
       loadEmptyMap(newMap);
       return;
     }
-    var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
-    mapPath = 'data/${mapFilename}';
-    loadMapData(mapPath);
+    loadMap(newMap);
   }
 
   public override function preload() {}
@@ -91,7 +83,9 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public function onPointerMove(info: TouchInfo) {
-    if (tileCursor == null) { return; };
+    if (tileCursor == null) {
+      return;
+    };
     var localCoords = new Point();
     screenToVisual(info.x, info.y, localCoords);
 
@@ -111,8 +105,8 @@ class TilemapViewport extends ceramic.Scene {
     data.height = 20 * tileSize;
     return data;
   }
-  
-  //@TODO assign better default values based on tilesize? or user settings
+
+  // @TODO assign better default values based on tilesize? or user settings
   private function loadEmptyMap(mapInfo: MapInfo) {
     tileSize = 16;
     tilemap.tilemapData = emptyTilemapData(mapInfo.name);
@@ -122,15 +116,10 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize, tileSize);
   }
 
-  private function loadMapData(path: String) {
-    assets.addTilemap(path);
-    assets.onComplete(this, onMapDataLoaded);
-    assets.load();
-  }
-
-  private function onMapDataLoaded(success: Bool) {
-    if (success) {
-      tilemap.tilemapData = assets.tilemap(mapPath);
+  private function loadMap(map: MapInfo) {
+    var tilemapData = projectAssets.tilemapData(map.path);
+    if (tilemapData != null) {
+      tilemap.tilemapData = tilemapData;
       tileSize = tilemap.tilemapData.maxTileHeight;
       mapCols = Math.round(tilemap.width / tileSize);
       mapRows = Math.round(tilemap.height / tileSize);

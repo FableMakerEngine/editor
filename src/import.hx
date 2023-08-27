@@ -4,5 +4,5 @@
 // Also provide statically typed asset identifiers: Images.XXX, Fonts.ROBOTO_MEDIUM...
 import assets.*;
 import ceramic.Shortcuts.*;
-import store.Store.*;
+import Shortcuts.*;
 #end

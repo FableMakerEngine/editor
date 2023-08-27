@@ -24,26 +24,19 @@ class TilePicker extends VBox {
       clearTilesets();
       return;
     }
-    var dataDir = store.state.dataDir;
-    var mapFilename = newMap.path;
-    var mapPath = '$dataDir\\$mapFilename';
-    var mapData = Files.getContent(mapPath);
-    var mapXml = Xml.parse(mapData).firstElement();
-    var tilesetElements = mapXml.elementsNamed('tileset');
+    var tilemapData = projectAssets.tilemapData(newMap.path);
+    var tilesets = tilemapData.tilesets;
 
     clearTilesets();
 
-    for (tileset in tilesetElements) {
-      var sourceElement = tileset.firstElement();
-      var tilesetName = tileset.get('name');
-      var tilesetSource = sourceElement.get('source');
+    for (tileset in tilesets) {
       var button = new Button();
       var data = {
-        name: tilesetName,
-        source: tilesetSource
+        name: tileset.name,
+        source: tileset.image.source
       }; 
 
-      button.text = tilesetName;
+      button.text = tileset.name;
       button.userData = data;
   
       if (tabBar.tabCount == 0) {
@@ -65,9 +58,9 @@ class TilePicker extends VBox {
 
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
-    var assetDir = store.state.assetsDir;
+    var assetDir = projectAssets.assetsPath;
     var filename = haxe.io.Path.withoutDirectory(data.source);
-    var tilesetrPath = '$assetDir\\img\\tilesets';
-    tilesetImage.resource = 'file://$tilesetrPath\\$filename';
+    var tilesetrPath = '$assetDir/img/tilesets';
+    tilesetImage.resource = 'file://$tilesetrPath/$filename';
   }
 }

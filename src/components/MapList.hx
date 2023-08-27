@@ -24,40 +24,26 @@ class MapList extends TreeView {
   }
 
   public override function onReady() {
-    store.state.onProjectPathChange(null, onProjectPathChanged);
+    // edfitorAssets.onMap
+    projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
+      createNodes(mapInfo);
+    });
   }
 
-  public function onProjectPathChanged(newPath, prevPath) {
-    var dataPath = store.state.dataDir;
-    var mapInfoPath = '$dataPath\\MapInfo.xml';
-
-    if (Files.exists(mapInfoPath)) {
-      var mapInfo = Files.getContent(mapInfoPath);
-      var data = Xml.parse(mapInfo);
-      removeAllChildNodes(worldNode);
-      createNodesFromXml(data.firstElement());
-    } else {
-      trace('unable to find the MapInfo.xml');
-    }
-  }
-
-  private function createNodesFromXml(xmlData: Xml, ?parentNode: TreeViewNode) {
-    var maps = xmlData.elements();
-
-    if (parentNode == null) {
-      parentNode = worldNode;
-    }
-
-    for (map in maps) {
-      var children = map.elements();
+  private function createNodes(mapInfo: Array<MapInfo>, ?parentNode) {
+    for (map in mapInfo) {
+      if (parentNode == null) {
+        parentNode = worldNode;
+      }
+      var children = map.children;
       var node = addMapNode(parentNode, {
-        name: map.get('name'),
-        id: Std.parseInt(map.get('id')),
-        path: map.get('path')
+        name: map.name,
+        id: map.id,
+        path: map.path
       });
 
-      if (children.hasNext()) {
-        createNodesFromXml(map, node);
+      if (children != null) {
+        createNodes(map.children, node);
       }
     }
   }
