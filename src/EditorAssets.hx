@@ -9,10 +9,12 @@ using ceramic.TilemapPlugin;
 
 class EditorAssets extends Assets {
   public static final instance: EditorAssets = new EditorAssets();
+  public final DATA_DIR: String = 'data';
+  public final ASSETS_DIR: String = 'assets';
 
-  public var dataDir(get, null): String;
-  public var assetsDir(get, null): String;
-  
+  public var dataPath(get, null): String;
+  public var assetsPath(get, null): String;
+
   private var mapInfoParser: MapInfoParser;
 
   @event function tilemapDataReady();
@@ -23,14 +25,19 @@ class EditorAssets extends Assets {
   private function new() {
     super();
     mapInfoParser = new MapInfoParser();
+    onMapInfoDataReady(this, preloadMapAssets);
   }
 
-  private function get_dataDir() {
-    return '${runtimeAssets.path}\\data';
+  private function get_dataPath() {
+    return '${runtimeAssets.path}\\$DATA_DIR';
   }
 
-  private function get_assetsDir() {
-    return '${runtimeAssets.path}\\assets';
+  private function get_assetsPath() {
+    return '${runtimeAssets.path}\\$ASSETS_DIR';
+  }
+
+  public function getMapAssetName(mapPath) {
+    return '${DATA_DIR}/${mapPath}';
   }
 
   public function setDirectory(path: String) {
@@ -39,7 +46,7 @@ class EditorAssets extends Assets {
   }
 
   public function loadMapInfo(path) {
-    var mapXmlPath = '$dataDir\\MapInfo.xml';
+    var mapXmlPath = '$dataPath\\MapInfo.xml';
 
     if (Files.exists(mapXmlPath)) {
       var mapXml = Files.getContent(mapXmlPath);
@@ -65,6 +72,21 @@ class EditorAssets extends Assets {
       }
       emitTilemapDataReady();
      });
+    load();
+  }
+
+  private function preloadMapAssets(mapInfo: Array<MapInfo>) {
+    for (map in mapInfo) {
+      var mapPath = '$dataPath\\${map.path}';
+      var children = map.children;
+      if (Files.exists(mapPath) == false) {
+        continue;
+      }
+      this.addTilemap('$DATA_DIR/${map.path}');
+      if (children != null) {
+        preloadMapAssets(children);
+      }
+    }
     load();
   }
 }

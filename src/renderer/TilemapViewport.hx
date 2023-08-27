@@ -27,8 +27,6 @@ class TilemapViewport extends ceramic.Scene {
     depth = 1;
     screen.onPointerMove(this, onPointerMove);
     store.state.onActiveMapChange(null, onActiveMapChanged);
-    editorAssets.onTilemapDataReady(this, onTilemapDataReady);
-    editorAssets.onTilemapDataError(this, onTilemapDataError);
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -36,9 +34,7 @@ class TilemapViewport extends ceramic.Scene {
       loadEmptyMap(newMap);
       return;
     }
-    var mapFilename = haxe.io.Path.withoutDirectory(newMap.path);
-    mapPath = 'data/${mapFilename}';
-    loadMapData(mapPath);
+    loadMap(newMap);
   }
 
   public override function preload() {}
@@ -122,20 +118,16 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize, tileSize);
   }
 
-  private function loadMapData(path: String) {
-    editorAssets.loadTilemap(path);
-  }
-
-  private function onTilemapDataReady() {
-    tilemap.tilemapData = editorAssets.tilemap(mapPath);
-    tileSize = tilemap.tilemapData.maxTileHeight;
-    mapCols = Math.round(tilemap.width / tileSize);
-    mapRows = Math.round(tilemap.height / tileSize);
-    resize(tilemap.width, tilemap.height);
-    tileCursor.size(tileSize, tileSize);
-  }
-
-  private function onTilemapDataError() {
-    // send a notification reporting the error
+  private function loadMap(map: MapInfo) {
+    var mapAssetName = editorAssets.getMapAssetName(map.path);
+    var tilemapData = editorAssets.tilemap(mapAssetName);
+    if (tilemapData != null) {
+      tilemap.tilemapData = tilemapData;
+      tileSize = tilemap.tilemapData.maxTileHeight;
+      mapCols = Math.round(tilemap.width / tileSize);
+      mapRows = Math.round(tilemap.height / tileSize);
+      resize(tilemap.width, tilemap.height);
+      tileCursor.size(tileSize, tileSize);
+    }
   }
 }
