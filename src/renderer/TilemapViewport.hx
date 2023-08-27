@@ -128,8 +128,9 @@ class TilemapViewport extends ceramic.Scene {
     var tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData != null) {
       tilemap.tilemapData = tilemapData;
-      tileSize.width = tilemapData.width;
-      tileSize.height = tilemapData.height;
+      tileSize.width = tilemapData.maxTileWidth;
+      tileSize.height = tilemapData.maxTileHeight;
+      store.commit('updateTileSize', tileSize);
       mapCols = Math.round(tilemap.width / tileSize.width);
       mapRows = Math.round(tilemap.height / tileSize.height);
       resize(tilemap.width, tilemap.height);

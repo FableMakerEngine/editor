@@ -1,5 +1,9 @@
 package components;
 
+import ceramic.Point;
+import ceramic.TouchInfo;
+import ceramic.Rect;
+import ceramic.Border;
 import ceramic.Quad;
 import ceramic.Visual;
 import ceramic.Line;
@@ -11,12 +15,37 @@ import haxe.ui.containers.VBox;
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
   private var tilesetImage: Quad;
+  public var tileCursor: Border;
 
   public function new() {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
+    store.state.onTileSizeChange(null, onTileSizeChanged);
+  }
+
+  public override function onReady() {
+    createTilesetImage();
+    createTileCursor();
+  }
+
+  private function createTilesetImage() {
     tilesetImage = new Quad();
+    tilesetImage.depth = 0;
+    tilesetImage.onPointerDown(null, onTilesetClick);
     imageContainer.add(tilesetImage);
+  }
+
+  private function createTileCursor() {
+    var tileSize = store.state.tileSize;
+    if (tileSize == null) {
+      tileSize = new Rect(0, 0, 16, 16);
+    }
+    tileCursor = new Border();
+    tileCursor.borderColor = Color.SNOW;
+    tileCursor.borderSize = 2;
+    tileCursor.size(tileSize.width, tileSize.height);
+    tileCursor.depth = 99;
+    imageContainer.add(tileCursor);
   }
 
   private function clearTilesets() {
@@ -25,6 +54,10 @@ class TilePicker extends VBox {
     for (index in 0 ... tabBar.tabCount) {
       tabBar.removeTab(0);
     }
+  }
+
+  private function onTileSizeChanged(newSize, oldSize) {
+    tileCursor.size(newSize.width, newSize.height);
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -69,5 +102,14 @@ class TilePicker extends VBox {
     tilesetImage.texture = data.texture;
     imageContainer.width = tilesetImage.width;
     imageContainer.height = tilesetImage.height;
+  }
+
+  public function onTilesetClick(info: TouchInfo) {
+    var tileSize = store.state.tileSize;
+    var localCoords = new Point();
+    tilesetImage.screenToVisual(info.x, info.y, localCoords);
+    var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
+    var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
+    tileCursor.pos(x, y);
   }
 }
