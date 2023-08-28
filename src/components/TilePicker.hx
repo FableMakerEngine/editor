@@ -5,8 +5,6 @@ import ceramic.TouchInfo;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Quad;
-import ceramic.Visual;
-import ceramic.Line;
 import ceramic.Color;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
