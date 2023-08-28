@@ -1,5 +1,8 @@
 package renderer;
 
+import ceramic.Shader;
+import ceramic.Filter;
+import ceramic.Quad;
 import tracker.Observable;
 import ceramic.Texture;
 import ceramic.Entity;
@@ -11,45 +14,60 @@ import ceramic.TouchInfo;
 import ceramic.Visual;
 
 class Grid extends Entity implements Component implements Observable {
-  public var cols: Int;
-  public var rows: Int;
-  public var cellSize: Rect;
-  public var width: Int;
-  public var height: Int;
   @observe public var visibleCells: Bool = true;
+  @entity var visual: Quad;
 
-
+  public var width(default, set): Int;
+  public var height(default, set): Int;
+  public var cols(default, null): Int;
+  public var rows(default, null): Int;
+  public var cellSize(default, set): Rect = new Rect(0, 0, 16, 16);
   private var lines: Array<Line> = [];
-  @entity var visual: GridQuad;
 
   public function new() {
     super();
-    cellSize = new Rect(0, 0, 16, 16);
     onVisibleCellsChange(this, (a, b) -> {
-      drawGrid();
+      redraw();
     });
   }
-
+  
   public function bindAsComponent() {
     visual.onPointerUp(this, onGridClick);
-    visual.onOnTextureChange(this, onTextureChanged);
+  }
+
+  function set_width(width: Int) {
+    if (this.width == width) return width;
+    this.width = width;
+    redraw();
+    return width;
+  }
+
+  function set_height(height: Int) {
+    if (this.height == height) return height;
+    this.height = height;
+    redraw();
+    return height;
+  }
+
+  function set_cellSize(cellSize: Rect) {
+    if (this.cellSize.width != cellSize.width || this.cellSize.height != cellSize.height) {
+      this.cellSize = cellSize;
+      redraw();
+    }
+    return cellSize;
   }
 
   private function drawGrid() {
-    clearGrid();
-    if (visibleCells == false) {
-      return;
-    }
     var cols = Math.round(width / cellSize.width);
     var rows = Math.round(height / cellSize.height);
     for (col in 0...cols + 1) {
       var colLine = new Line();
-      colLine.alpha = 0.8;
+      colLine.alpha = 0.5;
       colLine.depth = 99;
       colLine.color = Color.WHITE;
       var x = col * cellSize.width;
       colLine.points = [x, 0, x, height];
-      colLine.thickness = 1;
+      // colLine.thickness = 0.5;
       lines.push(colLine);
       visual.add(colLine);
     }
@@ -57,13 +75,25 @@ class Grid extends Entity implements Component implements Observable {
       var rowLine = new Line();
       rowLine.depth = 99;
       rowLine.color = Color.WHITE;
-      rowLine.alpha = 0.8;
+      rowLine.alpha = 0.5;
       var y = row * cellSize.height;
       rowLine.points = [0, y, width, y];
-      rowLine.thickness = 1;
+      // rowLine.thickness = 0.5;
       lines.push(rowLine);
       visual.add(rowLine);
     }
+  }
+
+  public function redraw() {
+    if (visual == null) return;
+    clearGrid();
+    cols = Math.round(width / cellSize.width);
+    rows = Math.round(height / cellSize.height);
+    if (cols <= 0 && rows <= 0) {
+      return;
+    }
+    if (visibleCells == false) return;
+    drawGrid();
   }
 
   public function getTileFrameId(cellSize: Rect, x, y): Int {
@@ -90,18 +120,6 @@ class Grid extends Entity implements Component implements Observable {
         lines.splice(i, 1);
       }
     }
-  }
-
-  private function onTextureChanged(texture: Texture) {
-    if (texture == null) return;
-    width = Math.round(visual.width);
-    height = Math.round(visual.height);
-    cols = Math.round(width / cellSize.width);
-    rows = Math.round(height / cellSize.height);
-    if (cols <= 0 && rows <= 0) {
-      return;
-    }
-    drawGrid();
   }
 
   private function onGridClick(info: TouchInfo) {}
