@@ -1,5 +1,6 @@
 package store;
 
+import ceramic.Rect;
 using Lambda;
 
 @:access(store.AppState)
@@ -32,5 +33,12 @@ class Mutations {
 
   private static function updateActiveMap(payload: MapInfo) {
     store.state.activeMap = payload;
+  }
+
+  private static function updateTileSize(payload: Rect) {
+    var tSize = store.state.tileSize;
+    if (tSize == null || payload.width != tSize.width || payload.height != tSize.height) {
+      store.state.tileSize = payload;
+    }
   }
 }

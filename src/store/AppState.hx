@@ -1,5 +1,6 @@
 package store;
 
+import ceramic.Rect;
 import tracker.Observable;
 
 class AppState implements ReadOnly implements Observable {
@@ -7,6 +8,7 @@ class AppState implements ReadOnly implements Observable {
   @observe public var recentlyOpenedProjects: Array<String> = [];
   @observe public var activeMap: MapInfo;
   @observe public var mapTabs: Array<MapInfo>;
+  @observe public var tileSize: Rect;
 
   public function new() {}
 
