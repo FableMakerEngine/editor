@@ -67,7 +67,6 @@ class Grid extends Entity implements Component implements Observable {
       colLine.color = Color.WHITE;
       var x = col * cellSize.width;
       colLine.points = [x, 0, x, height];
-      // colLine.thickness = 0.5;
       lines.push(colLine);
       visual.add(colLine);
     }
@@ -78,7 +77,6 @@ class Grid extends Entity implements Component implements Observable {
       rowLine.alpha = 0.5;
       var y = row * cellSize.height;
       rowLine.points = [0, y, width, y];
-      // rowLine.thickness = 0.5;
       lines.push(rowLine);
       visual.add(rowLine);
     }
