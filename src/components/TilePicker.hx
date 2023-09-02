@@ -86,10 +86,12 @@ class TilePicker extends VBox {
       return;
     }
     if (e.delta > 0) {
-      viewport.scale(viewport.scaleX + 0.1);
+      viewport.scale(viewport.scaleX + 0.2);
     } else if (e.delta < 0) {
-      viewport.scale(viewport.scaleX - 0.1);
+      viewport.scale(viewport.scaleX - 0.2);
     }
+    imageContainer.width = tileset.width * viewport.scaleX;
+    imageContainer.height = tileset.height * viewport.scaleY;
   }
 
   private function clearTilesets() {
@@ -145,8 +147,9 @@ class TilePicker extends VBox {
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
     tileset.texture = data.texture;
-    imageContainer.width = tileset.width;
-    imageContainer.height = tileset.height;
+    viewport.scale(1.0);
+    imageContainer.width = tileset.width * viewport.scaleX;
+    imageContainer.height = tileset.height * viewport.scaleY;
   }
 
   public function onTilesetClick(selectedTile, selectedTilePos) {
