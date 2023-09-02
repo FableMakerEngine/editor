@@ -100,8 +100,8 @@ class Grid extends Entity implements Component implements Observable {
   function set_cellSize(cellSize: Rect) {
     if (this.cellSize.width != cellSize.width || this.cellSize.height != cellSize.height) {
       this.cellSize = cellSize;
+      shader.setVec2('size', cellSize.width, cellSize.height);
     }
-    shader.setVec2('size', cellSize.width, cellSize.height);
     return cellSize;
   }
 
