@@ -18,6 +18,7 @@ class Grid extends Entity implements Component implements Observable {
   public var cols(default, null): Int;
   public var rows(default, null): Int;
   public var cellSize(default, set): Rect = new Rect(0, 0, 16, 16);
+  public var alpha(default, set): Float = 0.5;
   public var selectedCell: Int;
   public var selectedCellPos = new Point(0, 0);
   private var shader: Shader;
@@ -28,7 +29,8 @@ class Grid extends Entity implements Component implements Observable {
     super();
     shader = app.assets.shader(Shaders.SHADERS__GRID);
     shader.setVec2('size', 16, 16);
-    shader.setVec4('color', 1.0, 1.0, 1.0, 0.2);
+    shader.setVec4('color', 1.0, 1.0, 1.0, 1.0);
+    shader.setFloat('alpha', alpha);
     shader.setFloat('thickness', 1.0);
     shader.setFloat('scale', 1.0);
     onVisibleCellsChange(this, onVisibleCellsChanged);
@@ -47,6 +49,14 @@ class Grid extends Entity implements Component implements Observable {
         visual.shader = null;
     }
   }
+
+  function set_alpha(alpha: Float) {
+    if (this.alpha == alpha) return alpha;
+    this.alpha = alpha;
+    shader.setFloat('alpha', alpha);
+    return alpha;
+  }
+  
 
   function set_width(width: Int) {
     if (this.width == width) return width;

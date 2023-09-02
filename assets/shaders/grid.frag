@@ -9,6 +9,7 @@ precision mediump float;
 uniform vec4 color;
 uniform vec2 size;
 uniform float thickness;
+uniform float alpha;
 uniform float scale;
 uniform vec2 resolution;
 uniform sampler2D tex0;
@@ -34,5 +35,5 @@ void main() {
   float line = (min(grid.x, grid.y) * thickness) / scale;
   vec4 lineColor = color * (1.0 - min(line, 1.0));
 
-  outColor = lineColor + texColor;
+  outColor = (lineColor * alpha) + texColor;
 }
