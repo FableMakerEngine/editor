@@ -1,10 +1,8 @@
 package components;
 
-import ceramic.Point;
-import ceramic.TouchInfo;
+import renderer.GridQuad;
 import ceramic.Rect;
 import ceramic.Border;
-import ceramic.Quad;
 import ceramic.Color;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
@@ -12,7 +10,7 @@ import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
-  private var tilesetImage: Quad;
+  private var tileset: GridQuad;
   public var tileCursor: Border;
 
   public function new() {
@@ -22,15 +20,14 @@ class TilePicker extends VBox {
   }
 
   public override function onReady() {
-    createTilesetImage();
+    createTileset();
     createTileCursor();
   }
 
-  private function createTilesetImage() {
-    tilesetImage = new Quad();
-    tilesetImage.depth = 0;
-    tilesetImage.onPointerDown(null, onTilesetClick);
-    imageContainer.add(tilesetImage);
+  private function createTileset() {
+    tileset = new GridQuad();
+    tileset.grid.onGridClick(null, onTilesetClick);
+    imageContainer.add(tileset);
   }
 
   private function createTileCursor() {
@@ -47,8 +44,8 @@ class TilePicker extends VBox {
   }
 
   private function clearTilesets() {
-    tilesetImage.texture = null;
-    tilesetImage.clear();
+    tileset.texture = null;
+    tileset.clear();
     for (index in 0 ... tabBar.tabCount) {
       tabBar.removeTab(0);
     }
@@ -56,6 +53,7 @@ class TilePicker extends VBox {
 
   private function onTileSizeChanged(newSize, oldSize) {
     tileCursor.size(newSize.width, newSize.height);
+    tileset.grid.cellSize = newSize;
   }
 
   private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -97,17 +95,12 @@ class TilePicker extends VBox {
 
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
-    tilesetImage.texture = data.texture;
-    imageContainer.width = tilesetImage.width;
-    imageContainer.height = tilesetImage.height;
+    tileset.texture = data.texture;
+    imageContainer.width = tileset.width;
+    imageContainer.height = tileset.height;
   }
 
-  public function onTilesetClick(info: TouchInfo) {
-    var tileSize = store.state.tileSize;
-    var localCoords = new Point();
-    tilesetImage.screenToVisual(info.x, info.y, localCoords);
-    var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
-    var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
-    tileCursor.pos(x, y);
+  public function onTilesetClick(selectedTile, selectedTilePos) {
+    tileCursor.pos(selectedTilePos.x, selectedTilePos.y);
   }
 }
