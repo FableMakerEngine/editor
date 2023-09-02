@@ -2,17 +2,12 @@ package renderer;
 
 import ceramic.Point;
 import ceramic.Shader;
-import ceramic.Filter;
 import ceramic.Quad;
 import tracker.Observable;
-import ceramic.Texture;
 import ceramic.Entity;
-import ceramic.Color;
-import ceramic.Line;
 import ceramic.Rect;
 import ceramic.Component;
 import ceramic.TouchInfo;
-import ceramic.Visual;
 
 class Grid extends Entity implements Component implements Observable {
   @observe public var visibleCells: Bool = true;

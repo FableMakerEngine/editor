@@ -1,8 +1,6 @@
 package components;
 
 import renderer.GridQuad;
-import ceramic.Point;
-import ceramic.TouchInfo;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Color;
