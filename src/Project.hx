@@ -1,5 +1,6 @@
 package;
 
+import ceramic.Assets;
 import ceramic.Entity;
 import ceramic.Color;
 import ceramic.InitSettings;
@@ -17,7 +18,12 @@ class Project extends Entity {
     settings.scaling = RESIZE;
     settings.resizable = true;
 
+    app.onceDefaultAssetsLoad(this, loadAssets);
     app.onceReady(this, ready);
+  }
+
+  function loadAssets(assets: Assets) {
+    assets.add(Shaders.SHADERS__GRID);
   }
 
   function ready() {

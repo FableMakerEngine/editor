@@ -28,6 +28,7 @@ class TilePicker extends VBox {
 
   private function createTileset() {
     tileset = new GridQuad();
+    tileset.grid.onGridClick(null, onTilesetClick);
     imageContainer.add(tileset);
   }
 
@@ -101,12 +102,7 @@ class TilePicker extends VBox {
     imageContainer.height = tileset.height;
   }
 
-  public function onTilesetClick(info: TouchInfo) {
-    var tileSize = store.state.tileSize;
-    var localCoords = new Point();
-    tileset.screenToVisual(info.x, info.y, localCoords);
-    var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
-    var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
-    tileCursor.pos(x, y);
+  public function onTilesetClick(selectedTile, selectedTilePos) {
+    tileCursor.pos(selectedTilePos.x, selectedTilePos.y);
   }
 }

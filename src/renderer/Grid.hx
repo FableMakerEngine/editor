@@ -1,5 +1,6 @@
 package renderer;
 
+import ceramic.Point;
 import ceramic.Shader;
 import ceramic.Filter;
 import ceramic.Quad;
@@ -22,82 +23,50 @@ class Grid extends Entity implements Component implements Observable {
   public var cols(default, null): Int;
   public var rows(default, null): Int;
   public var cellSize(default, set): Rect = new Rect(0, 0, 16, 16);
-  private var lines: Array<Line> = [];
+  public var selectedCell: Int;
+  public var selectedCellPos = new Point(0, 0);
+  private var shader: Shader;
+  
+  @event public function gridClick(selectedTile: Int, selectedCellPos: Point);
 
   public function new() {
     super();
-    onVisibleCellsChange(this, (a, b) -> {
-      redraw();
-    });
+    shader = app.assets.shader(Shaders.SHADERS__GRID);
+    shader.setVec2('size', 16, 16);
+    shader.setVec4('color', 1.0, 1.0, 1.0, 0.2);
+    shader.setFloat('thickness', 1.0);
+    shader.setFloat('scale', 1.0);
   }
   
   public function bindAsComponent() {
-    visual.onPointerUp(this, onGridClick);
+    visual.onPointerDown(this, onClick);
+    visual.shader = shader;
   }
 
   function set_width(width: Int) {
     if (this.width == width) return width;
     this.width = width;
-    redraw();
     return width;
   }
 
   function set_height(height: Int) {
     if (this.height == height) return height;
     this.height = height;
-    redraw();
     return height;
   }
 
   function set_cellSize(cellSize: Rect) {
     if (this.cellSize.width != cellSize.width || this.cellSize.height != cellSize.height) {
       this.cellSize = cellSize;
-      redraw();
     }
+    shader.setVec2('size', cellSize.width, cellSize.height);
     return cellSize;
   }
 
-  private function drawGrid() {
-    var cols = Math.round(width / cellSize.width);
-    var rows = Math.round(height / cellSize.height);
-    for (col in 0...cols + 1) {
-      var colLine = new Line();
-      colLine.alpha = 0.5;
-      colLine.depth = 99;
-      colLine.color = Color.WHITE;
-      var x = col * cellSize.width;
-      colLine.points = [x, 0, x, height];
-      lines.push(colLine);
-      visual.add(colLine);
-    }
-    for (row in 0...rows + 1) {
-      var rowLine = new Line();
-      rowLine.depth = 99;
-      rowLine.color = Color.WHITE;
-      rowLine.alpha = 0.5;
-      var y = row * cellSize.height;
-      rowLine.points = [0, y, width, y];
-      lines.push(rowLine);
-      visual.add(rowLine);
-    }
-  }
-
-  public function redraw() {
-    if (visual == null) return;
-    clearGrid();
-    cols = Math.round(width / cellSize.width);
-    rows = Math.round(height / cellSize.height);
-    if (cols <= 0 && rows <= 0) {
-      return;
-    }
-    if (visibleCells == false) return;
-    drawGrid();
-  }
-
-  public function getTileFrameId(cellSize: Rect, x, y): Int {
-    var tileCol = Math.round(x / cellSize.width);
-    var tileRow = Math.round(y / cellSize.height);
-    var maxCols = Math.round(width / cellSize.width);
+  function getTileFrameId(x: Float, y: Float): Int {
+    var tileCol = Math.floor(x / cellSize.width);
+    var tileRow = Math.floor(y / cellSize.height);
+    var maxCols = Math.floor(width / cellSize.width);
     var tileFrame = 0;
     if (tileRow <= 0) {
       return tileCol;
@@ -111,14 +80,13 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame;
   }
 
-  private function clearGrid() {
-    if (lines.length > 0) {
-      var i = lines.length;
-      while (--i >= 0) {
-        lines.splice(i, 1);
-      }
-    }
+  private function onClick(info: TouchInfo) {
+    var localCoords = new Point();
+    visual.screenToVisual(info.x, info.y, localCoords);
+    var x = Math.floor(localCoords.x / cellSize.width) * cellSize.width;
+    var y = Math.floor(localCoords.y / cellSize.height) * cellSize.height;
+    selectedCell = getTileFrameId(localCoords.x, localCoords.y);
+    selectedCellPos = new Point(x, y);
+    emitGridClick(selectedCell, selectedCellPos);
   }
-
-  private function onGridClick(info: TouchInfo) {}
 }
