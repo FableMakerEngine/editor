@@ -45,7 +45,7 @@ class Grid extends Entity implements Component implements Observable {
     switch current {
       case true:
         visual.shader = shader;
-        case flase:
+      case false:
         visual.shader = null;
     }
   }
