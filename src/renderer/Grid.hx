@@ -31,11 +31,21 @@ class Grid extends Entity implements Component implements Observable {
     shader.setVec4('color', 1.0, 1.0, 1.0, 0.2);
     shader.setFloat('thickness', 1.0);
     shader.setFloat('scale', 1.0);
+    onVisibleCellsChange(this, onVisibleCellsChanged);
   }
   
   public function bindAsComponent() {
     visual.onPointerDown(this, onClick);
     visual.shader = shader;
+  }
+
+  function onVisibleCellsChanged(current, prev) {
+    switch current {
+      case true:
+        visual.shader = shader;
+        case flase:
+        visual.shader = null;
+    }
   }
 
   function set_width(width: Int) {
