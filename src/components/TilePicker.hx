@@ -1,33 +1,49 @@
 package components;
 
+import ceramic.KeyCode;
+import ceramic.Key;
+import ceramic.Visual;
 import renderer.GridQuad;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Color;
+import haxe.ui.containers.VBox;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
-import haxe.ui.containers.VBox;
+import haxe.ui.constants.ScrollMode;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
   private var tileset: GridQuad;
+  private var viewport: Visual;
   public var tileCursor: Border;
+  private var ctrlKeyDown: Bool;
 
   public function new() {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
+    tileView.scrollMode = ScrollMode.NORMAL;
+    input.onKeyUp(null, onKeyUp);
+    input.onKeyDown(null, onKeyDown);
+    registerEvent(MouseEvent.MOUSE_WHEEL, handleMouseZoom);
   }
 
   public override function onReady() {
+    createViewport();
     createTileset();
     createTileCursor();
+  }
+
+  private function createViewport() {
+    viewport = new Visual();
+    imageContainer.add(viewport);
   }
 
   private function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
-    imageContainer.add(tileset);
+    viewport.add(tileset);
   }
 
   private function createTileCursor() {
@@ -40,7 +56,40 @@ class TilePicker extends VBox {
     tileCursor.borderSize = 2;
     tileCursor.size(tileSize.width, tileSize.height);
     tileCursor.depth = 99;
-    imageContainer.add(tileCursor);
+    viewport.add(tileCursor);
+  }
+
+  private function onKeyUp(key: Key) {
+    var code = key.keyCode;
+    switch (key.keyCode) {
+      case KeyCode.LCTRL:
+          ctrlKeyDown = false;
+        case KeyCode.RCTRL:
+        ctrlKeyDown = false;
+        case _:
+    }
+  }
+
+  private function onKeyDown(key: Key) {
+    var code = key.keyCode;
+    switch (key.keyCode) {
+      case KeyCode.LCTRL:
+          ctrlKeyDown = true;
+        case KeyCode.RCTRL:
+          ctrlKeyDown = true;
+        case _:
+    }
+  }
+
+  private function handleMouseZoom(e: MouseEvent) {
+    if (ctrlKeyDown == false) {
+      return;
+    }
+    if (e.delta > 0) {
+      viewport.scale(viewport.scaleX + 0.1);
+    } else if (e.delta < 0) {
+      viewport.scale(viewport.scaleX - 0.1);
+    }
   }
 
   private function clearTilesets() {
