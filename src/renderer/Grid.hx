@@ -1,5 +1,6 @@
 package renderer;
 
+import ceramic.Color;
 import ceramic.Point;
 import ceramic.Shader;
 import ceramic.Quad;
@@ -18,6 +19,7 @@ class Grid extends Entity implements Component implements Observable {
   public var cols(default, null): Int;
   public var rows(default, null): Int;
   public var cellSize(default, set): Rect = new Rect(0, 0, 16, 16);
+  public var color(default, set): Color;
   public var alpha(default, set): Float = 0.5;
   public var selectedCell: Int;
   public var selectedCellPos = new Point(0, 0);
@@ -29,7 +31,7 @@ class Grid extends Entity implements Component implements Observable {
     super();
     shader = app.assets.shader(Shaders.SHADERS__GRID);
     shader.setVec2('size', 16, 16);
-    shader.setVec4('color', 1.0, 1.0, 1.0, 1.0);
+    shader.setColor('color',Color.WHITE);
     shader.setFloat('alpha', alpha);
     shader.setFloat('thickness', 1.0);
     shader.setFloat('scale', 1.0);
@@ -48,6 +50,13 @@ class Grid extends Entity implements Component implements Observable {
       case false:
         visual.shader = null;
     }
+  }
+
+  function set_color(color: Color) {
+    if (this.color == color) return color;
+    this.color = color;
+    shader.setColor('color', color);
+    return color;
   }
 
   function set_alpha(alpha: Float) {
