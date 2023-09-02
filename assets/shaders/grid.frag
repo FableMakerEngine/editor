@@ -32,7 +32,7 @@ void main() {
   vec2 gridUv = uv * (texSize / size);
   vec2 grid = abs(fract(gridUv - 0.5) - 0.5) / fwidth(gridUv);
 
-  float line = (min(grid.x, grid.y) * thickness) / scale;
+  float line = (min(grid.x, grid.y) / thickness) / scale;
   vec4 lineColor = color * (1.0 - min(line, 1.0));
 
   outColor = (lineColor * alpha) + texColor;
