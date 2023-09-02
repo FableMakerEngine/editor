@@ -41,12 +41,14 @@ class Grid extends Entity implements Component implements Observable {
   function set_width(width: Int) {
     if (this.width == width) return width;
     this.width = width;
+    cols = Math.floor(width / cellSize.width);
     return width;
   }
-
+  
   function set_height(height: Int) {
     if (this.height == height) return height;
     this.height = height;
+    rows = Math.floor(height / cellSize.height);
     return height;
   }
 
@@ -61,13 +63,13 @@ class Grid extends Entity implements Component implements Observable {
   function getTileFrameId(x: Float, y: Float): Int {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
-    var maxCols = Math.floor(width / cellSize.width);
     var tileFrame = 0;
+
     if (tileRow <= 0) {
       return tileCol;
     }
     for (i in 0...tileRow) {
-      tileFrame += maxCols;
+      tileFrame += cols;
     }
     for (j in -1...tileCol) {
       tileFrame++;
