@@ -86,12 +86,17 @@ class TilePicker extends VBox {
     if (ctrlKeyDown == false) {
       return;
     }
-    if (e.delta > 0) {
-      viewport.scale(viewport.scaleX + scaleFactor);
-    } else if (e.delta < 0) {
-      if (viewport.scaleX - scaleFactor >= 0.1) {
-        viewport.scale(viewport.scaleX - scaleFactor);
-      }
+    var type = e.delta > 0 ? 'zoomin' : 'zoomout';
+    var zoomSpeed = viewport.scaleX > 2.0 ? (scaleFactor + 0.5) : scaleFactor;
+
+    switch (type) {
+      case 'zoomin':
+        viewport.scale(viewport.scaleX + zoomSpeed);
+
+      case 'zoomout':
+        if (viewport.scaleX - scaleFactor >= 0.1) {
+          viewport.scale(viewport.scaleX - zoomSpeed);
+        }
     }
     imageContainer.width = tileset.width * viewport.scaleX;
     imageContainer.height = tileset.height * viewport.scaleY;
