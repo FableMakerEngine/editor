@@ -18,6 +18,7 @@ class TilePicker extends VBox {
   private var viewport: Visual;
   public var tileCursor: Border;
   private var ctrlKeyDown: Bool;
+  private final scaleFactor: Float = 0.2;
 
   public function new() {
     super();
@@ -86,9 +87,11 @@ class TilePicker extends VBox {
       return;
     }
     if (e.delta > 0) {
-      viewport.scale(viewport.scaleX + 0.2);
+      viewport.scale(viewport.scaleX + scaleFactor);
     } else if (e.delta < 0) {
-      viewport.scale(viewport.scaleX - 0.2);
+      if (viewport.scaleX - scaleFactor >= 0.1) {
+        viewport.scale(viewport.scaleX - scaleFactor);
+      }
     }
     imageContainer.width = tileset.width * viewport.scaleX;
     imageContainer.height = tileset.height * viewport.scaleY;
