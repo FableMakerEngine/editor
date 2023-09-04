@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.util.MathUtil;
 import ceramic.KeyCode;
 import ceramic.Key;
 import ceramic.Visual;
@@ -86,18 +87,12 @@ class TilePicker extends VBox {
     if (ctrlKeyDown == false) {
       return;
     }
-    var type = e.delta > 0 ? 'zoomin' : 'zoomout';
     var zoomSpeed = viewport.scaleX > 2.0 ? (scaleFactor + 0.5) : scaleFactor;
+    var zoomFactor = e.delta > 0 ? zoomSpeed : -zoomSpeed;
+    var newScale = MathUtil.clamp(viewport.scaleX + zoomFactor, 0.2, 10);
+    
+    viewport.scale(newScale);
 
-    switch (type) {
-      case 'zoomin':
-        viewport.scale(viewport.scaleX + zoomSpeed);
-
-      case 'zoomout':
-        if (viewport.scaleX - scaleFactor >= 0.1) {
-          viewport.scale(viewport.scaleX - zoomSpeed);
-        }
-    }
     imageContainer.width = tileset.width * viewport.scaleX;
     imageContainer.height = tileset.height * viewport.scaleY;
   }
