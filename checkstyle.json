@@ -52,7 +52,7 @@
       "type": "NeedBraces",
       "props": {
         "severity": "WARNING",
-        "allowSingleLineStatement": false,
+        "allowSingleLineStatement": true,
         "tokens": [
           "FOR",
           "IF",
