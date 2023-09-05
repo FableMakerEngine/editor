@@ -1,8 +1,5 @@
 package components;
 
-import haxe.ui.util.MathUtil;
-import ceramic.KeyCode;
-import ceramic.Key;
 import ceramic.Visual;
 import renderer.GridQuad;
 import ceramic.Rect;
@@ -18,17 +15,13 @@ class TilePicker extends VBox {
   private var tileset: GridQuad;
   private var viewport: Visual;
   public var tileCursor: Border;
-  private var ctrlKeyDown: Bool;
-  private final scaleFactor: Float = 0.2;
+  var zoomable = new renderer.Zoomable();
 
   public function new() {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
     tileView.scrollMode = ScrollMode.NORMAL;
-    input.onKeyUp(null, onKeyUp);
-    input.onKeyDown(null, onKeyDown);
-    registerEvent(MouseEvent.MOUSE_WHEEL, handleMouseZoom);
   }
 
   public override function onReady() {
@@ -39,6 +32,8 @@ class TilePicker extends VBox {
 
   private function createViewport() {
     viewport = new Visual();
+    viewport.component('zoomable', zoomable);
+    zoomable.onOnZoomFinish(null, onZoomFinished);
     imageContainer.add(viewport);
   }
 
@@ -61,40 +56,9 @@ class TilePicker extends VBox {
     viewport.add(tileCursor);
   }
 
-  private function onKeyUp(key: Key) {
-    var code = key.keyCode;
-    switch (key.keyCode) {
-      case KeyCode.LCTRL:
-          ctrlKeyDown = false;
-        case KeyCode.RCTRL:
-        ctrlKeyDown = false;
-        case _:
-    }
-  }
-
-  private function onKeyDown(key: Key) {
-    var code = key.keyCode;
-    switch (key.keyCode) {
-      case KeyCode.LCTRL:
-          ctrlKeyDown = true;
-        case KeyCode.RCTRL:
-          ctrlKeyDown = true;
-        case _:
-    }
-  }
-
-  private function handleMouseZoom(e: MouseEvent) {
-    if (ctrlKeyDown == false) {
-      return;
-    }
-    var zoomSpeed = viewport.scaleX > 2.0 ? (scaleFactor + 0.5) : scaleFactor;
-    var zoomFactor = e.delta > 0 ? zoomSpeed : -zoomSpeed;
-    var newScale = MathUtil.clamp(viewport.scaleX + zoomFactor, 0.2, 10);
-    
-    viewport.scale(newScale);
-
-    imageContainer.width = tileset.width * viewport.scaleX;
-    imageContainer.height = tileset.height * viewport.scaleY;
+  private function onZoomFinished(scale: Float) {
+    imageContainer.width = tileset.width * scale;
+    imageContainer.height = tileset.height * scale;
   }
 
   private function clearTilesets() {
