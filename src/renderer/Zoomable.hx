@@ -11,7 +11,7 @@ class Zoomable extends Entity implements Component {
   @entity var visual: Visual;
   var ctrlKeyDown = false;
 
-  public var ignoreHits = false;
+  public var enable = false;
   public var minZoom = 0.0;
   public var maxZoom = 20.0;
   public var zoomFactor = 0.5;
@@ -51,20 +51,8 @@ class Zoomable extends Entity implements Component {
     ctrlKeyDown = key.keyCode == KeyCode.LCTRL;
   }
 
-  function hits(x: Float, y: Float) {
-    var isHit = false;
-    var children = visual.children;
-    isHit = visual.hits(screen.pointerX, screen.pointerY);
-    for (child in children) {
-      if (child.hits(screen.pointerX, screen.pointerY)) {
-        isHit = true;
-      }
-    }
-    return isHit;
-  }
-
   function handleMouseWheel(x: Float, y: Float) {
-    if (ignoreHits == false && hits(screen.pointerX, screen.pointerY) == false) {
+    if (enable == false) {
       return;
     }
     if (ctrlKeyDown) {

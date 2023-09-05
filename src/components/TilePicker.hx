@@ -22,6 +22,8 @@ class TilePicker extends VBox {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
+    onMouseOver = handleZoomable;
+    onMouseOut = handleZoomable;
     tileView.scrollMode = ScrollMode.NORMAL;
   }
 
@@ -35,7 +37,6 @@ class TilePicker extends VBox {
     viewport = new Visual();
     viewport.component('zoomable', zoomable);
     zoomable.onOnZoomFinish(null, onZoomFinished);
-    imageContainer.onMouseOver = handleZoomHits;
     imageContainer.add(viewport);
   }
 
@@ -63,8 +64,8 @@ class TilePicker extends VBox {
     imageContainer.height = tileset.height * scale;
   }
 
-  private function handleZoomHits(e: MouseEvent) {
-    zoomable.ignoreHits = hitTest(e.screenX, e.screenY);
+  function handleZoomable(e) {
+    zoomable.enable = !zoomable.enable;
   }
 
   private function clearTilesets() {
