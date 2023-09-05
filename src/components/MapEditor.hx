@@ -58,7 +58,7 @@ class MapEditor extends VBox {
   }
 
   @:bind(tileView, MouseEvent.RIGHT_MOUSE_DOWN)
-  private function onContextMenu(e: MouseEvent) {
+  function onContextMenu(e: MouseEvent) {
     contextMenu.left = e.screenX;
     contextMenu.top = e.screenY;
     contextMenu.show();
@@ -80,7 +80,7 @@ class MapEditor extends VBox {
     super.onReady();
     tileView.add(viewport);
   }
-  
+
   public override function onResized() {
     viewport.resize(48 * 20, 48 * 16);
   }

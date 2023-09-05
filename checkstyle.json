@@ -2,6 +2,15 @@
   "defaultSeverity": "INFO",
   "checks": [
     {
+      "type": "RedundantModifier",
+      "props": {
+        "enforcePublicPrivate": false,
+        "enforcePublic": false,
+        "enforcePrivate": false,
+        "severity": "INFO"
+      }
+    },
+    {
       "type": "UnusedLocalVar"
     },
     {
@@ -43,7 +52,7 @@
       "type": "NeedBraces",
       "props": {
         "severity": "WARNING",
-        "allowSingleLineStatement": false,
+        "allowSingleLineStatement": true,
         "tokens": [
           "FOR",
           "IF",

@@ -20,7 +20,7 @@ class GridQuad extends Quad {
     return super.set_width(width);
   }
 
-  override function _set_texture(texture:Texture) {
+  override function _set_texture(texture: Texture) {
     super._set_texture(texture);
     if (texture == null) return;
     grid.width = Math.round(texture.width);

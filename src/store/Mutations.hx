@@ -1,11 +1,12 @@
 package store;
 
 import ceramic.Rect;
+
 using Lambda;
 
 @:access(store.AppState)
 class Mutations {
-  private static function loadStateWithStorage() {
+  static function loadStateWithStorage() {
     var keys = store.storage.keys();
 
     for (key in keys) {
@@ -19,11 +20,11 @@ class Mutations {
     }
   }
 
-  private static function updateProjectPath(payload: String) {
+  static function updateProjectPath(payload: String) {
     store.state.projectPath = payload;
   }
 
-  private static function addRecentProject(payload: String) {
+  static function addRecentProject(payload: String) {
     var recentProjects = store.state.recentlyOpenedProjects;
     var projectExists = recentProjects.exists(project -> project == payload);
     if (!projectExists) {
@@ -31,11 +32,11 @@ class Mutations {
     }
   }
 
-  private static function updateActiveMap(payload: MapInfo) {
+  static function updateActiveMap(payload: MapInfo) {
     store.state.activeMap = payload;
   }
 
-  private static function updateTileSize(payload: Rect) {
+  static function updateTileSize(payload: Rect) {
     var tSize = store.state.tileSize;
     if (tSize == null || payload.width != tSize.width || payload.height != tSize.height) {
       store.state.tileSize = payload;

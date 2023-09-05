@@ -16,6 +16,14 @@
       }
     }
   },
+  "sameLine": {
+    "ifBody": "keep",
+    "elseBody": "keep",
+    "ifElse": "same",
+    "elseIf": "same",
+    "expressionIf": "same",
+    "expressionIfWithBlocks": false
+  },
   "indentation": {
     "character": "  "
   },

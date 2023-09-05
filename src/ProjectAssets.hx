@@ -1,9 +1,7 @@
 package;
 
 import ceramic.TilemapData;
-import ceramic.Asset;
 import ceramic.Files;
-import ceramic.TilemapAsset;
 import ceramic.RuntimeAssets;
 import ceramic.Assets;
 
@@ -11,6 +9,7 @@ using ceramic.TilemapPlugin;
 
 class ProjectAssets extends Assets {
   public static final instance: ProjectAssets = new ProjectAssets();
+
   public final DATA_DIR: String = 'data';
   public final ASSETS_DIR: String = 'assets';
 
@@ -18,22 +17,23 @@ class ProjectAssets extends Assets {
   public var dataPath(get, null): String;
   public var assetsPath(get, null): String;
 
-  private var mapInfoParser: MapInfoParser;
+  var mapInfoParser: MapInfoParser;
 
   @event function mapInfoDataReady(mapInfo: Array<MapInfo>);
+
   @event function mapInfoDataError();
 
-  private function new() {
+  function new() {
     super();
     mapInfoParser = new MapInfoParser();
     onMapInfoDataReady(this, preloadMapAssets);
   }
 
-  private function get_dataPath() {
+  function get_dataPath() {
     return '${runtimeAssets.path}/$DATA_DIR';
   }
 
-  private function get_assetsPath() {
+  function get_assetsPath() {
     return '${runtimeAssets.path}/$ASSETS_DIR';
   }
 
@@ -57,9 +57,8 @@ class ProjectAssets extends Assets {
     if (Files.exists(mapXmlPath)) {
       var mapXml = Files.getContent(mapXmlPath);
       try {
-        var data = mapInfoParser.parse(mapXml);
-        var mapInfo = mapInfoParser.maps;
-        emitMapInfoDataReady(mapInfo);
+        var maps = mapInfoParser.parse(mapXml);
+        emitMapInfoDataReady(maps);
       } catch (error) {
         app.logger.error('Unable to parse MapInfo.xml');
         emitMapInfoDataError();
@@ -69,11 +68,11 @@ class ProjectAssets extends Assets {
     }
   }
 
-  private function preloadMapAssets(mapInfo: Array<MapInfo>) {
+  function preloadMapAssets(mapInfo: Array<MapInfo>) {
     for (map in mapInfo) {
       var mapPath = '$dataPath/${map.path}';
       var children = map.children;
-      if (Files.exists(mapPath) == false) {
+      if (!Files.exists(mapPath)) {
         continue;
       }
       this.addTilemap('$DATA_DIR/${map.path}');

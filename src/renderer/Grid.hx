@@ -11,9 +11,10 @@ import ceramic.Component;
 import ceramic.TouchInfo;
 
 class Grid extends Entity implements Component implements Observable {
-  @observe public var visibleCells: Bool = true;
   @entity var visual: Quad;
+  var shader: Shader;
 
+  @observe public var visibleCells: Bool = true;
   public var width(default, set): Int;
   public var height(default, set): Int;
   public var cols(default, null): Int;
@@ -25,21 +26,20 @@ class Grid extends Entity implements Component implements Observable {
   public var thickness(default, set): Float = 1.0;
   public var selectedCell: Int;
   public var selectedCellPos = new Point(0, 0);
-  private var shader: Shader;
-  
+
   @event public function gridClick(selectedTile: Int, selectedCellPos: Point);
 
   public function new() {
     super();
     shader = app.assets.shader(Shaders.SHADERS__GRID);
     shader.setVec2('size', 16, 16);
-    shader.setColor('color',Color.WHITE);
+    shader.setColor('color', Color.WHITE);
     shader.setFloat('alpha', alpha);
     shader.setFloat('thickness', thickness);
     shader.setFloat('scale', scale);
     onVisibleCellsChange(this, onVisibleCellsChanged);
   }
-  
+
   public function bindAsComponent() {
     visual.onPointerDown(this, onClick);
     visual.shader = shader;
@@ -81,7 +81,6 @@ class Grid extends Entity implements Component implements Observable {
     shader.setFloat('alpha', alpha);
     return alpha;
   }
-  
 
   function set_width(width: Int) {
     if (this.width == width) return width;
@@ -89,7 +88,7 @@ class Grid extends Entity implements Component implements Observable {
     cols = Math.floor(width / cellSize.width);
     return width;
   }
-  
+
   function set_height(height: Int) {
     if (this.height == height) return height;
     this.height = height;
@@ -122,7 +121,7 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame;
   }
 
-  private function onClick(info: TouchInfo) {
+  function onClick(info: TouchInfo) {
     var localCoords = new Point();
     visual.screenToVisual(info.x, info.y, localCoords);
     var x = Math.floor(localCoords.x / cellSize.width) * cellSize.width;
