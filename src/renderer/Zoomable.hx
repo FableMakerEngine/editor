@@ -26,11 +26,15 @@ class Zoomable extends Entity implements Component {
     input.onKeyDown(this, onKeyDown);
   }
 
+  function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+  }
+
   function bindAsComponent() {}
 
   function scaleAt(target: Point, amount: Float) {
-    visual.scaleX *= amount;
-    visual.scaleY *= amount;
+    visual.scaleX = clamp(visual.scaleX * amount, minZoom, maxZoom);
+    visual.scaleY = clamp(visual.scaleY * amount, minZoom, maxZoom);
     if (zoomToMouse) {
       visual.x = target.x - (target.x - visual.x) * amount;
       visual.y = target.y - (target.y - visual.y) * amount;
