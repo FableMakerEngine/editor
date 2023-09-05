@@ -2,6 +2,15 @@
   "defaultSeverity": "INFO",
   "checks": [
     {
+      "type": "RedundantModifier",
+      "props": {
+        "enforcePublicPrivate": false,
+        "enforcePublic": false,
+        "enforcePrivate": false,
+        "severity": "INFO"
+      }
+    },
+    {
       "type": "UnusedLocalVar"
     },
     {
