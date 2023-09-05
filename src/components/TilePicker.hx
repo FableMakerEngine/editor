@@ -35,6 +35,7 @@ class TilePicker extends VBox {
     viewport = new Visual();
     viewport.component('zoomable', zoomable);
     zoomable.onOnZoomFinish(null, onZoomFinished);
+    imageContainer.onMouseOver = handleZoomHits;
     imageContainer.add(viewport);
   }
 
@@ -60,6 +61,10 @@ class TilePicker extends VBox {
   private function onZoomFinished(scale: Float) {
     imageContainer.width = tileset.width * scale;
     imageContainer.height = tileset.height * scale;
+  }
+
+  private function handleZoomHits(e: MouseEvent) {
+    zoomable.ignoreHits = hitTest(e.screenX, e.screenY);
   }
 
   private function clearTilesets() {
