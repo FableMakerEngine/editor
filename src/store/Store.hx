@@ -6,11 +6,13 @@ import ceramic.PersistentData;
 
 class Store extends Entity implements Observable {
   public static final store: Store = new Store();
+
   public var state: AppState = new AppState();
   public var storage: PersistentData;
-   var status: String = 'resting';
 
-   function new() {
+  var status: String = 'resting';
+
+  function new() {
     super();
   }
 
@@ -31,7 +33,7 @@ class Store extends Entity implements Observable {
         Reflect.callMethod(Mutations, method, [payload]);
         status = 'resting';
       }
-    } else { 
+    } else {
       trace('Unable to find field $type');
     }
   }

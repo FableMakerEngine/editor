@@ -13,7 +13,7 @@ import ceramic.TouchInfo;
 class Grid extends Entity implements Component implements Observable {
   @entity var visual: Quad;
   var shader: Shader;
-  
+
   @observe public var visibleCells: Bool = true;
   public var width(default, set): Int;
   public var height(default, set): Int;

@@ -9,6 +9,7 @@ using ceramic.TilemapPlugin;
 
 class ProjectAssets extends Assets {
   public static final instance: ProjectAssets = new ProjectAssets();
+
   public final DATA_DIR: String = 'data';
   public final ASSETS_DIR: String = 'assets';
 
@@ -16,22 +17,23 @@ class ProjectAssets extends Assets {
   public var dataPath(get, null): String;
   public var assetsPath(get, null): String;
 
-   var mapInfoParser: MapInfoParser;
+  var mapInfoParser: MapInfoParser;
 
   @event function mapInfoDataReady(mapInfo: Array<MapInfo>);
+
   @event function mapInfoDataError();
 
-   function new() {
+  function new() {
     super();
     mapInfoParser = new MapInfoParser();
     onMapInfoDataReady(this, preloadMapAssets);
   }
 
-   function get_dataPath() {
+  function get_dataPath() {
     return '${runtimeAssets.path}/$DATA_DIR';
   }
 
-   function get_assetsPath() {
+  function get_assetsPath() {
     return '${runtimeAssets.path}/$ASSETS_DIR';
   }
 
@@ -66,7 +68,7 @@ class ProjectAssets extends Assets {
     }
   }
 
-   function preloadMapAssets(mapInfo: Array<MapInfo>) {
+  function preloadMapAssets(mapInfo: Array<MapInfo>) {
     for (map in mapInfo) {
       var mapPath = '$dataPath/${map.path}';
       var children = map.children;

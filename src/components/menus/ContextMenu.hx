@@ -17,7 +17,7 @@ class ContextMenu extends Menu {
     removeAllComponents();
   }
 
-   function buildMenu() {
+  function buildMenu() {
     clear();
     for (item in items) {
       if (item.name == 'seperator') {

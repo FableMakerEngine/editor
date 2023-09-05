@@ -28,7 +28,7 @@ class MapList extends TreeView {
     });
   }
 
-   function createNodes(mapInfo: Array<MapInfo>, ?parentNode) {
+  function createNodes(mapInfo: Array<MapInfo>, ?parentNode) {
     for (map in mapInfo) {
       if (parentNode == null) {
         parentNode = worldNode;
@@ -46,7 +46,7 @@ class MapList extends TreeView {
     }
   }
 
-   function addMapNode(?parentNode: TreeViewNode, mapInfo: MapInfo): TreeViewNode {
+  function addMapNode(?parentNode: TreeViewNode, mapInfo: MapInfo): TreeViewNode {
     if (parentNode == null) {
       parentNode = worldNode;
     }
@@ -71,7 +71,7 @@ class MapList extends TreeView {
     return node;
   }
 
-   function removeAllChildNodes(parent: TreeViewNode) {
+  function removeAllChildNodes(parent: TreeViewNode) {
     var children = parent.childComponents;
     for (child in children) {
       if (Std.isOfType(child, TreeViewNode)) {
@@ -111,7 +111,7 @@ class MapList extends TreeView {
     ];
   }
 
-   function onNodeRightClick(e: MouseEvent) {
+  function onNodeRightClick(e: MouseEvent) {
     // Timer to workaround a bug in haxeui-ceramic backend
     haxe.Timer.delay(() -> {
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
@@ -125,7 +125,7 @@ class MapList extends TreeView {
     }, 25);
   }
 
-   function onNodeSelected(e) {
+  function onNodeSelected(e) {
     // Timer to workaround a bug in haxeui-ceramic backend
     haxe.Timer.delay(() -> {
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {

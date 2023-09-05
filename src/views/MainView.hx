@@ -8,7 +8,7 @@ class MainView extends VBox {
   public function new() {
     super();
   }
-  
+
   public override function onReady() {
     store.initializeStorage();
     if (!store.storage.exists('locale')) {
@@ -18,7 +18,7 @@ class MainView extends VBox {
     store.state.onProjectPathChange(null, onProjectPathChanged);
     store.state.invalidateProjectPath();
   }
-  
+
   public function onProjectPathChanged(newPath, prevPath) {
     if (newPath != null && newPath.length > 0) {
       store.commit('addRecentProject', newPath);
