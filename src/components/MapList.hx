@@ -1,9 +1,7 @@
 package components;
 
-import haxe.ui.events.UIEvent;
 import haxe.ui.containers.TreeView;
 import haxe.ui.core.Screen;
-import ceramic.Files;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.containers.TreeViewNode;
 import components.menus.ContextMenu;

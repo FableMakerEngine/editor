@@ -3,7 +3,6 @@ package renderer;
 import ceramic.Rect;
 import ceramic.Color;
 import ceramic.Border;
-import ceramic.RuntimeAssets;
 import ceramic.Point;
 import ceramic.TouchInfo;
 
@@ -16,7 +15,7 @@ class TilemapViewport extends ceramic.Scene {
   public var tileSize: Rect = new Rect(0, 0, 32, 32);
   public var tileCursor: ceramic.Border;
 
-   var mapPath: String;
+  var mapPath: String;
 
   public function new(?parentView) {
     super();
@@ -29,7 +28,7 @@ class TilemapViewport extends ceramic.Scene {
     store.state.onTileSizeChange(null, onTileSizeChanged);
   }
 
-   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+  function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     if (newMap.path == null) {
       loadEmptyMap(newMap);
       return;
@@ -37,7 +36,7 @@ class TilemapViewport extends ceramic.Scene {
     loadMap(newMap);
   }
 
-   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
+  function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
     tileSize = newSize;
     tileCursor.size(tileSize.width, tileSize.height);
     mapCols = Math.round(tilemap.width / tileSize.width);
@@ -46,20 +45,20 @@ class TilemapViewport extends ceramic.Scene {
 
   public override function preload() {}
 
-   override function create() {
+  override function create() {
     createBackground();
     createTileCursor();
     createTilemap();
   }
 
-   function createBackground() {
+  function createBackground() {
     background = new ceramic.Quad();
     background.color = ceramic.Color.BLACK;
     background.size(500, 500);
     add(background);
   }
 
-   function createTileCursor() {
+  function createTileCursor() {
     tileCursor = new Border();
     tileCursor.borderColor = Color.SNOW;
     tileCursor.borderSize = 2;
@@ -68,7 +67,7 @@ class TilemapViewport extends ceramic.Scene {
     add(tileCursor);
   }
 
-   function createTilemap() {
+  function createTilemap() {
     tilemap = new ceramic.Tilemap();
     add(tilemap);
   }
@@ -107,7 +106,7 @@ class TilemapViewport extends ceramic.Scene {
 
   public override function update(dt: Float) {}
 
-   function emptyTilemapData(name: String) {
+  function emptyTilemapData(name: String) {
     var data = new ceramic.TilemapData();
     data.name = name;
     data.width = Math.round(20 * tileSize.width);
@@ -116,7 +115,7 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   // @TODO assign better default values based on tilesize? or user settings
-   function loadEmptyMap(mapInfo: MapInfo) {
+  function loadEmptyMap(mapInfo: MapInfo) {
     tilemap.tilemapData = emptyTilemapData(mapInfo.name);
     mapCols = Math.round(tilemap.width / tileSize.width);
     mapRows = Math.round(tilemap.height / tileSize.height);
@@ -124,7 +123,7 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize.width, tileSize.height);
   }
 
-   function loadMap(map: MapInfo) {
+  function loadMap(map: MapInfo) {
     var tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData != null) {
       tilemap.tilemapData = tilemapData;

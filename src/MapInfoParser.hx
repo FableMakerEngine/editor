@@ -11,7 +11,7 @@ class MapInfoParser {
     return maps;
   }
 
-   function recursiveParse(xmlData: Xml): Array<MapInfo> {
+  function recursiveParse(xmlData: Xml): Array<MapInfo> {
     var mapElements = xmlData.elements();
 
     return [
@@ -25,6 +25,7 @@ class MapInfoParser {
         }
 
         mapInfo;
-      }];
+      }
+    ];
   }
 }

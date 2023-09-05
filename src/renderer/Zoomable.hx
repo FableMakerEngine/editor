@@ -57,7 +57,7 @@ class Zoomable extends Entity implements Component {
   }
 
   function handleMouseWheel(x: Float, y: Float) {
-    if (enable == false) {
+    if (!enable) {
       return;
     }
     if (ctrlKeyDown) {

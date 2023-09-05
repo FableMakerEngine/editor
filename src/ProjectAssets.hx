@@ -1,9 +1,7 @@
 package;
 
 import ceramic.TilemapData;
-import ceramic.Asset;
 import ceramic.Files;
-import ceramic.TilemapAsset;
 import ceramic.RuntimeAssets;
 import ceramic.Assets;
 
@@ -57,9 +55,8 @@ class ProjectAssets extends Assets {
     if (Files.exists(mapXmlPath)) {
       var mapXml = Files.getContent(mapXmlPath);
       try {
-        var data = mapInfoParser.parse(mapXml);
-        var mapInfo = mapInfoParser.maps;
-        emitMapInfoDataReady(mapInfo);
+        var maps = mapInfoParser.parse(mapXml);
+        emitMapInfoDataReady(maps);
       } catch (error) {
         app.logger.error('Unable to parse MapInfo.xml');
         emitMapInfoDataError();
@@ -73,7 +70,7 @@ class ProjectAssets extends Assets {
     for (map in mapInfo) {
       var mapPath = '$dataPath/${map.path}';
       var children = map.children;
-      if (Files.exists(mapPath) == false) {
+      if (!Files.exists(mapPath)) {
         continue;
       }
       this.addTilemap('$DATA_DIR/${map.path}');
