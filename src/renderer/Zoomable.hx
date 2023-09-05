@@ -33,6 +33,10 @@ class Zoomable extends Entity implements Component {
 
   function bindAsComponent() {}
 
+  public function resetZoom() {
+    visual.scale(1.0, 1.0);
+  }
+
   function scaleAt(target: Point, amount: Float) {
     visual.scaleX = clamp(visual.scaleX * amount, minZoom, maxZoom);
     visual.scaleY = clamp(visual.scaleY * amount, minZoom, maxZoom);
