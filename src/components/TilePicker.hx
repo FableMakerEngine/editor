@@ -1,33 +1,49 @@
 package components;
 
+import renderer.Zoomable;
 import renderer.GridQuad;
+import ceramic.Visual;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Color;
+import haxe.ui.containers.VBox;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
-import haxe.ui.containers.VBox;
+import haxe.ui.constants.ScrollMode;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
   private var tileset: GridQuad;
+  private var viewport: Visual;
   public var tileCursor: Border;
+  var zoomable = new Zoomable();
 
   public function new() {
     super();
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
+    onMouseOver = handleZoomable;
+    onMouseOut = handleZoomable;
+    tileView.scrollMode = ScrollMode.NORMAL;
   }
 
   public override function onReady() {
+    createViewport();
     createTileset();
     createTileCursor();
+  }
+
+  private function createViewport() {
+    viewport = new Visual();
+    viewport.component('zoomable', zoomable);
+    zoomable.onOnZoomFinish(null, onZoomFinished);
+    imageContainer.add(viewport);
   }
 
   private function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
-    imageContainer.add(tileset);
+    viewport.add(tileset);
   }
 
   private function createTileCursor() {
@@ -40,7 +56,16 @@ class TilePicker extends VBox {
     tileCursor.borderSize = 2;
     tileCursor.size(tileSize.width, tileSize.height);
     tileCursor.depth = 99;
-    imageContainer.add(tileCursor);
+    viewport.add(tileCursor);
+  }
+
+  private function onZoomFinished(scale: Float) {
+    imageContainer.width = tileset.width * scale;
+    imageContainer.height = tileset.height * scale;
+  }
+
+  function handleZoomable(e) {
+    zoomable.enable = !zoomable.enable;
   }
 
   private function clearTilesets() {
@@ -96,8 +121,9 @@ class TilePicker extends VBox {
   public function onTilesetTabClick(button: Button) {
     var data = button.userData;
     tileset.texture = data.texture;
-    imageContainer.width = tileset.width;
-    imageContainer.height = tileset.height;
+    viewport.scale(1.0);
+    imageContainer.width = tileset.width * viewport.scaleX;
+    imageContainer.height = tileset.height * viewport.scaleY;
   }
 
   public function onTilesetClick(selectedTile, selectedTilePos) {
