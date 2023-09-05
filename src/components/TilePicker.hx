@@ -1,7 +1,8 @@
 package components;
 
-import ceramic.Visual;
+import renderer.Zoomable;
 import renderer.GridQuad;
+import ceramic.Visual;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Color;
@@ -15,7 +16,7 @@ class TilePicker extends VBox {
   private var tileset: GridQuad;
   private var viewport: Visual;
   public var tileCursor: Border;
-  var zoomable = new renderer.Zoomable();
+  var zoomable = new Zoomable();
 
   public function new() {
     super();
