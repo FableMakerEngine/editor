@@ -8,9 +8,9 @@ class Store extends Entity implements Observable {
   public static final store: Store = new Store();
   public var state: AppState = new AppState();
   public var storage: PersistentData;
-  private var status: String = 'resting';
+   var status: String = 'resting';
 
-  private function new() {
+   function new() {
     super();
   }
 

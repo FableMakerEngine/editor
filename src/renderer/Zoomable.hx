@@ -15,8 +15,9 @@ class Zoomable extends Entity implements Component {
   public var minZoom = 0.0;
   public var maxZoom = 20.0;
   public var zoomFactor = 0.5;
+
   // not finished with implementation
-  private var zoomToMouse = false;
+  var zoomToMouse = false;
 
   @event public function onZoomFinish(scale: Float);
 

@@ -18,22 +18,22 @@ class ProjectAssets extends Assets {
   public var dataPath(get, null): String;
   public var assetsPath(get, null): String;
 
-  private var mapInfoParser: MapInfoParser;
+   var mapInfoParser: MapInfoParser;
 
   @event function mapInfoDataReady(mapInfo: Array<MapInfo>);
   @event function mapInfoDataError();
 
-  private function new() {
+   function new() {
     super();
     mapInfoParser = new MapInfoParser();
     onMapInfoDataReady(this, preloadMapAssets);
   }
 
-  private function get_dataPath() {
+   function get_dataPath() {
     return '${runtimeAssets.path}/$DATA_DIR';
   }
 
-  private function get_assetsPath() {
+   function get_assetsPath() {
     return '${runtimeAssets.path}/$ASSETS_DIR';
   }
 
@@ -69,7 +69,7 @@ class ProjectAssets extends Assets {
     }
   }
 
-  private function preloadMapAssets(mapInfo: Array<MapInfo>) {
+   function preloadMapAssets(mapInfo: Array<MapInfo>) {
     for (map in mapInfo) {
       var mapPath = '$dataPath/${map.path}';
       var children = map.children;

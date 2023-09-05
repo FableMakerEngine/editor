@@ -15,7 +15,7 @@ class TopMenu extends VBox {
     store.state.onRecentlyOpenedProjectsChange(null, buildRecentProjectItems);
   }
 
-  private function buildRecentProjectItems(?newList, ?oldList) {
+   function buildRecentProjectItems(?newList, ?oldList) {
     var recentProjects = newList != null ? newList : store.state.recentlyOpenedProjects;
     var children = menuOpenRecentProject.childComponents;
     if (recentProjects.length <= 0) {
@@ -36,7 +36,7 @@ class TopMenu extends VBox {
     }
   }
 
-  private function assignClickEvents() {
+   function assignClickEvents() {
     fileMenu.walkComponents(child -> {
       switch (child.id) {
         case 'menuItemNewProject':
@@ -52,9 +52,9 @@ class TopMenu extends VBox {
     });
   }
 
-  private function onNewProject(e: MouseEvent) {}
+   function onNewProject(e: MouseEvent) {}
   
-  private function onOpenProject(e: MouseEvent) {
+   function onOpenProject(e: MouseEvent) {
     var filter: DialogsFileFilter = {
       extensions: ['fable'],
       name: 'Fable Maker Project'
@@ -65,12 +65,12 @@ class TopMenu extends VBox {
     });
   }
 
-  private function onOpenRecentProject(menuItem: MenuItem, e: MouseEvent) {
+   function onOpenRecentProject(menuItem: MenuItem, e: MouseEvent) {
     var selectedPath = menuItem.text;
     store.commit('updateProjectPath', selectedPath);
   }
 
-  private function onSave(e: MouseEvent) {}
+   function onSave(e: MouseEvent) {}
 
-  private function onExit(e: MouseEvent) {}
+   function onExit(e: MouseEvent) {}
 }

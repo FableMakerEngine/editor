@@ -25,7 +25,7 @@ class Grid extends Entity implements Component implements Observable {
   public var thickness(default, set): Float = 1.0;
   public var selectedCell: Int;
   public var selectedCellPos = new Point(0, 0);
-  private var shader: Shader;
+   var shader: Shader;
   
   @event public function gridClick(selectedTile: Int, selectedCellPos: Point);
 
@@ -122,7 +122,7 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame;
   }
 
-  private function onClick(info: TouchInfo) {
+   function onClick(info: TouchInfo) {
     var localCoords = new Point();
     visual.screenToVisual(info.x, info.y, localCoords);
     var x = Math.floor(localCoords.x / cellSize.width) * cellSize.width;

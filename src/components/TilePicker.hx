@@ -13,10 +13,10 @@ import haxe.ui.constants.ScrollMode;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
-  private var tileset: GridQuad;
-  private var viewport: Visual;
-  public var tileCursor: Border;
+  var tileset: GridQuad;
+  var viewport: Visual;
   var zoomable = new Zoomable();
+  var tileCursor: Border;
 
   public function new() {
     super();
@@ -33,20 +33,20 @@ class TilePicker extends VBox {
     createTileCursor();
   }
 
-  private function createViewport() {
+  function createViewport() {
     viewport = new Visual();
     viewport.component('zoomable', zoomable);
     zoomable.onOnZoomFinish(null, onZoomFinished);
     imageContainer.add(viewport);
   }
 
-  private function createTileset() {
+  function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
     viewport.add(tileset);
   }
 
-  private function createTileCursor() {
+  function createTileCursor() {
     var tileSize = store.state.tileSize;
     if (tileSize == null) {
       tileSize = new Rect(0, 0, 16, 16);
@@ -59,7 +59,7 @@ class TilePicker extends VBox {
     viewport.add(tileCursor);
   }
 
-  private function onZoomFinished(scale: Float) {
+  function onZoomFinished(scale: Float) {
     imageContainer.width = tileset.width * scale;
     imageContainer.height = tileset.height * scale;
   }
@@ -68,20 +68,20 @@ class TilePicker extends VBox {
     zoomable.enable = !zoomable.enable;
   }
 
-  private function clearTilesets() {
+  function clearTilesets() {
     tileset.texture = null;
     tileset.clear();
-    for (index in 0 ... tabBar.tabCount) {
+    for (index in 0...tabBar.tabCount) {
       tabBar.removeTab(0);
     }
   }
 
-  private function onTileSizeChanged(newSize, oldSize) {
+  function onTileSizeChanged(newSize, oldSize) {
     tileCursor.size(newSize.width, newSize.height);
     tileset.grid.cellSize = newSize;
   }
 
-  private function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+  function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     if (newMap.path == null) {
       clearTilesets();
       return;
@@ -96,11 +96,11 @@ class TilePicker extends VBox {
       var data = {
         name: tileset.name,
         texture: tileset.image.texture
-      }; 
+      };
 
       button.text = tileset.name;
       button.userData = data;
-  
+
       if (tabBar.tabCount == 0) {
         onTilesetTabClick(button);
       }
@@ -108,11 +108,11 @@ class TilePicker extends VBox {
       tabBar.addComponent(button);
     }
 
-    for (i in 0 ... tabBar.tabCount) {
+    for (i in 0...tabBar.tabCount) {
       var button = tabBar.getTab(i);
       if (button != null) {
         button.registerEvent(MouseEvent.CLICK, (e) -> {
-          onTilesetTabClick(cast (button, Button));
+          onTilesetTabClick(cast(button, Button));
         });
       }
     }
