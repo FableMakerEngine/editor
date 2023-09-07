@@ -60,8 +60,8 @@ class TilePicker extends VBox {
   }
 
   function onZoomFinished(scale: Float) {
-    imageContainer.width = tileset.width * scale;
-    imageContainer.height = tileset.height * scale;
+    imageContainer.width = tileset.width * viewport.scaleX;
+    imageContainer.height = tileset.height * viewport.scaleY;
   }
 
   function handleZoomable(e) {
