@@ -26,26 +26,26 @@ class AppMutations {
     }
   }
 
-  public function updateProjectPath(payload: String) {
-    state.projectPath = payload;
+  public function updateProjectPath(path: String) {
+    state.projectPath = path;
   }
 
-  public function addRecentProject(payload: String) {
+  public function addRecentProject(path: String) {
     var recentProjects = state.recentlyOpenedProjects;
-    var projectExists = recentProjects.exists(project -> project == payload);
+    var projectExists = recentProjects.exists(project -> project == path);
     if (!projectExists) {
-      state.recentlyOpenedProjects.push(payload);
+      state.recentlyOpenedProjects.push(path);
     }
   }
 
-  public function updateActiveMap(payload: MapInfo) {
-    state.activeMap = payload;
+  public function updateActiveMap(mapInfo: MapInfo) {
+    state.activeMap = mapInfo;
   }
 
-  public function updateTileSize(payload: Rect) {
+  public function updateTileSize(size: Rect) {
     var tSize = state.tileSize;
-    if (tSize == null || payload.width != tSize.width || payload.height != tSize.height) {
-      state.tileSize = payload;
+    if (tSize == null || size.width != tSize.width || size.height != tSize.height) {
+      state.tileSize = size;
     }
   }
 }
