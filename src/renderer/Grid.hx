@@ -156,6 +156,7 @@ class Grid extends Entity implements Component implements Observable {
 
   function onPointerDown(info: TouchInfo) {
     var start = screenToCellPosition(info.x, info.y);
+    selectionRect = new Rect(0, 0, 0, 0);
     selectionRect.x = start.x;
     selectionRect.y = start.y;
     screen.onPointerMove(this, onPointerMove);
