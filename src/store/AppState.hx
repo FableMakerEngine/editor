@@ -9,6 +9,7 @@ class AppState implements ReadOnly implements Observable {
   @observe public var activeMap: MapInfo;
   @observe public var mapTabs: Array<MapInfo>;
   @observe public var tileSize: Rect;
+  @observe public var selectedTiles: Array<Int>;
 
   public function new() {}
 

@@ -48,4 +48,11 @@ class AppMutations {
       state.tileSize = size;
     }
   }
+
+  public function addSelectedTile(tile: Int, unselectPrevious: Bool = false) {
+    if (unselectPrevious) {
+      store.state.selectedTiles = [];
+    }
+    store.state.selectedTiles.push(tile);
+  }
 }
