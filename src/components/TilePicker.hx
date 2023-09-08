@@ -43,6 +43,7 @@ class TilePicker extends VBox {
   function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
+    tileset.grid.onOnGridSelection(null, onTilesetSelection);
     viewport.add(tileset);
   }
 
@@ -128,5 +129,9 @@ class TilePicker extends VBox {
 
   public function onTilesetClick(selectedTile, selectedTilePos) {
     tileCursor.pos(selectedTilePos.x, selectedTilePos.y);
+  }
+
+  public function onTilesetSelection(cells, positions, selectionRect) {
+    tileCursor.size(selectionRect.width, selectionRect.height);
   }
 }

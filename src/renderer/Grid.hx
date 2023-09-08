@@ -10,6 +10,8 @@ import ceramic.Rect;
 import ceramic.Component;
 import ceramic.TouchInfo;
 
+using Lambda;
+
 class Grid extends Entity implements Component implements Observable {
   @entity var visual: Quad;
   var shader: Shader;
@@ -24,13 +26,17 @@ class Grid extends Entity implements Component implements Observable {
   public var alpha(default, set): Float = 0.5;
   public var scale(default, set): Float = 1.0;
   public var thickness(default, set): Float = 1.0;
-  public var selectedCell: Int;
-  public var selectedCellPos = new Point(0, 0);
+  public var selectedCells: Array<Int> = [];
+  public var cellPositions: Array<Point> = [];
 
-  @event public function gridClick(selectedTile: Int, selectedCellPos: Point);
+  var selectionRect: Rect;
+
+  @event public function gridClick(selectedCells: Array<Int>, selectedCellPos: Point);
+  @event public function onGridSelection(selectedCells: Array<Int>, cellPositions: Array<Point>, selectionRect: Rect);
 
   public function new() {
     super();
+    selectionRect = new Rect();
     shader = app.assets.shader(Shaders.SHADERS__GRID);
     shader.setVec2('size', 16, 16);
     shader.setColor('color', Color.WHITE);
@@ -41,7 +47,7 @@ class Grid extends Entity implements Component implements Observable {
   }
 
   public function bindAsComponent() {
-    visual.onPointerDown(this, onClick);
+    visual.onPointerDown(this, onPointerDown);
     visual.shader = shader;
   }
 
@@ -121,13 +127,39 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame;
   }
 
-  function onClick(info: TouchInfo) {
+  function screenToCellPosition(screenX, screenY, roundUp = false): Point {
     var localCoords = new Point();
-    visual.screenToVisual(info.x, info.y, localCoords);
-    var x = Math.floor(localCoords.x / cellSize.width) * cellSize.width;
-    var y = Math.floor(localCoords.y / cellSize.height) * cellSize.height;
-    selectedCell = getTileFrameId(localCoords.x, localCoords.y);
-    selectedCellPos = new Point(x, y);
-    emitGridClick(selectedCell, selectedCellPos);
+    // screenToVisual may be heavy on performance?
+    visual.screenToVisual(screenX, screenY, localCoords);
+    if (roundUp) {
+      return new Point(
+        Math.ceil(localCoords.x / cellSize.width) * cellSize.width,
+        Math.ceil(localCoords.y / cellSize.height) * cellSize.height
+      );
+    }
+    return new Point(
+      Math.floor(localCoords.x / cellSize.width) * cellSize.width,
+      Math.floor(localCoords.y / cellSize.height) * cellSize.height
+    );
+  }
+
+  function onClick(info: TouchInfo) {
+    screen.offPointerMove(onPointerMove);
+  }
+
+  function onPointerMove(info: TouchInfo) {
+    var current = screenToCellPosition(info.x, info.y, true);
+    selectionRect.width = current.x - selectionRect.x;
+    selectionRect.height = current.y - selectionRect.y;
+    emitOnGridSelection(selectedCells, cellPositions, selectionRect);
+  }
+
+  function onPointerDown(info: TouchInfo) {
+    var start = screenToCellPosition(info.x, info.y);
+    selectionRect.x = start.x;
+    selectionRect.y = start.y;
+    screen.onPointerMove(this, onPointerMove);
+    visual.oncePointerUp(this, onClick);
+    emitGridClick(selectedCells, start);
   }
 }
