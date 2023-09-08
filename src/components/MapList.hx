@@ -136,7 +136,7 @@ class MapList extends TreeView {
         id: selectedNode.data.id,
         path: selectedNode.data.path
       }
-      store.commit('updateActiveMap', mapInfo);
+      store.commit.updateActiveMap(mapInfo);
     }, 25);
   }
 

@@ -61,13 +61,13 @@ class TopMenu extends VBox {
     }
     ceramic.Dialogs.openFile('Open Project', [filter], (filePath) -> {
       var projectDir = Path.normalize(Path.directory(filePath));
-      store.commit('updateProjectPath', projectDir);
+      store.commit.updateProjectPath(projectDir);
     });
   }
 
   function onOpenRecentProject(menuItem: MenuItem, e: MouseEvent) {
     var selectedPath = menuItem.text;
-    store.commit('updateProjectPath', selectedPath);
+    store.commit.updateProjectPath(selectedPath);
   }
 
   function onSave(e: MouseEvent) {}
