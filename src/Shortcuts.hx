@@ -1,4 +1,4 @@
-import store.Store;
+import store.AppStore;
 
 class Shortcuts {
   /**
@@ -13,9 +13,9 @@ class Shortcuts {
   /**
    * Shared store instance
    */
-  public static var store(get, never): Store;
+  public static var store(get, never): AppStore;
 
-  #if !haxe_server inline #end static function get_store(): Store {
-    return Store.store;
+  #if !haxe_server inline #end static function get_store(): AppStore {
+    return AppStore.instance;
   }
 }
