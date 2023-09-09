@@ -171,7 +171,8 @@ class Grid extends Entity implements Component implements Observable {
     return selectedCells;
   }
 
-  function createRectangleFromSelectedCells(selectedCells: Array<Cell>): Rect {
+  // Move out of Grid?
+  function createRectFromCells(selectedCells: Array<Cell>): Rect {
     if (selectedCells.length == 0) {
       return new Rect(0, 0, 0, 0);
     }
@@ -205,7 +206,7 @@ class Grid extends Entity implements Component implements Observable {
     selectionRect.width = current.x - selectionRect.x;
     selectionRect.height = current.y - selectionRect.y;
     var selectedCells = getSelectedCells(selectionRect);
-    var newRect = createRectangleFromSelectedCells(selectedCells);
+    var newRect = createRectFromCells(selectedCells);
     newRect.width += cellSize.width;
     newRect.height += cellSize.height;
     emitOnGridSelection(selectedCells, newRect);
