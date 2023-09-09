@@ -110,6 +110,10 @@ class Grid extends Entity implements Component implements Observable {
     return cellSize;
   }
 
+  function isWithinBounds(value: Float, minValue: Float, maxValue: Float): Bool {
+    return (value >= minValue && value <= maxValue);
+  }
+
   function getTileFrameId(x: Float, y: Float): Int {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
@@ -187,6 +191,10 @@ class Grid extends Entity implements Component implements Observable {
   function onPointerMove(info: TouchInfo) {
     // may be performanc heavy to calculate every pixel moved
     var current = screenToCellPosition(info.x, info.y, true);
+    if (!isWithinBounds(current.x, 0, width - cellSize.width) ||
+        !isWithinBounds(current.y, 0, height - cellSize.height)) {
+      return;
+    }
     selectionRect.width = current.x - selectionRect.x;
     selectionRect.height = current.y - selectionRect.y;
     var selectedCells = getSelectedCells(selectionRect);
