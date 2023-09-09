@@ -45,6 +45,7 @@ class TilePicker extends VBox {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
     tileset.grid.onOnGridSelection(null, onTilesetSelection);
+    tileset.grid.onOnGridSelectionFinished(null, onTilesetSelectionFinished);
     viewport.add(tileset);
   }
 
@@ -137,6 +138,9 @@ class TilePicker extends VBox {
   public function onTilesetSelection(cells: Array<Cell>, selectionRect) {
     tileCursor.pos(selectionRect.x, selectionRect.y);
     tileCursor.size(selectionRect.width, selectionRect.height);
-    // trace(selectedCells.length);
+  }
+
+  public function onTilesetSelectionFinished(cells: Array<Cell>) {
+    store.commit.addSelectedTiles(cast cells);
   }
 }
