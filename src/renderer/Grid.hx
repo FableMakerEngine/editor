@@ -12,6 +12,11 @@ import ceramic.TouchInfo;
 
 using Lambda;
 
+typedef Cell = {
+  frame: Int,
+  position: Point
+}
+
 class Grid extends Entity implements Component implements Observable {
   @entity var visual: Quad;
   var shader: Shader;
@@ -26,13 +31,12 @@ class Grid extends Entity implements Component implements Observable {
   public var alpha(default, set): Float = 0.5;
   public var scale(default, set): Float = 1.0;
   public var thickness(default, set): Float = 1.0;
-  public var selectedCells: Array<Int> = [];
-  public var cellPositions: Array<Point> = [];
+  public var selectedCells: Array<Cell> = [];
 
   var selectionRect: Rect;
 
-  @event public function gridClick(selectedCells: Array<Int>, selectedCellPos: Point);
-  @event public function onGridSelection(selectedCells: Array<Point>, selectionRect: Rect);
+  @event public function gridClick(cells: Array<Cell>);
+  @event public function onGridSelection(cells: Array<Cell>, selectionRect: Rect);
 
   public function new() {
     super();
@@ -141,8 +145,8 @@ class Grid extends Entity implements Component implements Observable {
     );
   }
 
-  function getSelectedCells(rect: Rect): Array<Point> {
-    var selectedPositions: Array<Point> = [];
+  function getSelectedCells(rect: Rect): Array<Cell> {
+    var selectedCells: Array<Cell> = [];
     var rectX1 = Math.floor(rect.x);
     var rectX2 = Math.floor(rect.x + rect.width);
     var rectY1 = Math.floor(rect.y);
@@ -157,28 +161,31 @@ class Grid extends Entity implements Component implements Observable {
     for (x in startX...endX + 1) {
       for (y in startY...endY + 1) {
         if (x % cellSize.width == 0 && y % cellSize.height == 0) {
-          selectedPositions.push(new Point(x, y));
+          selectedCells.push({
+            frame: getTileFrameId(x, y),
+            position: new Point(x, y)
+          });
         }
       }
     }
-    return selectedPositions;
+    return selectedCells;
   }
 
-  function createRectangleFromSelectedCells(selectedCells: Array<Point>): Rect {
+  function createRectangleFromSelectedCells(selectedCells: Array<Cell>): Rect {
     if (selectedCells.length == 0) {
       return new Rect(0, 0, 0, 0);
     }
 
-    var minX = selectedCells[0].x;
-    var minY = selectedCells[0].y;
-    var maxX = selectedCells[0].x;
-    var maxY = selectedCells[0].y;
+    var minX = selectedCells[0].position.x;
+    var minY = selectedCells[0].position.y;
+    var maxX = selectedCells[0].position.x;
+    var maxY = selectedCells[0].position.y;
 
     for (cell in selectedCells) {
-      minX = Std.int(Math.min(minX, cell.x));
-      minY = Std.int(Math.min(minY, cell.y));
-      maxX = Std.int(Math.max(maxX, cell.x));
-      maxY = Std.int(Math.max(maxY, cell.y));
+      minX = Std.int(Math.min(minX, cell.position.x));
+      minY = Std.int(Math.min(minY, cell.position.y));
+      maxX = Std.int(Math.max(maxX, cell.position.x));
+      maxY = Std.int(Math.max(maxY, cell.position.y));
     }
 
     return new Rect(minX, minY, maxX - minX, maxY - minY);
@@ -209,8 +216,12 @@ class Grid extends Entity implements Component implements Observable {
     selectionRect = new Rect(0, 0, 0, 0);
     selectionRect.x = start.x;
     selectionRect.y = start.y;
+    selectedCells = [{
+      frame: getTileFrameId(start.x, start.y),
+      position: start
+    }];
     screen.onPointerMove(this, onPointerMove);
     visual.oncePointerUp(this, onClick);
-    emitGridClick(selectedCells, start);
+    emitGridClick(selectedCells);
   }
 }
