@@ -132,7 +132,8 @@ class TilePicker extends VBox {
     tileCursor.size(tileset.grid.cellSize.width, tileset.grid.cellSize.height);
   }
 
-  public function onTilesetSelection(cells, positions, selectionRect) {
+  public function onTilesetSelection(selectedCells, selectionRect) {
+    tileCursor.pos(selectionRect.x, selectionRect.y);
     tileCursor.size(selectionRect.width, selectionRect.height);
   }
 }

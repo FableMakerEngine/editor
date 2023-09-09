@@ -32,7 +32,7 @@ class Grid extends Entity implements Component implements Observable {
   var selectionRect: Rect;
 
   @event public function gridClick(selectedCells: Array<Int>, selectedCellPos: Point);
-  @event public function onGridSelection(selectedCells: Array<Int>, cellPositions: Array<Point>, selectionRect: Rect);
+  @event public function onGridSelection(selectedCells: Array<Point>, selectionRect: Rect);
 
   public function new() {
     super();
@@ -131,16 +131,53 @@ class Grid extends Entity implements Component implements Observable {
     var localCoords = new Point();
     // screenToVisual may be heavy on performance?
     visual.screenToVisual(screenX, screenY, localCoords);
-    if (roundUp) {
-      return new Point(
-        Math.ceil(localCoords.x / cellSize.width) * cellSize.width,
-        Math.ceil(localCoords.y / cellSize.height) * cellSize.height
-      );
-    }
     return new Point(
       Math.floor(localCoords.x / cellSize.width) * cellSize.width,
       Math.floor(localCoords.y / cellSize.height) * cellSize.height
     );
+  }
+
+  function getSelectedCells(rect: Rect): Array<Point> {
+    var selectedPositions: Array<Point> = [];
+    var rectX1 = Math.floor(rect.x);
+    var rectX2 = Math.floor(rect.x + rect.width);
+    var rectY1 = Math.floor(rect.y);
+    var rectY2 = Math.floor(rect.y + rect.height);
+
+    var startX = Std.int(Math.min(rectX1, rectX2));
+    var endX = Std.int(Math.max(rectX1, rectX2));
+    var startY = Std.int(Math.min(rectY1, rectY2));
+    var endY = Std.int(Math.max(rectY1, rectY2));
+
+    // we add 1 to ensure we loop to the the endX value, in order for modulos to work
+    for (x in startX...endX + 1) {
+      for (y in startY...endY + 1) {
+        if (x % cellSize.width == 0 && y % cellSize.height == 0) {
+          selectedPositions.push(new Point(x, y));
+        }
+      }
+    }
+    return selectedPositions;
+  }
+
+  function createRectangleFromSelectedCells(selectedCells: Array<Point>): Rect {
+    if (selectedCells.length == 0) {
+      return new Rect(0, 0, 0, 0);
+    }
+
+    var minX = selectedCells[0].x;
+    var minY = selectedCells[0].y;
+    var maxX = selectedCells[0].x;
+    var maxY = selectedCells[0].y;
+
+    for (cell in selectedCells) {
+      minX = Std.int(Math.min(minX, cell.x));
+      minY = Std.int(Math.min(minY, cell.y));
+      maxX = Std.int(Math.max(maxX, cell.x));
+      maxY = Std.int(Math.max(maxY, cell.y));
+    }
+
+    return new Rect(minX, minY, maxX - minX, maxY - minY);
   }
 
   function onClick(info: TouchInfo) {
@@ -148,10 +185,15 @@ class Grid extends Entity implements Component implements Observable {
   }
 
   function onPointerMove(info: TouchInfo) {
+    // may be performanc heavy to calculate every pixel moved
     var current = screenToCellPosition(info.x, info.y, true);
     selectionRect.width = current.x - selectionRect.x;
     selectionRect.height = current.y - selectionRect.y;
-    emitOnGridSelection(selectedCells, cellPositions, selectionRect);
+    var selectedCells = getSelectedCells(selectionRect);
+    var newRect = createRectangleFromSelectedCells(selectedCells);
+    newRect.width += cellSize.width;
+    newRect.height += cellSize.height;
+    emitOnGridSelection(selectedCells, newRect);
   }
 
   function onPointerDown(info: TouchInfo) {
