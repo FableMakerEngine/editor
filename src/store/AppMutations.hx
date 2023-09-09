@@ -49,10 +49,14 @@ class AppMutations {
     }
   }
 
-  public function addSelectedTile(tile: Int, unselectPrevious: Bool = false) {
+  public function addSelectedTiles(tiles: Array<Tile>, unselectPrevious: Bool = false) {
     if (unselectPrevious) {
-      store.state.selectedTiles = [];
+      state.selectedTiles = tiles;
+      return;
     }
-    store.state.selectedTiles.push(tile);
+    for (tile in tiles) {
+      state.selectedTiles.push(tile);
+      state.invalidateSelectedTiles();
+    }
   }
 }
