@@ -118,7 +118,7 @@ class Grid extends Entity implements Component implements Observable {
     return (value >= minValue && value <= maxValue);
   }
 
-  function getTileFrameId(x: Float, y: Float): Int {
+  function getCellFrame(x: Float, y: Float): Int {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
     var tileFrame = 0;
@@ -162,7 +162,7 @@ class Grid extends Entity implements Component implements Observable {
       for (y in startY...endY + 1) {
         if (x % cellSize.width == 0 && y % cellSize.height == 0) {
           selectedCells.push({
-            frame: getTileFrameId(x, y),
+            frame: getCellFrame(x, y),
             position: new Point(x, y)
           });
         }
@@ -217,7 +217,7 @@ class Grid extends Entity implements Component implements Observable {
     selectionRect.x = start.x;
     selectionRect.y = start.y;
     selectedCells = [{
-      frame: getTileFrameId(start.x, start.y),
+      frame: getCellFrame(start.x, start.y),
       position: start
     }];
     screen.onPointerMove(this, onPointerMove);
