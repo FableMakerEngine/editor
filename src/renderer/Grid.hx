@@ -36,7 +36,9 @@ class Grid extends Entity implements Component implements Observable {
   var startPos = new Point();
 
   @event public function gridClick(cells: Array<Cell>);
+
   @event public function onGridSelection(cells: Array<Cell>, selectionRect: Rect);
+
   @event public function onGridSelectionFinished(cells: Array<Cell>);
 
   public function new() {
@@ -200,8 +202,8 @@ class Grid extends Entity implements Component implements Observable {
   function onPointerMove(info: TouchInfo) {
     // may be performanc heavy to calculate every pixel moved
     var current = screenToCellPosition(info.x, info.y, true);
-    if (!isWithinBounds(current.x, 0, width - cellSize.width) ||
-        !isWithinBounds(current.y, 0, height - cellSize.height)) {
+    if (!isWithinBounds(current.x, 0, width - cellSize.width)
+      || !isWithinBounds(current.y, 0, height - cellSize.height)) {
       return;
     }
     selectedCells = getSelectedCells(
@@ -213,10 +215,12 @@ class Grid extends Entity implements Component implements Observable {
 
   function onPointerDown(info: TouchInfo) {
     startPos = screenToCellPosition(info.x, info.y);
-    selectedCells = [{
-      frame: getCellFrame(startPos.x, startPos.y),
-      position: startPos
-    }];
+    selectedCells = [
+      {
+        frame: getCellFrame(startPos.x, startPos.y),
+        position: startPos
+      }
+    ];
     screen.onPointerMove(this, onPointerMove);
     visual.oncePointerUp(this, onClick);
     emitGridClick(selectedCells);
