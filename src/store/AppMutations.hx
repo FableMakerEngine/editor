@@ -56,7 +56,7 @@ class AppMutations {
     }
     for (tile in tiles) {
       state.selectedTiles.push(tile);
-      state.invalidateSelectedTiles();
     }
+    state.invalidateSelectedTiles();
   }
 }
