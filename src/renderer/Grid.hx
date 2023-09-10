@@ -33,7 +33,7 @@ class Grid extends Entity implements Component implements Observable {
   public var thickness(default, set): Float = 1.0;
   public var selectedCells: Array<Cell> = [];
 
-  var selectionRect: Rect;
+  var startPos = new Point();
 
   @event public function gridClick(cells: Array<Cell>);
   @event public function onGridSelection(cells: Array<Cell>, selectionRect: Rect);
@@ -41,7 +41,6 @@ class Grid extends Entity implements Component implements Observable {
 
   public function new() {
     super();
-    selectionRect = new Rect();
     shader = app.assets.shader(Shaders.SHADERS__GRID);
     shader.setVec2('size', 16, 16);
     shader.setColor('color', Color.WHITE);
@@ -173,7 +172,7 @@ class Grid extends Entity implements Component implements Observable {
   }
 
   // Move out of Grid?
-  function createRectFromCells(selectedCells: Array<Cell>): Rect {
+  function createRectFromCells(selectedCells: Array<Cell>, cellSize: Rect): Rect {
     if (selectedCells.length == 0) {
       return new Rect(0, 0, 0, 0);
     }
@@ -190,7 +189,7 @@ class Grid extends Entity implements Component implements Observable {
       maxY = Std.int(Math.max(maxY, cell.position.y));
     }
 
-    return new Rect(minX, minY, maxX - minX, maxY - minY);
+    return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
   }
 
   function onClick(info: TouchInfo) {
@@ -205,23 +204,18 @@ class Grid extends Entity implements Component implements Observable {
         !isWithinBounds(current.y, 0, height - cellSize.height)) {
       return;
     }
-    selectionRect.width = current.x - selectionRect.x;
-    selectionRect.height = current.y - selectionRect.y;
-    selectedCells = getSelectedCells(selectionRect);
-    var newRect = createRectFromCells(selectedCells);
-    newRect.width += cellSize.width;
-    newRect.height += cellSize.height;
-    emitOnGridSelection(selectedCells, newRect);
+    selectedCells = getSelectedCells(
+      new Rect(startPos.x, startPos.y, current.x - startPos.x, current.y - startPos.y)
+    );
+    var selectionRect = createRectFromCells(selectedCells, cellSize);
+    emitOnGridSelection(selectedCells, selectionRect);
   }
 
   function onPointerDown(info: TouchInfo) {
-    var start = screenToCellPosition(info.x, info.y);
-    selectionRect = new Rect(0, 0, 0, 0);
-    selectionRect.x = start.x;
-    selectionRect.y = start.y;
+    startPos = screenToCellPosition(info.x, info.y);
     selectedCells = [{
-      frame: getCellFrame(start.x, start.y),
-      position: start
+      frame: getCellFrame(startPos.x, startPos.y),
+      position: startPos
     }];
     screen.onPointerMove(this, onPointerMove);
     visual.oncePointerUp(this, onClick);
