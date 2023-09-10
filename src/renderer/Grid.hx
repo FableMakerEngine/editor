@@ -185,10 +185,10 @@ class Grid extends Entity implements Component implements Observable {
     var maxY = selectedCells[0].position.y;
 
     for (cell in selectedCells) {
-      minX = Std.int(Math.min(minX, cell.position.x));
-      minY = Std.int(Math.min(minY, cell.position.y));
-      maxX = Std.int(Math.max(maxX, cell.position.x));
-      maxY = Std.int(Math.max(maxY, cell.position.y));
+      minX = Math.min(minX, cell.position.x);
+      minY = Math.min(minY, cell.position.y);
+      maxX = Math.max(maxX, cell.position.x);
+      maxY = Math.max(maxY, cell.position.y);
     }
 
     return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
