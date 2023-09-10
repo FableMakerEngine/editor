@@ -39,7 +39,7 @@ class Grid extends Entity implements Component implements Observable {
 
   @event public function onGridSelection(cells: Array<Cell>, selectionRect: Rect);
 
-  @event public function onGridSelectionFinished(cells: Array<Cell>);
+  @event public function onGridSelectionFinished(cells: Array<Cell>, selectionRect: Rect);
 
   public function new() {
     super();
@@ -196,7 +196,8 @@ class Grid extends Entity implements Component implements Observable {
 
   function onClick(info: TouchInfo) {
     screen.offPointerMove(onPointerMove);
-    emitOnGridSelectionFinished(selectedCells);
+    var selectionRect = createRectFromCells(selectedCells, cellSize);
+    emitOnGridSelectionFinished(selectedCells, selectionRect);
   }
 
   function onPointerMove(info: TouchInfo) {

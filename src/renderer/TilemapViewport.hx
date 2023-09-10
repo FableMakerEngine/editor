@@ -26,6 +26,7 @@ class TilemapViewport extends ceramic.Scene {
     screen.onPointerMove(this, onPointerMove);
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
+    store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
   }
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -41,6 +42,33 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize.width, tileSize.height);
     mapCols = Math.round(tilemap.width / tileSize.width);
     mapRows = Math.round(tilemap.height / tileSize.height);
+  }
+
+  // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
+  function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
+    if (selectedCells.length == 0) {
+      return new Rect(0, 0, 0, 0);
+    }
+
+    var minX = selectedCells[0].position.x;
+    var minY = selectedCells[0].position.y;
+    var maxX = selectedCells[0].position.x;
+    var maxY = selectedCells[0].position.y;
+
+    for (cell in selectedCells) {
+      minX = Math.min(minX, cell.position.x);
+      minY = Math.min(minY, cell.position.y);
+      maxX = Math.max(maxX, cell.position.x);
+      maxY = Math.max(maxY, cell.position.y);
+    }
+
+    return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
+  }
+
+  function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
+    if (newTiles.length <= 0) return;
+    var selectionRect = createRectFromTiles(newTiles, tileSize);
+    tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   public override function preload() {}
