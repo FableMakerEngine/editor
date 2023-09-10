@@ -137,7 +137,7 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame;
   }
 
-  function screenToCellPosition(screenX, screenY, roundUp = false): Point {
+  function screenToCellPosition(screenX, screenY): Point {
     var localCoords = new Point();
     // screenToVisual may be heavy on performance?
     visual.screenToVisual(screenX, screenY, localCoords);
@@ -201,7 +201,7 @@ class Grid extends Entity implements Component implements Observable {
 
   function onPointerMove(info: TouchInfo) {
     // may be performanc heavy to calculate every pixel moved
-    var current = screenToCellPosition(info.x, info.y, true);
+    var current = screenToCellPosition(info.x, info.y);
     if (!isWithinBounds(current.x, 0, width - cellSize.width)
       || !isWithinBounds(current.y, 0, height - cellSize.height)) {
       return;
