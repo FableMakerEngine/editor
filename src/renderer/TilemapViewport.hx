@@ -1,5 +1,7 @@
 package renderer;
 
+import ceramic.Texture;
+import ceramic.UInt8Array;
 import ceramic.Rect;
 import ceramic.Color;
 import ceramic.Border;
@@ -12,8 +14,9 @@ class TilemapViewport extends ceramic.Scene {
   public var tilemap(default, null): ceramic.Tilemap;
   public var mapCols: Int = 16;
   public var mapRows: Int = 16;
-  public var tileSize: Rect = new Rect(0, 0, 32, 32);
+  public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: ceramic.Border;
+  public var gridOverlay: GridQuad;
 
   var mapPath: String;
 
@@ -41,20 +44,31 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize.width, tileSize.height);
     mapCols = Math.round(tilemap.width / tileSize.width);
     mapRows = Math.round(tilemap.height / tileSize.height);
+    gridOverlay.grid.cellSize = newSize;
   }
 
   public override function preload() {}
 
   override function create() {
+    createOverlay();
     createBackground();
     createTileCursor();
     createTilemap();
   }
 
+  function createOverlay() {
+    gridOverlay = new GridQuad();
+    var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
+    gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
+    gridOverlay.shader.setVec2('resolution', 480, 480);
+    gridOverlay.depth = 90;
+    add(gridOverlay);
+  }
+
   function createBackground() {
     background = new ceramic.Quad();
     background.color = ceramic.Color.BLACK;
-    background.size(500, 500);
+    background.size(480, 480);
     add(background);
   }
 
@@ -87,6 +101,10 @@ class TilemapViewport extends ceramic.Scene {
     if (parentView != null) {
       parentView.width = mapWidth();
       parentView.height = mapHeight();
+    }
+    if (gridOverlay != null) {
+      gridOverlay.size(mapWidth(), mapHeight());
+      gridOverlay.shader.setVec2('resolution', mapWidth(), mapHeight());
     }
   }
 
