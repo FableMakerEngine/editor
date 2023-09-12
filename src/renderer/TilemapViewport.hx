@@ -60,7 +60,6 @@ class TilemapViewport extends ceramic.Scene {
     gridOverlay = new GridQuad();
     var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
     gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
-    gridOverlay.grid.enableTexture = true;
     gridOverlay.shader.setVec2('resolution', 480, 480);
     gridOverlay.depth = 90;
     add(gridOverlay);
