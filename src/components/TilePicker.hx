@@ -43,6 +43,7 @@ class TilePicker extends VBox {
   function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
+    tileset.grid.enableTexture = true;
     viewport.add(tileset);
   }
 
