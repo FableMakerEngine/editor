@@ -20,6 +20,7 @@ class Grid extends Entity implements Component implements Observable {
   public var cols(default, null): Int;
   public var rows(default, null): Int;
   public var cellSize(default, set): Rect = new Rect(0, 0, 16, 16);
+  public var enableTexture(default, set): Bool;
   public var color(default, set): Color;
   public var alpha(default, set): Float = 0.5;
   public var scale(default, set): Float = 1.0;
@@ -53,6 +54,13 @@ class Grid extends Entity implements Component implements Observable {
       case false:
         visual.shader = null;
     }
+  }
+
+  function set_enableTexture(enable: Bool) {
+    if (this.enableTexture == enable) return enable;
+    this.enableTexture = enable;
+    shader.setFloat('enableTexture', enable ? 1.0 : 0.0);
+    return enable;
   }
 
   function set_thickness(thickness: Float) {
