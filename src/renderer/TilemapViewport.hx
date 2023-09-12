@@ -1,5 +1,6 @@
 package renderer;
 
+import renderer.Grid.Cell;
 import ceramic.Texture;
 import ceramic.UInt8Array;
 import ceramic.Rect;
@@ -19,6 +20,8 @@ class TilemapViewport extends ceramic.Scene {
   public var gridOverlay: GridQuad;
 
   var mapPath: String;
+
+  @event function onTilemapClick(info: TouchInfo, tiles: Array<Tile>);
 
   public function new(?parentView) {
     super();
@@ -90,6 +93,7 @@ class TilemapViewport extends ceramic.Scene {
     gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
     gridOverlay.shader.setVec2('resolution', 480, 480);
     gridOverlay.depth = 90;
+    gridOverlay.grid.onGridClick(this, onGridClick);
     add(gridOverlay);
   }
 
@@ -180,5 +184,9 @@ class TilemapViewport extends ceramic.Scene {
       mapRows = Math.round(tilemap.height / tileSize.height);
       resize(tilemap.width, tilemap.height);
     }
+  }
+
+  function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
+    emitOnTilemapClick(info, tiles);
   }
 }
