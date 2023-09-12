@@ -33,6 +33,7 @@ class Grid extends Entity implements Component implements Observable {
   public var scale(default, set): Float = 1.0;
   public var thickness(default, set): Float = 1.0;
   public var selectedCells: Array<Cell> = [];
+  public var cellStartIndex: Int = 0;
 
   var startPos = new Point();
 
@@ -129,7 +130,7 @@ class Grid extends Entity implements Component implements Observable {
     return (value >= minValue && value <= maxValue);
   }
 
-  function getCellFrame(x: Float, y: Float): Int {
+  function getCellFrame(x: Float, y: Float, startIndex: Int = 0): Int {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
     var tileFrame = 0;
@@ -142,7 +143,7 @@ class Grid extends Entity implements Component implements Observable {
     for (j in 0...tileCol) {
       tileFrame++;
     }
-    return tileFrame;
+    return tileFrame + startIndex;
   }
 
   function screenToCellPosition(screenX, screenY): Point {
@@ -172,7 +173,7 @@ class Grid extends Entity implements Component implements Observable {
       for (y in startY...endY + 1) {
         if (x % cellSize.width == 0 && y % cellSize.height == 0) {
           selectedCells.push({
-            frame: getCellFrame(x, y),
+            frame: getCellFrame(x, y, cellStartIndex),
             position: new Point(x, y)
           });
         }
@@ -226,7 +227,7 @@ class Grid extends Entity implements Component implements Observable {
     startPos = screenToCellPosition(info.x, info.y);
     selectedCells = [
       {
-        frame: getCellFrame(startPos.x, startPos.y),
+        frame: getCellFrame(startPos.x, startPos.y, cellStartIndex),
         position: startPos
       }
     ];
