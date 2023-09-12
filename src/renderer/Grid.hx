@@ -31,7 +31,7 @@ class Grid extends Entity implements Component implements Observable {
 
   public function new() {
     super();
-    shader = app.assets.shader(Shaders.SHADERS__GRID);
+    shader = app.assets.shader(Shaders.SHADERS__GRID).clone();
     shader.setVec2('size', 16, 16);
     shader.setColor('color', Color.WHITE);
     shader.setFloat('alpha', alpha);
