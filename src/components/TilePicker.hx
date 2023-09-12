@@ -1,5 +1,6 @@
 package components;
 
+import ceramic.TouchInfo;
 import renderer.Grid.Cell;
 import renderer.Zoomable;
 import renderer.GridQuad;
@@ -130,7 +131,7 @@ class TilePicker extends VBox {
     imageContainer.height = tileset.height * viewport.scaleY;
   }
 
-  public function onTilesetClick(cells: Array<Cell>) {
+  public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
     var selectedPos = cells[0].position;
     tileCursor.pos(selectedPos.x, selectedPos.y);
     tileCursor.size(tileset.grid.cellSize.width, tileset.grid.cellSize.height);

@@ -36,7 +36,7 @@ class Grid extends Entity implements Component implements Observable {
 
   var startPos = new Point();
 
-  @event public function gridClick(cells: Array<Cell>);
+  @event public function gridClick(info: TouchInfo, cells: Array<Cell>);
 
   @event public function onGridSelection(cells: Array<Cell>, selectionRect: Rect);
 
@@ -133,14 +133,13 @@ class Grid extends Entity implements Component implements Observable {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
     var tileFrame = 0;
-
     if (tileRow <= 0) {
       return tileCol;
     }
     for (i in 0...tileRow) {
       tileFrame += cols;
     }
-    for (j in -1...tileCol) {
+    for (j in 0...tileCol) {
       tileFrame++;
     }
     return tileFrame;
@@ -233,6 +232,6 @@ class Grid extends Entity implements Component implements Observable {
     ];
     screen.onPointerMove(this, onPointerMove);
     visual.oncePointerUp(this, onClick);
-    emitGridClick(selectedCells);
+    emitGridClick(info, selectedCells);
   }
 }
