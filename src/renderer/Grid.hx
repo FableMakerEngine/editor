@@ -37,6 +37,7 @@ class Grid extends Entity implements Component implements Observable {
     shader.setFloat('alpha', alpha);
     shader.setFloat('thickness', thickness);
     shader.setFloat('scale', scale);
+    shader.setFloat('enableTexture', 0.0);
     onVisibleCellsChange(this, onVisibleCellsChanged);
   }
 
