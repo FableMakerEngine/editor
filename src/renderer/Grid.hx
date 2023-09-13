@@ -156,6 +156,12 @@ class Grid extends Entity implements Component implements Observable {
     );
   }
 
+  public function getCellsFromRect(rect: Rect) {
+    rect.width -= cellSize.width;
+    rect.height -= cellSize.height;
+    return getSelectedCells(rect);
+  }
+
   function getSelectedCells(rect: Rect): Array<Cell> {
     var selectedCells: Array<Cell> = [];
     var rectX1 = Math.floor(rect.x);

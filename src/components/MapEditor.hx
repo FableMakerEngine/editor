@@ -1,7 +1,6 @@
 package components;
 
-import ceramic.TilemapLayerData;
-import ceramic.TilemapData;
+import ceramic.Rect;
 import ceramic.TilemapTile;
 import ceramic.TouchInfo;
 import components.menus.ContextMenu;
@@ -16,10 +15,12 @@ class MapEditor extends VBox {
   public var viewport: TilemapViewport;
   public var layerName: String;
 
-  var selectedTiles: Array<Tile>;
+  var selectedTiles: Array<TilemapTile>;
+  var selectionRect: Rect;
 
   public function new() {
     super();
+    selectionRect = new Rect();
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
@@ -95,15 +96,22 @@ class MapEditor extends VBox {
   }
 
   function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
-    selectedTiles = newTiles;
+    if (viewport == null) return;
+    selectedTiles = [];
+    for (tile in newTiles) {
+      selectedTiles.push(new TilemapTile(tile.frame));
+    }
   }
 
-  function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
+  function onTilemapClick(info: TouchInfo, tiles: Array<Tile>, selectionRect: Rect) {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
-    trace(clickedTile);
+    
+    selectionRect.x = clickedTile.position.x;
+    selectionRect.y = clickedTile.position.y;
+    var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(selectionRect);
 
-    // for testing
+    // for testing set layer manually
     layerName = 'lower_ground';
     // handle fill
     // right click erase
@@ -118,11 +126,14 @@ class MapEditor extends VBox {
           var tiles = [].concat(layerData.tiles.original);
 
           if (info.buttonId == 0) {
-            // for testing we assign the first tile of the selectedTiles
-            var tilemapTile = new TilemapTile(selectedTiles[0].frame);
-            tiles[index] = tilemapTile;
+            for (index => tile in tilesToDrawTo) {
+              var tilemapTile = selectedTiles[index];
+              tiles[tile.frame] = tilemapTile;
+            }
           } else {
-            tiles[index] = 0;
+            for (index => tile in tilesToDrawTo) {
+              tiles[tile.frame] = 0;
+            }
           }
 
           layerData.tiles = tiles;

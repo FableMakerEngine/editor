@@ -20,8 +20,9 @@ class TilemapViewport extends ceramic.Scene {
   public var gridOverlay: GridQuad;
 
   var mapPath: String;
+  var selectionRect: Rect;
 
-  @event function onTilemapClick(info: TouchInfo, tiles: Array<Tile>);
+  @event function onTilemapClick(info: TouchInfo, tiles: Array<Tile>, selectionRect: Rect);
 
   public function new(?parentView) {
     super();
@@ -52,7 +53,7 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
-  function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
+  public function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
     if (selectedCells.length == 0) {
       return new Rect(0, 0, 0, 0);
     }
@@ -74,7 +75,7 @@ class TilemapViewport extends ceramic.Scene {
 
   function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
     if (newTiles.length <= 0) return;
-    var selectionRect = createRectFromTiles(newTiles, tileSize);
+    selectionRect = createRectFromTiles(newTiles, tileSize);
     tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
@@ -187,6 +188,6 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
-    emitOnTilemapClick(info, tiles);
+    emitOnTilemapClick(info, tiles, selectionRect);
   }
 }
