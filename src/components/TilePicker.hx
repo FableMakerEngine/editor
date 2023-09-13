@@ -1,5 +1,7 @@
 package components;
 
+import ceramic.TouchInfo;
+import renderer.Grid.Cell;
 import renderer.Zoomable;
 import renderer.GridQuad;
 import ceramic.Visual;
@@ -43,6 +45,9 @@ class TilePicker extends VBox {
   function createTileset() {
     tileset = new GridQuad();
     tileset.grid.onGridClick(null, onTilesetClick);
+    tileset.grid.onOnGridSelection(null, onTilesetSelection);
+    tileset.grid.onOnGridSelectionFinished(null, onTilesetSelectionFinished);
+    tileset.grid.cellStartIndex = 1;
     tileset.grid.enableTexture = true;
     viewport.add(tileset);
   }
@@ -127,7 +132,21 @@ class TilePicker extends VBox {
     imageContainer.height = tileset.height * viewport.scaleY;
   }
 
-  public function onTilesetClick(selectedTile, selectedTilePos) {
-    tileCursor.pos(selectedTilePos.x, selectedTilePos.y);
+  public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
+    var selectedPos = cells[0].position;
+    tileCursor.pos(selectedPos.x, selectedPos.y);
+    tileCursor.size(tileset.grid.cellSize.width, tileset.grid.cellSize.height);
+  }
+
+  public function onTilesetSelection(cells: Array<Cell>, selectionRect) {
+    tileCursor.pos(selectionRect.x, selectionRect.y);
+    tileCursor.size(selectionRect.width, selectionRect.height);
+  }
+
+  public function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
+    /* For now we will always unselect previous selection. In the future it would be nice to
+       add to the selection, simillar to how TileD does it.
+    */
+    store.commit.addSelectedTiles(cast cells, true);
   }
 }

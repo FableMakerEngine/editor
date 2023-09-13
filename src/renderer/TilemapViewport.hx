@@ -1,5 +1,6 @@
 package renderer;
 
+import renderer.Grid.Cell;
 import ceramic.Texture;
 import ceramic.UInt8Array;
 import ceramic.Rect;
@@ -19,6 +20,9 @@ class TilemapViewport extends ceramic.Scene {
   public var gridOverlay: GridQuad;
 
   var mapPath: String;
+  var selectionRect: Rect;
+
+  @event function onTilemapClick(info: TouchInfo, tiles: Array<Tile>, selectionRect: Rect);
 
   public function new(?parentView) {
     super();
@@ -29,6 +33,7 @@ class TilemapViewport extends ceramic.Scene {
     screen.onPointerMove(this, onPointerMove);
     store.state.onActiveMapChange(null, onActiveMapChanged);
     store.state.onTileSizeChange(null, onTileSizeChanged);
+    store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
   }
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
@@ -47,6 +52,33 @@ class TilemapViewport extends ceramic.Scene {
     gridOverlay.grid.cellSize = newSize;
   }
 
+  // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
+  public function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
+    if (selectedCells.length == 0) {
+      return new Rect(0, 0, 0, 0);
+    }
+
+    var minX = selectedCells[0].position.x;
+    var minY = selectedCells[0].position.y;
+    var maxX = selectedCells[0].position.x;
+    var maxY = selectedCells[0].position.y;
+
+    for (cell in selectedCells) {
+      minX = Math.min(minX, cell.position.x);
+      minY = Math.min(minY, cell.position.y);
+      maxX = Math.max(maxX, cell.position.x);
+      maxY = Math.max(maxY, cell.position.y);
+    }
+
+    return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
+  }
+
+  function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
+    if (newTiles.length <= 0) return;
+    selectionRect = createRectFromTiles(newTiles, tileSize);
+    tileCursor.size(selectionRect.width, selectionRect.height);
+  }
+
   public override function preload() {}
 
   override function create() {
@@ -62,6 +94,7 @@ class TilemapViewport extends ceramic.Scene {
     gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
     gridOverlay.shader.setVec2('resolution', 480, 480);
     gridOverlay.depth = 90;
+    gridOverlay.grid.onGridClick(this, onGridClick);
     add(gridOverlay);
   }
 
@@ -152,5 +185,9 @@ class TilemapViewport extends ceramic.Scene {
       mapRows = Math.round(tilemap.height / tileSize.height);
       resize(tilemap.width, tilemap.height);
     }
+  }
+
+  function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
+    emitOnTilemapClick(info, tiles, selectionRect);
   }
 }
