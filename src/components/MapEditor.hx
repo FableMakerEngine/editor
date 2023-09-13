@@ -23,6 +23,8 @@ class MapEditor extends VBox {
     selectionRect = new Rect();
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
+    store.state.onActiveMapChange(null, onActiveMapChanged);
+    store.state.onTileSizeChange(null, onTileSizeChanged);
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
@@ -93,6 +95,14 @@ class MapEditor extends VBox {
 
   public override function onResized() {
     viewport.resize(48 * 20, 48 * 16);
+  }
+
+  function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
+    tilePicker.changeTileSize(newSize);
+  }
+
+  function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    tilePicker.changeActiveMap(newMap);
   }
 
   function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {

@@ -22,8 +22,6 @@ class TilePicker extends VBox {
 
   public function new() {
     super();
-    store.state.onActiveMapChange(null, onActiveMapChanged);
-    store.state.onTileSizeChange(null, onTileSizeChanged);
     onMouseOver = handleZoomable;
     onMouseOut = handleZoomable;
     tileView.scrollMode = ScrollMode.NORMAL;
@@ -82,17 +80,17 @@ class TilePicker extends VBox {
     }
   }
 
-  function onTileSizeChanged(newSize, oldSize) {
+  public function changeTileSize(newSize: Rect) {
     tileCursor.size(newSize.width, newSize.height);
     tileset.grid.cellSize = newSize;
   }
 
-  function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
-    if (newMap.path == null) {
+  public function changeActiveMap(map: MapInfo) {
+    if (map.path == null) {
       clearTilesets();
       return;
     }
-    var tilemapData = projectAssets.tilemapData(newMap.path);
+    var tilemapData = projectAssets.tilemapData(map.path);
     var tilesets = tilemapData.tilesets;
 
     clearTilesets();
