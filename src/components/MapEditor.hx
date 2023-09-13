@@ -106,10 +106,11 @@ class MapEditor extends VBox {
   function onTilemapClick(info: TouchInfo, tiles: Array<Tile>, selectionRect: Rect) {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
+    var tilePos = clickedTile.position;
     
-    selectionRect.x = clickedTile.position.x;
-    selectionRect.y = clickedTile.position.y;
-    var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(selectionRect);
+    var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(
+      new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
+    );
 
     // for testing set layer manually
     layerName = 'lower_ground';
