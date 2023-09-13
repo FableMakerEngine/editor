@@ -15,6 +15,7 @@ class MapEditor extends VBox {
   public var viewport: TilemapViewport;
   public var layerName: String;
 
+  var tileSize: Rect = new Rect(0, 0, 16, 16);
   var selectedTiles: Array<TilemapTile>;
   var selectionRect: Rect;
 
@@ -98,22 +99,27 @@ class MapEditor extends VBox {
   }
 
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
+    tileSize = newSize;
     tilePicker.changeTileSize(newSize);
+    viewport.changeTileSize(newSize);
   }
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     tilePicker.changeActiveMap(newMap);
+    viewport.changeActiveMap(newMap);
   }
 
   function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
-    if (viewport == null) return;
+    if (viewport == null || newTiles.length <= 0) return;
     selectedTiles = [];
     for (tile in newTiles) {
       selectedTiles.push(new TilemapTile(tile.frame));
     }
+    selectionRect = createRectFromTiles(newTiles, tileSize);
+    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
-  function onTilemapClick(info: TouchInfo, tiles: Array<Tile>, selectionRect: Rect) {
+  function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
     var tilePos = clickedTile.position;
@@ -158,5 +164,26 @@ class MapEditor extends VBox {
 
   public function update(dt: Float) {
     viewport.update(dt);
+  }
+
+  // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
+  function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
+    if (selectedCells.length == 0) {
+      return new Rect(0, 0, 0, 0);
+    }
+
+    var minX = selectedCells[0].position.x;
+    var minY = selectedCells[0].position.y;
+    var maxX = selectedCells[0].position.x;
+    var maxY = selectedCells[0].position.y;
+
+    for (cell in selectedCells) {
+      minX = Math.min(minX, cell.position.x);
+      minY = Math.min(minY, cell.position.y);
+      maxX = Math.max(maxX, cell.position.x);
+      maxY = Math.max(maxY, cell.position.y);
+    }
+
+    return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
   }
 }
