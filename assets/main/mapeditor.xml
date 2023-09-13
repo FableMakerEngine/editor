@@ -3,26 +3,28 @@
   <splitter id="splitView" width="100%" height="100%">
     <box width="25%" height="100%">
       <splitter id="tilesetSplitter" direction="vertical" width="100%" height="100%">
-        <tile-picker id="tilePicker" width="100%" height="40%"></tile-picker>
         <maplist id="mapList" width="100%" height="60%"></maplist>
       </splitter>
     </box>
-    <tabview id="workspace" width="85%" height="100%" closable="true">
-      <box id="mapeditor" text="Map Editor" width="100%" height="100%"
-        icon="haxeui-core/styles/default/haxeui_tiny.png">
-        <scrollview height="100%" width="100%">
-          <box id="tileView"></box>
-        </scrollview>
-      </box>
-      <box text="Database" icon="haxeui-core/styles/default/haxeui_tiny.png">
-        <button text="Page 2" />
-      </box>
-      <box text="Plugins" icon="haxeui-core/styles/default/haxeui_tiny.png">
-        <button text="Page 3" />
-      </box>
-      <box text="Settings" icon="haxeui-core/styles/default/haxeui_tiny.png">
-        <button text="Page 4" />
-      </box>
-    </tabview>
+    <splitter id="tilesetSplitter" direction="vertical" width="100%" height="100%">
+      <tabview id="workspace" width="85%" height="70%" closable="true">
+        <box id="mapeditor" text="Map Editor" width="100%" height="100%"
+          icon="haxeui-core/styles/default/haxeui_tiny.png">
+          <scrollview height="100%" width="100%">
+            <box id="tileView"></box>
+          </scrollview>
+        </box>
+        <box text="Database" icon="haxeui-core/styles/default/haxeui_tiny.png">
+          <button text="Page 2" />
+        </box>
+        <box text="Plugins" icon="haxeui-core/styles/default/haxeui_tiny.png">
+          <button text="Page 3" />
+        </box>
+        <box text="Settings" icon="haxeui-core/styles/default/haxeui_tiny.png">
+          <button text="Page 4" />
+        </box>
+      </tabview>
+      <tile-picker id="tilePicker" width="100%" height="30%"></tile-picker>
+    </splitter>
   </splitter>
 </vbox>
