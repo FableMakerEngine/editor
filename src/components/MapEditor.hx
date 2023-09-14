@@ -14,7 +14,6 @@ import haxe.ui.containers.VBox;
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
-  public var layerName: String;
 
   var tilemapData: TilemapData;
   var tileSize: Rect = new Rect(0, 0, 16, 16);
@@ -108,6 +107,7 @@ class MapEditor extends VBox {
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     tilemapData = projectAssets.tilemapData(newMap.path);
+    layerList.layers = tilemapData.layers;
     tilePicker.changeActiveMap(newMap);
     viewport.changeActiveMap(newMap);
   }
@@ -126,13 +126,11 @@ class MapEditor extends VBox {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
     var tilePos = clickedTile.position;
+    var layerName = layerList.activeLayer.name;
     
     var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
-
-    // for testing set layer manually
-    layerName = 'lower_ground';
     // handle fill
     // right click erase
     if (info.buttonId == 0 || info.buttonId == 2) {

@@ -4,7 +4,7 @@
     <box width="25%" height="100%">
       <splitter id="tilesetSplitter" direction="vertical" width="100%" height="100%">
         <maplist id="mapList" width="100%" height="60%"></maplist>
-        <layer-list width="100%" height="40%"></layer-list>
+        <layer-list id="layerList" width="100%" height="40%"></layer-list>
       </splitter>
     </box>
     <splitter id="tilesetSplitter" direction="vertical" width="100%" height="100%">
