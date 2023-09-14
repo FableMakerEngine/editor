@@ -21,6 +21,7 @@ class LayerList extends ListView {
     super();
     onClick = onLayerSelect;
     layerItemRenderer = new LayerItemRenderer();
+    layerItemRenderer.id = 'layerItemRenderer';
     addComponent(layerItemRenderer);
   }
 
@@ -99,8 +100,15 @@ private class LayerItemRenderer extends ItemRenderer {
   function onListViewSelect(_) {
     if (currentItemRenderer == this) return;
     if (currentItemRenderer != null) {
-      currentItemRenderer.stopEdit();
+      currentItemRenderer.stopEdit(true);
     }
+  }
+
+  override function onDataChanged(data: Dynamic) {
+    super.onDataChanged(data);
+    if (data == null) return;
+    var value = Reflect.field(data, label.id);
+    label.text = Std.string(value);
   }
 
   function startEdit(_) {
@@ -122,16 +130,46 @@ private class LayerItemRenderer extends ItemRenderer {
     // if we focus too fast the text won't display (might be a haxeui-ceramic bug)
     Timer.delay(() -> {
       textField.focus = true;
+      // we use ceramic's input directly (at least until haxeui-ceramic implements KeyboardEvents)
+      input.onKeyDown(null, onKeyDown);
     }, 25);
   }
 
-  function stopEdit() {
-    if (currentItemRenderer != null) {
-      currentItemRenderer = null;
+  function updateEdit() {
+    if (textField != null && currentItemRenderer == this) {
+      if (textField.text != label.text) {
+        label.text = textField.text;
+        Reflect.setField(_data, label.id, label.text);
+
+        var parentList = findAncestor(ListView);
+        if (parentList != null) {
+          parentList.dataSource.update(parentList.selectedIndex, _data);
+        }
+      }
     }
+  }
+
+  function stopEdit(cancel: Bool = false) {
+    if (textField != null && !cancel) {
+      updateEdit();
+    }
+
+    currentItemRenderer = null;
 
     label.percentWidth = 100;
     label.visible = true;
+    textField.focus = false;
     textField.visible = false;
+    input.offKeyDown(onKeyDown);
+  }
+
+  function onKeyDown(key: ceramic.Key) {
+    if (currentItemRenderer != null) {
+      if (key.keyCode == ceramic.KeyCode.ENTER) {
+        currentItemRenderer.stopEdit();
+      } else if (key.keyCode == ceramic.KeyCode.ESCAPE) {
+        currentItemRenderer.stopEdit(true);
+      }
+    }
   }
 }
