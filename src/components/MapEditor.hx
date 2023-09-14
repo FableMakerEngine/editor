@@ -1,5 +1,6 @@
 package components;
 
+import ceramic.TilemapData;
 import ceramic.Rect;
 import ceramic.TilemapTile;
 import ceramic.TouchInfo;
@@ -15,6 +16,7 @@ class MapEditor extends VBox {
   public var viewport: TilemapViewport;
   public var layerName: String;
 
+  var tilemapData: TilemapData;
   var tileSize: Rect = new Rect(0, 0, 16, 16);
   var selectedTiles: Array<TilemapTile>;
   var selectionRect: Rect;
@@ -105,6 +107,7 @@ class MapEditor extends VBox {
   }
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    tilemapData = projectAssets.tilemapData(newMap.path);
     tilePicker.changeActiveMap(newMap);
     viewport.changeActiveMap(newMap);
   }
