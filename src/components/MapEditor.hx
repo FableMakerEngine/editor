@@ -32,6 +32,7 @@ class MapEditor extends VBox {
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
     layerList.registerEvent('layerVisibilityChange', onLayerVisibilityChange);
+    layerList.registerEvent(UIEvent.PROPERTY_CHANGE, onLayerRename);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -127,6 +128,15 @@ class MapEditor extends VBox {
   function onLayerVisibilityChange(event: UIEvent) {
     var layer = viewport.tilemap.layer(event.data.name);
     layer.visible = event.data.visibleState;
+  }
+
+  function onLayerRename(event: UIEvent) {
+    var selectedItem = layerList.selectedItem;
+    if (selectedItem == null) return;
+    var layer = this.tilemapData.layers[layerList.selectedIndex];
+    if (layer.name != selectedItem.name) {
+      layer.name = selectedItem.name;
+    }
   }
 
   function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
