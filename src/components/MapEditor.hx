@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.events.UIEvent;
 import ceramic.TilemapData;
 import ceramic.Rect;
 import ceramic.TilemapTile;
@@ -30,6 +31,7 @@ class MapEditor extends VBox {
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
+    layerList.registerEvent('layerVisibilityChange', onLayerVisibilityChange);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -120,6 +122,11 @@ class MapEditor extends VBox {
     }
     selectionRect = createRectFromTiles(newTiles, tileSize);
     viewport.tileCursor.size(selectionRect.width, selectionRect.height);
+  }
+
+  function onLayerVisibilityChange(event: UIEvent) {
+    var layer = viewport.tilemap.layer(event.data.name);
+    layer.visible = event.data.visibleState;
   }
 
   function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
