@@ -20,11 +20,11 @@ class LayerList extends ListView {
   
   public function new() {
     super();
-    onClick = onLayerSelect;
     layerItemRenderer = new LayerItemRenderer();
     layerItemRenderer.id = 'layerItemRenderer';
     addComponent(layerItemRenderer);
     registerEvent('visibleStateChange', onVisibleStateChange);
+    registerEvent(UIEvent.CHANGE, onLayerSelect);
   }
 
   public function set_layers(layers: Array<TilemapLayerData>) {
@@ -47,7 +47,7 @@ class LayerList extends ListView {
     dataSource.allowCallbacks = true;
   }
 
-  function onLayerSelect(event: MouseEvent) {
+  function onLayerSelect(event: UIEvent) {
     var index = selectedIndex;
     activeLayer = this.layers[index];
   }
