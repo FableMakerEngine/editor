@@ -97,7 +97,7 @@ private class LayerItemRenderer extends ItemRenderer {
       listView.registerEvent(ScrollEvent.CHANGE, onListScroll);
     }
     registerEvent(MouseEvent.CLICK, onListViewSelect);
-    registerEvent(MouseEvent.DBL_CLICK, startEdit);
+    registerEvent(MouseEvent.DBL_CLICK, onListViewDoubleClick);
   }
 
   function onListScroll(_) {
@@ -130,7 +130,14 @@ private class LayerItemRenderer extends ItemRenderer {
     }
   }
 
-  function startEdit(_) {
+  function onListViewDoubleClick(event: MouseEvent) {
+    if (this.hasComponentUnderPoint(event.screenX, event.screenY, CheckBox)) {
+      return;
+    }
+    startEdit();
+  }
+
+  function startEdit() {
     if (currentItemRenderer == this) {
       return;
     }
