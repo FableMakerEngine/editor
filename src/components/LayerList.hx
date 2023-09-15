@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.events.UIEvent;
 import haxe.Timer;
 import haxe.ui.components.TextField;
 import haxe.ui.events.ScrollEvent;
@@ -23,6 +24,7 @@ class LayerList extends ListView {
     layerItemRenderer = new LayerItemRenderer();
     layerItemRenderer.id = 'layerItemRenderer';
     addComponent(layerItemRenderer);
+    registerEvent('visibleStateChange', onVisibleStateChange);
   }
 
   public function set_layers(layers: Array<TilemapLayerData>) {
@@ -49,8 +51,16 @@ class LayerList extends ListView {
     activeLayer = this.layers[index];
   }
 
-  function visibilityChanged() {
-    trace('visible change');
+  function onVisibleStateChange(event: UIEvent) {
+    if (event.data != null) {
+      var index = this.layers.indexOf(event.data.name);
+      
+      var uiEvent = new UIEvent('layerVisibilityChange', false, {
+        layer: this.layers[index],
+        visibleState: event.data.visibleState
+      });
+      dispatch(uiEvent);
+    }
   }
 }
 
@@ -78,6 +88,7 @@ private class LayerItemRenderer extends ItemRenderer {
     visibleState = new CheckBox();
     visibleState.id = 'visibleState';
     visibleState.selected = false;
+    visibleState.onClick = onVisibleStateClick;
 
     addComponent(label);
     addComponent(textField);
@@ -109,6 +120,14 @@ private class LayerItemRenderer extends ItemRenderer {
     if (data == null) return;
     var value = Reflect.field(data, label.id);
     label.text = Std.string(value);
+  }
+
+  function onVisibleStateClick(event: MouseEvent) {
+    var parentList = findAncestor(ListView);
+    if (parentList != null) {
+      var event = new UIEvent('visibleStateChange', false, _data);
+      parentList.dispatch(event);
+    }
   }
 
   function startEdit(_) {
