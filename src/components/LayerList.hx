@@ -36,6 +36,7 @@ class LayerList extends ListView {
 
   function buildList() {
     if (this.layers.length < 0) return;
+    dataSource.data = [];
     dataSource.allowCallbacks = false;
     for (layer in this.layers) {
       dataSource.add({
@@ -53,12 +54,7 @@ class LayerList extends ListView {
 
   function onVisibleStateChange(event: UIEvent) {
     if (event.data != null) {
-      var index = this.layers.indexOf(event.data.name);
-      
-      var uiEvent = new UIEvent('layerVisibilityChange', false, {
-        layer: this.layers[index],
-        visibleState: event.data.visibleState
-      });
+      var uiEvent = new UIEvent('layerVisibilityChange', false, event.data);
       dispatch(uiEvent);
     }
   }
@@ -125,7 +121,11 @@ private class LayerItemRenderer extends ItemRenderer {
   function onVisibleStateClick(event: MouseEvent) {
     var parentList = findAncestor(ListView);
     if (parentList != null) {
-      var event = new UIEvent('visibleStateChange', false, _data);
+      var event = new UIEvent('visibleStateChange', false, {
+        name: _data.name,
+        // we negate because the click happens before visibleState is set to new state
+        visibleState: !_data.visibleState
+      });
       parentList.dispatch(event);
     }
   }
