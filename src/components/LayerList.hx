@@ -80,6 +80,7 @@ private class LayerItemRenderer extends ItemRenderer {
     textField.percentWidth = 100;
     textField.verticalAlign = 'center';
     textField.visible = false;
+    textField.allowInteraction = false;
 
     visibleState = new CheckBox();
     visibleState.id = 'visibleState';
@@ -152,6 +153,7 @@ private class LayerItemRenderer extends ItemRenderer {
     label.visible = false;
 
     textField.visible = true;
+    textField.allowInteraction = true;
     textField.text = label.text;
     // if we focus too fast the text won't display (might be a haxeui-ceramic bug)
     Timer.delay(() -> {
@@ -186,6 +188,7 @@ private class LayerItemRenderer extends ItemRenderer {
     label.visible = true;
     textField.focus = false;
     textField.visible = false;
+    textField.allowInteraction = false;
     input.offKeyDown(onKeyDown);
   }
 
