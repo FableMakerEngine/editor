@@ -25,6 +25,7 @@ class LayerList extends ListView {
     addComponent(layerItemRenderer);
     registerEvent('visibleStateChange', onVisibleStateChange);
     registerEvent(UIEvent.CHANGE, onLayerSelect);
+    registerEvent(UIEvent.PROPERTY_CHANGE, onLayerRename);
   }
 
   public function set_layers(layers: Array<TilemapLayerData>) {
@@ -58,6 +59,14 @@ class LayerList extends ListView {
   function onVisibleStateChange(event: UIEvent) {
     if (event.data != null) {
       var uiEvent = new UIEvent('layerVisibilityChange', false, event.data);
+      dispatch(uiEvent);
+    }
+  }
+
+  function onLayerRename(event: UIEvent) {
+    if (selectedItem == null) return;
+    if (activeLayer != null && activeLayer.name != selectedItem.name) {
+      var uiEvent = new UIEvent('layerNameChange', false, selectedItem.name);
       dispatch(uiEvent);
     }
   }
