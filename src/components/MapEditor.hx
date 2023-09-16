@@ -133,8 +133,8 @@ class MapEditor extends VBox {
   function onLayerRename(event: UIEvent) {
     var selectedItem = layerList.selectedItem;
     if (selectedItem == null) return;
-    var layer = this.tilemapData.layers[layerList.selectedIndex];
-    if (layer.name != selectedItem.name) {
+    var layer = layerList.activeLayer;
+    if (layer != null && layer.name != selectedItem.name) {
       layer.name = selectedItem.name;
     }
   }

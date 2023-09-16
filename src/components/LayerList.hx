@@ -38,17 +38,20 @@ class LayerList extends ListView {
     if (this.layers.length < 0) return;
     dataSource.data = [];
     dataSource.allowCallbacks = false;
-    for (layer in this.layers) {
+    var i = this.layers.length - 1;
+    while (i >= 0) {
+      var layer = this.layers[i];
       dataSource.add({
         name: layer.name,
         visibleState: layer.visible
       });
+      i--;
     }
     dataSource.allowCallbacks = true;
   }
 
   function onLayerSelect(event: UIEvent) {
-    var index = selectedIndex;
+    var index = (this.layers.length - 1) - selectedIndex;
     activeLayer = this.layers[index];
   }
 
