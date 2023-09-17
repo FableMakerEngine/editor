@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.containers.Panel;
 import haxe.ui.events.UIEvent;
 import haxe.Timer;
 import haxe.ui.components.TextField;
@@ -11,8 +12,8 @@ import haxe.ui.events.MouseEvent;
 import ceramic.TilemapLayerData;
 import haxe.ui.containers.ListView;
 
-@:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('../../assets/main/layer-list.xml'))
-class LayerList extends ListView {
+@:build(haxe.ui.macros.ComponentMacros.ComponentMacros.build('../../assets/main/layer-panel.xml'))
+class LayerPanel extends Panel {
   public var layers(default, set): Array<TilemapLayerData>;
   public var activeLayer: TilemapLayerData;
 
@@ -22,10 +23,10 @@ class LayerList extends ListView {
     super();
     layerItemRenderer = new LayerItemRenderer();
     layerItemRenderer.id = 'layerItemRenderer';
-    addComponent(layerItemRenderer);
-    registerEvent(MapEvent.LAYER_VISIBILITY, onVisibleStateChange);
-    registerEvent(UIEvent.CHANGE, onLayerSelect);
-    registerEvent(UIEvent.PROPERTY_CHANGE, onLayerRename);
+    list.addComponent(layerItemRenderer);
+    list.registerEvent(MapEvent.LAYER_VISIBILITY, onVisibleStateChange);
+    list.registerEvent(UIEvent.CHANGE, onLayerSelect);
+    list.registerEvent(UIEvent.PROPERTY_CHANGE, onLayerRename);
   }
 
   public function set_layers(layers: Array<TilemapLayerData>) {
@@ -37,36 +38,36 @@ class LayerList extends ListView {
 
   function buildList() {
     if (this.layers.length < 0) return;
-    dataSource.data = [];
-    dataSource.allowCallbacks = false;
+    list.dataSource.data = [];
+    list.dataSource.allowCallbacks = false;
     var i = this.layers.length - 1;
     while (i >= 0) {
       var layer = this.layers[i];
-      dataSource.add({
+      list.dataSource.add({
         name: layer.name,
         visibleState: layer.visible
       });
       i--;
     }
-    dataSource.allowCallbacks = true;
+    list.dataSource.allowCallbacks = true;
   }
 
   function onLayerSelect(event: UIEvent) {
-    var index = (this.layers.length - 1) - selectedIndex;
+    var index = (this.layers.length - 1) - list.selectedIndex;
     activeLayer = this.layers[index];
   }
 
   function onVisibleStateChange(event: UIEvent) {
     if (event.data != null) {
-      var uiEvent = new UIEvent('layerVisibilityChange', false, event.data);
+      var uiEvent = new UIEvent(MapEvent.LAYER_VISIBILITY, false, event.data);
       dispatch(uiEvent);
     }
   }
 
   function onLayerRename(event: UIEvent) {
-    if (selectedItem == null) return;
-    if (activeLayer != null && activeLayer.name != selectedItem.name) {
-      var uiEvent = new UIEvent(MapEvent.LAYER_RENAME, false, selectedItem.name);
+    if (list.selectedItem == null) return;
+    if (activeLayer != null && activeLayer.name != list.selectedItem.name) {
+      var uiEvent = new UIEvent(MapEvent.LAYER_RENAME, false, list.selectedItem.name);
       dispatch(uiEvent);
     }
   }

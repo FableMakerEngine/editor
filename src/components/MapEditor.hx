@@ -31,8 +31,8 @@ class MapEditor extends VBox {
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
-    layerList.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
-    layerList.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
+    layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
+    layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -110,7 +110,7 @@ class MapEditor extends VBox {
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     tilemapData = projectAssets.tilemapData(newMap.path);
-    layerList.layers = tilemapData.layers;
+    layerPanel.layers = tilemapData.layers;
     tilePicker.changeActiveMap(newMap);
     viewport.changeActiveMap(newMap);
   }
@@ -131,14 +131,14 @@ class MapEditor extends VBox {
   }
 
   function onLayerRename(event: UIEvent) {
-    layerList.activeLayer.name = event.data;
+    layerPanel.activeLayer.name = event.data;
   }
 
   function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
     var tilePos = clickedTile.position;
-    var layerName = layerList.activeLayer.name;
+    var layerName = layerPanel.activeLayer.name;
     
     var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
