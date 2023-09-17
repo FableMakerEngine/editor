@@ -23,7 +23,7 @@ class LayerList extends ListView {
     layerItemRenderer = new LayerItemRenderer();
     layerItemRenderer.id = 'layerItemRenderer';
     addComponent(layerItemRenderer);
-    registerEvent('visibleStateChange', onVisibleStateChange);
+    registerEvent(MapEvent.LAYER_VISIBILITY, onVisibleStateChange);
     registerEvent(UIEvent.CHANGE, onLayerSelect);
     registerEvent(UIEvent.PROPERTY_CHANGE, onLayerRename);
   }
@@ -66,7 +66,7 @@ class LayerList extends ListView {
   function onLayerRename(event: UIEvent) {
     if (selectedItem == null) return;
     if (activeLayer != null && activeLayer.name != selectedItem.name) {
-      var uiEvent = new UIEvent('layerNameChange', false, selectedItem.name);
+      var uiEvent = new UIEvent(MapEvent.LAYER_RENAME, false, selectedItem.name);
       dispatch(uiEvent);
     }
   }
@@ -134,7 +134,7 @@ private class LayerItemRenderer extends ItemRenderer {
   function onVisibleStateClick(event: MouseEvent) {
     var parentList = findAncestor(ListView);
     if (parentList != null) {
-      var event = new UIEvent('visibleStateChange', false, {
+      var event = new UIEvent(MapEvent.LAYER_VISIBILITY, false, {
         name: _data.name,
         // we negate because the click happens before visibleState is set to new state
         visibleState: !_data.visibleState

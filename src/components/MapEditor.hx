@@ -31,8 +31,8 @@ class MapEditor extends VBox {
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
-    layerList.registerEvent('layerVisibilityChange', onLayerVisibilityChange);
-    layerList.registerEvent('layerNameChange', onLayerRename);
+    layerList.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
+    layerList.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
   }
 
   public function menu(): Array<ContextMenuEntry> {
