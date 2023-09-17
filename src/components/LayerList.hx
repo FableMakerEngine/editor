@@ -98,6 +98,7 @@ private class LayerItemRenderer extends ItemRenderer {
     visibleState.id = 'visibleState';
     visibleState.selected = false;
     visibleState.onClick = onVisibleStateClick;
+    visibleState.tooltip = '{{layer.visible}}';
 
     addComponent(label);
     addComponent(textField);

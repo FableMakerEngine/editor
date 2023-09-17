@@ -15,6 +15,7 @@
   <locales>
     <locale id="en_US">
       <resource path="locale/en_US/menus.properties" />
+      <resource path="locale/en_US/layerList.properties" />
     </locale>
   </locales>
 </module>
