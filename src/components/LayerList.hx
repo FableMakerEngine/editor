@@ -136,8 +136,7 @@ private class LayerItemRenderer extends ItemRenderer {
     if (parentList != null) {
       var event = new UIEvent(MapEvent.LAYER_VISIBILITY, false, {
         name: _data.name,
-        // we negate because the click happens before visibleState is set to new state
-        visibleState: !_data.visibleState
+        visibleState: visibleState.selected
       });
       parentList.dispatch(event);
     }
