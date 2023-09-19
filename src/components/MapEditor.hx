@@ -27,12 +27,12 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
-    store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
+    tilePicker.registerEvent(MapEvent.TILE_SELECTION, onTileSelection);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -111,6 +111,17 @@ class MapEditor extends VBox {
     viewport.changeTileSize(newSize);
   }
 
+  function onTileSelection(event: UIEvent) {
+    var tiles: Array<Tile> = cast event.data;
+    if (viewport == null || tiles.length <= 0) return;
+    selectedTiles = [];
+    for (tile in tiles) {
+      selectedTiles.push(new TilemapTile(tile.frame));
+    }
+    selectionRect = createRectFromTiles(tiles, tileSize);
+    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
+  }
+
   function onActiveMapChanged(event: UIEvent) {
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
@@ -118,16 +129,6 @@ class MapEditor extends VBox {
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
     viewport.changeActiveMap(map);
-  }
-
-  function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
-    if (viewport == null || newTiles.length <= 0) return;
-    selectedTiles = [];
-    for (tile in newTiles) {
-      selectedTiles.push(new TilemapTile(tile.frame));
-    }
-    selectionRect = createRectFromTiles(newTiles, tileSize);
-    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   function onLayerVisibilityChange(event: UIEvent) {

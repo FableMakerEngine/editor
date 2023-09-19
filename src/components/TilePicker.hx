@@ -141,10 +141,7 @@ class TilePicker extends VBox {
     tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
-  public function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
-    /* For now we will always unselect previous selection. In the future it would be nice to
-       add to the selection, simillar to how TileD does it.
-    */
-    store.commit.addSelectedTiles(cast cells, true);
+  function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
+    final event = new MapEvent(MapEvent.TILE_SELECTION, false, cells);
   }
 }
