@@ -34,10 +34,7 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public function changeActiveMap(mapData: TilemapData) {
-    if (mapData == null) {
-      loadEmptyMap(newMap);
-      return;
-    }
+    if (mapData == null) return;
     loadMap(mapData);
   }
 
@@ -109,6 +106,9 @@ class TilemapViewport extends ceramic.Scene {
       gridOverlay.size(mapWidth(), mapHeight());
       gridOverlay.shader.setVec2('resolution', mapWidth(), mapHeight());
     }
+    if (tileCursor != null) {
+      tileCursor.size(tileSize.width, tileSize.height);
+    }
   }
 
   public function onPointerMove(info: TouchInfo) {
@@ -126,23 +126,6 @@ class TilemapViewport extends ceramic.Scene {
   }
 
   public override function update(dt: Float) {}
-
-  function emptyTilemapData(name: String) {
-    var data = new ceramic.TilemapData();
-    data.name = name;
-    data.width = Math.round(20 * tileSize.width);
-    data.height = Math.round(20 * tileSize.height);
-    return data;
-  }
-
-  // @TODO assign better default values based on tilesize? or user settings
-  function loadEmptyMap(mapInfo: MapInfo) {
-    tilemap.tilemapData = emptyTilemapData(mapInfo.name);
-    mapCols = Math.round(tilemap.width / tileSize.width);
-    mapRows = Math.round(tilemap.height / tileSize.height);
-    resize(tilemap.width, tilemap.height);
-    tileCursor.size(tileSize.width, tileSize.height);
-  }
 
   function loadMap(mapData: TilemapData) {
     tilemap.tilemapData = mapData;

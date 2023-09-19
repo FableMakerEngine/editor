@@ -125,6 +125,9 @@ class MapEditor extends VBox {
   function onActiveMapChanged(event: UIEvent) {
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
+    if (tilemapData == null) {
+      tilemapData = emptyTilemapData(map.name);
+    }
     layerPanel.layers = tilemapData.layers;
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
@@ -183,6 +186,14 @@ class MapEditor extends VBox {
 
   public function update(dt: Float) {
     viewport.update(dt);
+  }
+
+  function emptyTilemapData(name: String) {
+    var data = new ceramic.TilemapData();
+    data.name = name;
+    data.width = Math.round(20 * tileSize.width);
+    data.height = Math.round(20 * tileSize.height);
+    return data;
   }
 
   // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
