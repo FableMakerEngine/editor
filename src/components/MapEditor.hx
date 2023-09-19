@@ -27,7 +27,8 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
-    viewport = new TilemapViewport(tileView);
+    tileView.visible = false;
+    viewport = new TilemapViewport();
     viewport.onOnTilemapClick(null, onTilemapClick);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
@@ -102,7 +103,6 @@ class MapEditor extends VBox {
   }
 
   public override function onResized() {
-    viewport.resize(48 * 20, 48 * 16);
   }
 
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
@@ -123,6 +123,7 @@ class MapEditor extends VBox {
   }
 
   function onActiveMapChanged(event: UIEvent) {
+    if (!tileView.visible) tileView.visible = true;
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData == null) {
@@ -132,6 +133,8 @@ class MapEditor extends VBox {
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
     viewport.changeActiveMap(tilemapData);
+    tileView.width = tilemapData.width;
+    tileView.height = tilemapData.height;
   }
 
   function onLayerVisibilityChange(event: UIEvent) {

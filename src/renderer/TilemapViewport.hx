@@ -14,8 +14,6 @@ class TilemapViewport extends ceramic.Scene {
   public var parentView: haxe.ui.core.Component;
   public var background: ceramic.Quad;
   public var tilemap(default, null): ceramic.Tilemap;
-  public var mapCols: Int = 16;
-  public var mapRows: Int = 16;
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: ceramic.Border;
   public var gridOverlay: GridQuad;
@@ -24,12 +22,8 @@ class TilemapViewport extends ceramic.Scene {
 
   @event function onTilemapClick(info: TouchInfo, tiles: Array<Tile>);
 
-  public function new(?parentView) {
+  public function new() {
     super();
-    if (parentView != null) {
-      this.parentView = parentView;
-    }
-    depth = 1;
     screen.onPointerMove(this, onPointerMove);
   }
 
@@ -41,8 +35,6 @@ class TilemapViewport extends ceramic.Scene {
   public function changeTileSize(newSize: Rect) {
     tileSize = newSize;
     tileCursor.size(tileSize.width, tileSize.height);
-    mapCols = Math.round(tilemap.width / tileSize.width);
-    mapRows = Math.round(tilemap.height / tileSize.height);
     gridOverlay.grid.cellSize = newSize;
   }
 
@@ -86,29 +78,10 @@ class TilemapViewport extends ceramic.Scene {
     add(tilemap);
   }
 
-  public function mapWidth() {
-    return tileSize.width * mapCols;
-  }
-
-  public function mapHeight() {
-    return tileSize.height * mapRows;
-  }
-
   public override function resize(width, height) {
-    if (background != null) {
-      background.size(mapWidth(), mapHeight());
-    }
-    if (parentView != null) {
-      parentView.width = mapWidth();
-      parentView.height = mapHeight();
-    }
-    if (gridOverlay != null) {
-      gridOverlay.size(mapWidth(), mapHeight());
-      gridOverlay.shader.setVec2('resolution', mapWidth(), mapHeight());
-    }
-    if (tileCursor != null) {
-      tileCursor.size(tileSize.width, tileSize.height);
-    }
+    background.size(width, height);
+    gridOverlay.size(width, height);
+    gridOverlay.shader.setVec2('resolution', width, height);
   }
 
   public function onPointerMove(info: TouchInfo) {
@@ -118,7 +91,9 @@ class TilemapViewport extends ceramic.Scene {
     var localCoords = new Point();
     screenToVisual(info.x, info.y, localCoords);
 
-    if (localCoords.x > 0 && localCoords.y > 0 && localCoords.x < mapWidth() && localCoords.y < mapHeight()) {
+    var width = tilemap.width;
+    var height = tilemap.height;
+    if (localCoords.x > 0 && localCoords.y > 0 && localCoords.x < width && localCoords.y < height) {
       var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
       var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
       tileCursor.pos(x, y);
@@ -131,8 +106,6 @@ class TilemapViewport extends ceramic.Scene {
     tilemap.tilemapData = mapData;
     tileSize.width = mapData.maxTileWidth;
     tileSize.height = mapData.maxTileHeight;
-    mapCols = Math.round(tilemap.width / tileSize.width);
-    mapRows = Math.round(tilemap.height / tileSize.height);
     resize(tilemap.width, tilemap.height);
   }
 
