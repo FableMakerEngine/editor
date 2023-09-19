@@ -1,5 +1,6 @@
 package renderer;
 
+import ceramic.TilemapData;
 import renderer.Grid.Cell;
 import ceramic.Texture;
 import ceramic.UInt8Array;
@@ -32,12 +33,12 @@ class TilemapViewport extends ceramic.Scene {
     screen.onPointerMove(this, onPointerMove);
   }
 
-  public function changeActiveMap(newMap: MapInfo) {
-    if (newMap.path == null) {
+  public function changeActiveMap(mapData: TilemapData) {
+    if (mapData == null) {
       loadEmptyMap(newMap);
       return;
     }
-    loadMap(newMap);
+    loadMap(mapData);
   }
 
   public function changeTileSize(newSize: Rect) {
@@ -143,17 +144,13 @@ class TilemapViewport extends ceramic.Scene {
     tileCursor.size(tileSize.width, tileSize.height);
   }
 
-  function loadMap(map: MapInfo) {
-    var tilemapData = projectAssets.tilemapData(map.path);
-    if (tilemapData != null) {
-      tilemap.tilemapData = tilemapData;
-      tileSize.width = tilemapData.maxTileWidth;
-      tileSize.height = tilemapData.maxTileHeight;
-      store.commit.updateTileSize(tileSize);
-      mapCols = Math.round(tilemap.width / tileSize.width);
-      mapRows = Math.round(tilemap.height / tileSize.height);
-      resize(tilemap.width, tilemap.height);
-    }
+  function loadMap(mapData: TilemapData) {
+    tilemap.tilemapData = mapData;
+    tileSize.width = mapData.maxTileWidth;
+    tileSize.height = mapData.maxTileHeight;
+    mapCols = Math.round(tilemap.width / tileSize.width);
+    mapRows = Math.round(tilemap.height / tileSize.height);
+    resize(tilemap.width, tilemap.height);
   }
 
   function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 

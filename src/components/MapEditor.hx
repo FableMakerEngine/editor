@@ -128,7 +128,7 @@ class MapEditor extends VBox {
     layerPanel.layers = tilemapData.layers;
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
-    viewport.changeActiveMap(map);
+    viewport.changeActiveMap(tilemapData);
   }
 
   function onLayerVisibilityChange(event: UIEvent) {
