@@ -27,12 +27,13 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
-    store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
-    viewport = new TilemapViewport(tileView);
+    tileView.visible = false;
+    viewport = new TilemapViewport();
     viewport.onOnTilemapClick(null, onTilemapClick);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
+    tilePicker.registerEvent(MapEvent.TILE_SELECTION, onTileSelection);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -96,10 +97,12 @@ class MapEditor extends VBox {
   public override function onReady() {
     super.onReady();
     tileView.add(viewport);
+    projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
+      mapListPanel.createNodes(mapInfo);
+    });
   }
 
   public override function onResized() {
-    viewport.resize(48 * 20, 48 * 16);
   }
 
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
@@ -108,23 +111,30 @@ class MapEditor extends VBox {
     viewport.changeTileSize(newSize);
   }
 
+  function onTileSelection(event: UIEvent) {
+    var tiles: Array<Tile> = cast event.data;
+    if (viewport == null || tiles.length <= 0) return;
+    selectedTiles = [];
+    for (tile in tiles) {
+      selectedTiles.push(new TilemapTile(tile.frame));
+    }
+    selectionRect = createRectFromTiles(tiles, tileSize);
+    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
+  }
+
   function onActiveMapChanged(event: UIEvent) {
+    if (!tileView.visible) tileView.visible = true;
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
+    if (tilemapData == null) {
+      tilemapData = emptyTilemapData(map.name);
+    }
     layerPanel.layers = tilemapData.layers;
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
-    viewport.changeActiveMap(map);
-  }
-
-  function onSelectedTilesChanged(newTiles: Array<Tile>, oldTiles: Array<Tile>) {
-    if (viewport == null || newTiles.length <= 0) return;
-    selectedTiles = [];
-    for (tile in newTiles) {
-      selectedTiles.push(new TilemapTile(tile.frame));
-    }
-    selectionRect = createRectFromTiles(newTiles, tileSize);
-    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
+    viewport.changeActiveMap(tilemapData);
+    tileView.width = tilemapData.width;
+    tileView.height = tilemapData.height;
   }
 
   function onLayerVisibilityChange(event: UIEvent) {
@@ -179,6 +189,14 @@ class MapEditor extends VBox {
 
   public function update(dt: Float) {
     viewport.update(dt);
+  }
+
+  function emptyTilemapData(name: String) {
+    var data = new ceramic.TilemapData();
+    data.name = name;
+    data.width = Math.round(20 * tileSize.width);
+    data.height = Math.round(20 * tileSize.height);
+    return data;
   }
 
   // We definitely want this as a utility or somewhere else, this is the 2nd time using this.

@@ -22,14 +22,9 @@ class MapsPanel extends Panel {
     registerEvent(MouseEvent.CLICK, onNodeSelected);
   }
 
-  public override function onReady() {
-    // edfitorAssets.onMap
-    projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
-      createNodes(mapInfo);
-    });
-  }
+  public override function onReady() {}
 
-  function createNodes(mapInfo: Array<MapInfo>, ?parentNode) {
+  public function createNodes(mapInfo: Array<MapInfo>, ?parentNode) {
     for (map in mapInfo) {
       if (parentNode == null) {
         parentNode = worldNode;
