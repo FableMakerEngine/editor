@@ -3,6 +3,7 @@
     <component class="components.TopMenu" />
     <component class="components.StatusBar" />
     <component class="components.MapList" />
+    <component class="components.LayerPanel" />
     <component class="components.MapEditor" />
     <component class="components.TilePicker" />
   </components>
@@ -14,6 +15,7 @@
   <locales>
     <locale id="en_US">
       <resource path="locale/en_US/menus.properties" />
+      <resource path="locale/en_US/layerList.properties" />
     </locale>
   </locales>
 </module>

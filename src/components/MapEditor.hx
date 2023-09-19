@@ -1,5 +1,7 @@
 package components;
 
+import haxe.ui.events.UIEvent;
+import ceramic.TilemapData;
 import ceramic.Rect;
 import ceramic.TilemapTile;
 import ceramic.TouchInfo;
@@ -13,8 +15,8 @@ import haxe.ui.containers.VBox;
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
   public var viewport: TilemapViewport;
-  public var layerName: String;
 
+  var tilemapData: TilemapData;
   var tileSize: Rect = new Rect(0, 0, 16, 16);
   var selectedTiles: Array<TilemapTile>;
   var selectionRect: Rect;
@@ -29,6 +31,8 @@ class MapEditor extends VBox {
     store.state.onSelectedTilesChange(null, onSelectedTilesChanged);
     viewport = new TilemapViewport(tileView);
     viewport.onOnTilemapClick(null, onTilemapClick);
+    layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
+    layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -105,6 +109,9 @@ class MapEditor extends VBox {
   }
 
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
+    tilemapData = projectAssets.tilemapData(newMap.path);
+    layerPanel.layers = tilemapData.layers;
+    layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(newMap);
     viewport.changeActiveMap(newMap);
   }
@@ -119,17 +126,24 @@ class MapEditor extends VBox {
     viewport.tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
+  function onLayerVisibilityChange(event: UIEvent) {
+    var layer = viewport.tilemap.layer(event.data.name);
+    layer.visible = event.data.visibleState;
+  }
+
+  function onLayerRename(event: UIEvent) {
+    layerPanel.activeLayer.name = event.data;
+  }
+
   function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
     var clickedTile = tiles[0];
     var tilemap = viewport.tilemap;
     var tilePos = clickedTile.position;
+    var layerName = layerPanel.activeLayer.name;
     
     var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
-
-    // for testing set layer manually
-    layerName = 'lower_ground';
     // handle fill
     // right click erase
     if (info.buttonId == 0 || info.buttonId == 2) {
