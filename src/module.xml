@@ -2,7 +2,7 @@
   <components>
     <component class="components.TopMenu" />
     <component class="components.StatusBar" />
-    <component class="components.MapList" />
+    <component class="components.MapsPanel" />
     <component class="components.LayerPanel" />
     <component class="components.MapEditor" />
     <component class="components.TilePicker" />
