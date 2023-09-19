@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.events.UIEvent;
 import haxe.ui.containers.Panel;
 import haxe.ui.core.Screen;
 import haxe.ui.events.MouseEvent;
@@ -138,7 +139,8 @@ class MapsPanel extends Panel {
         id: selectedNode.data.id,
         path: selectedNode.data.path
       }
-      store.commit.updateActiveMap(mapInfo);
+      final mapEvent = new UIEvent(MapEvent.MAP_SELECT, false, mapInfo);
+      dispatch(mapEvent);
     }, 25);
   }
 
