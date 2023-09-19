@@ -96,6 +96,9 @@ class MapEditor extends VBox {
   public override function onReady() {
     super.onReady();
     tileView.add(viewport);
+    projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
+      mapListPanel.createNodes(mapInfo);
+    });
   }
 
   public override function onResized() {
