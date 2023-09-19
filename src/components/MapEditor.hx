@@ -111,6 +111,7 @@ class MapEditor extends VBox {
   function onActiveMapChanged(newMap: MapInfo, oldMap: MapInfo) {
     tilemapData = projectAssets.tilemapData(newMap.path);
     layerPanel.layers = tilemapData.layers;
+    layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(newMap);
     viewport.changeActiveMap(newMap);
   }
