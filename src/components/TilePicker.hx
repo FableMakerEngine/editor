@@ -51,10 +51,7 @@ class TilePicker extends VBox {
   }
 
   function createTileCursor() {
-    var tileSize = store.state.tileSize;
-    if (tileSize == null) {
-      tileSize = new Rect(0, 0, 16, 16);
-    }
+    var tileSize = new Rect(0, 0, 16, 16);
     tileCursor = new Border();
     tileCursor.borderColor = Color.SNOW;
     tileCursor.borderSize = 2;
