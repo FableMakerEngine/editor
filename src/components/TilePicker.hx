@@ -140,5 +140,6 @@ class TilePicker extends VBox {
 
   function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
     final event = new MapEvent(MapEvent.TILE_SELECTION, false, cells);
+    dispatch(event);
   }
 }
