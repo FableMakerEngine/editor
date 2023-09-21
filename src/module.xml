@@ -4,6 +4,7 @@
     <component class="components.StatusBar" />
     <component class="components.MapsPanel" />
     <component class="components.LayerPanel" />
+    <component class="components.Tilemap" />
     <component class="components.MapEditor" />
     <component class="components.TilePicker" />
   </components>

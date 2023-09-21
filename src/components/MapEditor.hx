@@ -8,13 +8,11 @@ import ceramic.TouchInfo;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
-import renderer.TilemapViewport;
 import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.macros.ComponentMacros.build('../../assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
-  public var viewport: TilemapViewport;
 
   var tilemapData: TilemapData;
   var tileSize: Rect = new Rect(0, 0, 16, 16);
@@ -27,9 +25,8 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
-    tileView.visible = false;
-    viewport = new TilemapViewport();
-    viewport.onOnTilemapClick(null, onTilemapClick);
+    tilemapView.visible = false;
+    tilemapView.registerEvent(MapEvent.MAP_CLICK, onTilemapClick);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
@@ -75,7 +72,7 @@ class MapEditor extends VBox {
     ];
   }
 
-  @:bind(tileView, MouseEvent.RIGHT_MOUSE_DOWN)
+  @:bind(tilemapView, MouseEvent.RIGHT_MOUSE_DOWN)
   function onContextMenu(e: MouseEvent) {
     contextMenu.left = e.screenX;
     contextMenu.top = e.screenY;
@@ -96,7 +93,6 @@ class MapEditor extends VBox {
 
   public override function onReady() {
     super.onReady();
-    tileView.add(viewport);
     projectAssets.onMapInfoDataReady(null, (mapInfo) -> {
       mapListPanel.createNodes(mapInfo);
     });
@@ -108,37 +104,35 @@ class MapEditor extends VBox {
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
     tileSize = newSize;
     tilePicker.changeTileSize(newSize);
-    viewport.changeTileSize(newSize);
+    tilemapView.changeTileSize(newSize);
   }
 
   function onTileSelection(event: UIEvent) {
     var tiles: Array<Tile> = cast event.data;
-    if (viewport == null || tiles.length <= 0) return;
+    if (tilemapView == null || tiles.length <= 0) return;
     selectedTiles = [];
     for (tile in tiles) {
       selectedTiles.push(new TilemapTile(tile.frame));
     }
     selectionRect = createRectFromTiles(tiles, tileSize);
-    viewport.tileCursor.size(selectionRect.width, selectionRect.height);
+    tilemapView.tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   function onActiveMapChanged(event: UIEvent) {
-    if (!tileView.visible) tileView.visible = true;
+    if (!tilemapView.visible) tilemapView.visible = true;
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData == null) {
       tilemapData = emptyTilemapData(map.name);
     }
+    tilemapView.changeActiveMap(tilemapData);
     layerPanel.layers = tilemapData.layers;
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
-    viewport.changeActiveMap(tilemapData);
-    tileView.width = tilemapData.width;
-    tileView.height = tilemapData.height;
   }
 
   function onLayerVisibilityChange(event: UIEvent) {
-    var layer = viewport.tilemap.layer(event.data.name);
+    var layer = tilemapView.tilemap.layer(event.data.name);
     layer.visible = event.data.visibleState;
   }
 
@@ -146,13 +140,15 @@ class MapEditor extends VBox {
     layerPanel.activeLayer.name = event.data;
   }
 
-  function onTilemapClick(info: TouchInfo, tiles: Array<Tile>) {
+  function onTilemapClick(event: UIEvent) {
+    var info: TouchInfo = event.data.mouseInfo;
+    var tiles: Array<Tile> = event.data.tiles;
     var clickedTile = tiles[0];
-    var tilemap = viewport.tilemap;
     var tilePos = clickedTile.position;
     var layerName = layerPanel.activeLayer.name;
+    var tilemap = tilemapView.tilemap;
     
-    var tilesToDrawTo = viewport.gridOverlay.grid.getCellsFromRect(
+    var tilesToDrawTo = tilemapView.gridOverlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
     // handle fill
@@ -187,9 +183,7 @@ class MapEditor extends VBox {
     }
   }
 
-  public function update(dt: Float) {
-    viewport.update(dt);
-  }
+  public function update(dt: Float) {}
 
   function emptyTilemapData(name: String) {
     var data = new ceramic.TilemapData();
