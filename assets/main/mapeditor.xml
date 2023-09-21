@@ -11,7 +11,7 @@
       <tabview id="workspace" width="100%" height="70%" closable="true">
         <box id="mapeditor" text="Map Editor" width="100%" height="100%"
           icon="haxeui-core/styles/default/haxeui_tiny.png">
-          <tilemap id="tilemap" width="100%" height="100%"></tilemap>
+          <tilemap id="tilemapView" width="100%" height="100%"></tilemap>
         </box>
         <box text="Database" icon="haxeui-core/styles/default/haxeui_tiny.png">
           <button text="Page 2" />

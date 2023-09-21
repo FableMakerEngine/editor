@@ -25,8 +25,8 @@ class MapEditor extends VBox {
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
-    tilemap.visible = false;
-    tilemap.registerEvent(MapEvent.MAP_CLICK, onTilemapClick);
+    tilemapView.visible = false;
+    tilemapView.registerEvent(MapEvent.MAP_CLICK, onTilemapClick);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
@@ -72,7 +72,7 @@ class MapEditor extends VBox {
     ];
   }
 
-  @:bind(tilemap, MouseEvent.RIGHT_MOUSE_DOWN)
+  @:bind(tilemapView, MouseEvent.RIGHT_MOUSE_DOWN)
   function onContextMenu(e: MouseEvent) {
     contextMenu.left = e.screenX;
     contextMenu.top = e.screenY;
@@ -104,35 +104,35 @@ class MapEditor extends VBox {
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
     tileSize = newSize;
     tilePicker.changeTileSize(newSize);
-    tilemap.changeTileSize(newSize);
+    tilemapView.changeTileSize(newSize);
   }
 
   function onTileSelection(event: UIEvent) {
     var tiles: Array<Tile> = cast event.data;
-    if (tilemap == null || tiles.length <= 0) return;
+    if (tilemapView == null || tiles.length <= 0) return;
     selectedTiles = [];
     for (tile in tiles) {
       selectedTiles.push(new TilemapTile(tile.frame));
     }
     selectionRect = createRectFromTiles(tiles, tileSize);
-    tilemap.tileCursor.size(selectionRect.width, selectionRect.height);
+    tilemapView.tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   function onActiveMapChanged(event: UIEvent) {
-    if (!tilemap.visible) tilemap.visible = true;
+    if (!tilemapView.visible) tilemapView.visible = true;
     var map: MapInfo = event.data;
     tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData == null) {
       tilemapData = emptyTilemapData(map.name);
     }
-    tilemap.changeActiveMap(tilemapData);
+    tilemapView.changeActiveMap(tilemapData);
     layerPanel.layers = tilemapData.layers;
     layerPanel.list.selectedIndex = 0;
     tilePicker.changeActiveMap(map);
   }
 
   function onLayerVisibilityChange(event: UIEvent) {
-    var layer = tilemap.tilemap.layer(event.data.name);
+    var layer = tilemapView.tilemap.layer(event.data.name);
     layer.visible = event.data.visibleState;
   }
 
@@ -146,11 +146,11 @@ class MapEditor extends VBox {
     var clickedTile = tiles[0];
     var tilePos = clickedTile.position;
     var layerName = layerPanel.activeLayer.name;
+    var tilemap = tilemapView.tilemap;
     
-    var tilesToDrawTo = tilemap.gridOverlay.grid.getCellsFromRect(
+    var tilesToDrawTo = tilemapView.gridOverlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
-    var tilemap = tilemap.tilemap;
     // handle fill
     // right click erase
     if (info.buttonId == 0 || info.buttonId == 2) {
