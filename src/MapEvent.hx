@@ -13,4 +13,10 @@ class MapEvent extends UIEvent {
 
   /* Dispatched when a map has been selected' */
   public static final TILE_SELECTION: EventType<UIEvent> = EventType.name('tileSelection');
+
+  /* Dispatched when the tilemap is clicked' */
+  public static final MAP_CLICK: EventType<UIEvent> = EventType.name('mapClick');
+
+  /* Dispatched when the tilemap is zoomed' */
+  public static final MAP_ZOOM: EventType<UIEvent> = EventType.name('mapZoom');
 }
