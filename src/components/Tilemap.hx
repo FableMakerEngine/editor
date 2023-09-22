@@ -142,51 +142,58 @@ class Tilemap extends VBox {
     resize(tilemap.width, tilemap.height);
   }
 
+  function getActiveLayerTiles() {
+    var tiles: Array<TilemapTile> = null;
+    if (tilemap.tilemapData != null) {
+      var layerData = tilemap.tilemapData.layer(activeLayer.name);
+      var layer = tilemap.layer(activeLayer.name);
+      if (layerData != null && layer != null) {
+        tiles = [].concat(layerData.tiles.original);
+      }
+    }
+    return tiles;
+  }
+
+  function updateLayerTiles(tiles: Array<TilemapTile>) {
+    tilemap.tilemapData.layer(activeLayer.name).tiles = tiles;
+
+    var layer = tilemap.layer(activeLayer.name);
+    if (layer != null) layer.contentDirty = true;
+  }
+
+  function eraseTile(tilesToEdit: Array<Tile>) {
+    var tiles = getActiveLayerTiles();
+    if (tiles == null) return;
+    for (index => tile in tilesToEdit) {
+      tiles[tile.frame] = 0;
+    }
+    updateLayerTiles(tiles);
+  }
+
+  function drawTile(tilesToEdit: Array<Tile>) {
+    var tiles = getActiveLayerTiles();
+    if (tiles == null) return;
+
+    for (index => tile in tilesToEdit) {
+      var tilemapTile = tilemapTiles[index];
+      tiles[tile.frame] = tilemapTile;
+    }
+    updateLayerTiles(tiles);
+  }
+
   function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
-    final event = new MapEvent(MapEvent.MAP_CLICK, false, {
-        tiles: tiles,
-        mouseInfo: info
-    });
-    dispatch(event);
-
     if (activeLayer == null) return;
+    var selectedTile = tiles[0];
+    var tilePos = selectedTile.position;
 
-    var info: TouchInfo = event.data.mouseInfo;
-    var tiles: Array<Tile> = event.data.tiles;
-    var clickedTile = tiles[0];
-    var tilePos = clickedTile.position;
-    var layerName = activeLayer.name;
-    
-    var tilesToDrawTo = overlay.grid.getCellsFromRect(
+    var tilesToEdit = overlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
-    // handle fill
-    // right click erase
-    if (info.buttonId == 0 || info.buttonId == 2) {
-      var tilemapData = tilemap.tilemapData;
-      if (tilemapData != null) {
-        var layerData = tilemapData.layer(layerName);
-        var layer = tilemap.layer(layerName);
-        if (layerData != null && layer != null) {
-          var tiles = [].concat(layerData.tiles.original);
 
-          if (info.buttonId == 0) {
-            for (index => tile in tilesToDrawTo) {
-              var tilemapTile = tilemapTiles[index];
-              tiles[tile.frame] = tilemapTile;
-            }
-          } else {
-            for (index => tile in tilesToDrawTo) {
-              tiles[tile.frame] = 0;
-            }
-          }
-
-          layerData.tiles = tiles;
-
-          var layer = tilemap.layer(layerName);
-          if (layer != null) layer.contentDirty = true;
-        }
-      }
+    if (info.buttonId == 0) {
+      drawTile(tilesToEdit);
+    } else if (info.buttonId == 2) {
+      eraseTile(tilesToEdit);
     }
   }
 }
