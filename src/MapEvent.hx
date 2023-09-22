@@ -8,6 +8,9 @@ class MapEvent extends UIEvent {
   /* Dispatched when a layer's visibility has changed' */
   public static final LAYER_VISIBILITY: EventType<UIEvent> = EventType.name('layerVisiblChange');
 
+  /* Dispatched when a new layer is selected' */
+  public static final LAYER_SELECT: EventType<UIEvent> = EventType.name('mapZoom');
+
   /* Dispatched when a map has been selected' */
   public static final MAP_SELECT: EventType<UIEvent> = EventType.name('mapSelect');
 

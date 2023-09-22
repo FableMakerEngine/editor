@@ -1,10 +1,8 @@
 package components;
 
 import haxe.ui.events.UIEvent;
-import ceramic.TilemapData;
 import ceramic.Rect;
 import ceramic.TilemapTile;
-import ceramic.TouchInfo;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
@@ -14,19 +12,15 @@ import haxe.ui.containers.VBox;
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
 
-  var tilemapData: TilemapData;
   var tileSize: Rect = new Rect(0, 0, 16, 16);
-  var selectedTiles: Array<TilemapTile>;
-  var selectionRect: Rect;
 
   public function new() {
     super();
-    selectionRect = new Rect();
     contextMenu = new ContextMenu();
     contextMenu.items = menu();
     store.state.onTileSizeChange(null, onTileSizeChanged);
     tilemapView.visible = false;
-    tilemapView.registerEvent(MapEvent.MAP_CLICK, onTilemapClick);
+    layerPanel.registerEvent(MapEvent.LAYER_SELECT, onLayerSelect);
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
@@ -110,18 +104,20 @@ class MapEditor extends VBox {
   function onTileSelection(event: UIEvent) {
     var tiles: Array<Tile> = cast event.data;
     if (tilemapView == null || tiles.length <= 0) return;
-    selectedTiles = [];
+    var selectionRect = createRectFromTiles(tiles, tileSize);
+    var selectedTiles = [];
     for (tile in tiles) {
       selectedTiles.push(new TilemapTile(tile.frame));
     }
-    selectionRect = createRectFromTiles(tiles, tileSize);
     tilemapView.tileCursor.size(selectionRect.width, selectionRect.height);
+    tilemapView.selectionRect = createRectFromTiles(tiles, tileSize);
+    tilemapView.selectedTiles = selectedTiles;
   }
 
   function onActiveMapChanged(event: UIEvent) {
     if (!tilemapView.visible) tilemapView.visible = true;
     var map: MapInfo = event.data;
-    tilemapData = projectAssets.tilemapData(map.path);
+    var tilemapData = projectAssets.tilemapData(map.path);
     if (tilemapData == null) {
       tilemapData = emptyTilemapData(map.name);
     }
@@ -131,6 +127,10 @@ class MapEditor extends VBox {
     tilePicker.changeActiveMap(map);
   }
 
+  function onLayerSelect(event: UIEvent) {
+    tilemapView.activeLayer = event.data;
+  }
+
   function onLayerVisibilityChange(event: UIEvent) {
     var layer = tilemapView.tilemap.layer(event.data.name);
     layer.visible = event.data.visibleState;
@@ -138,49 +138,6 @@ class MapEditor extends VBox {
 
   function onLayerRename(event: UIEvent) {
     layerPanel.activeLayer.name = event.data;
-  }
-
-  function onTilemapClick(event: UIEvent) {
-    var info: TouchInfo = event.data.mouseInfo;
-    var tiles: Array<Tile> = event.data.tiles;
-    var clickedTile = tiles[0];
-    var tilePos = clickedTile.position;
-    var layerName = layerPanel.activeLayer.name;
-    var tilemap = tilemapView.tilemap;
-    
-    var tilesToDrawTo = tilemapView.gridOverlay.grid.getCellsFromRect(
-      new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
-    );
-    // handle fill
-    // right click erase
-    if (info.buttonId == 0 || info.buttonId == 2) {
-      var tilemapData = tilemap.tilemapData;
-      if (tilemapData != null) {
-        var layers = tilemapData.layers;
-        var layerData = tilemapData.layer(layerName);
-        var layer = tilemap.layer(layerName);
-        if (layerData != null && layer != null) {
-          var index = clickedTile.frame;
-          var tiles = [].concat(layerData.tiles.original);
-
-          if (info.buttonId == 0) {
-            for (index => tile in tilesToDrawTo) {
-              var tilemapTile = selectedTiles[index];
-              tiles[tile.frame] = tilemapTile;
-            }
-          } else {
-            for (index => tile in tilesToDrawTo) {
-              tiles[tile.frame] = 0;
-            }
-          }
-
-          layerData.tiles = tiles;
-
-          var layer = tilemap.layer(layerName);
-          if (layer != null) layer.contentDirty = true;
-        }
-      }
-    }
   }
 
   public function update(dt: Float) {}

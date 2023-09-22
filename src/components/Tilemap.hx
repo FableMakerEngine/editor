@@ -1,5 +1,7 @@
 package components;
 
+import ceramic.TilemapTile;
+import ceramic.TilemapLayerData;
 import ceramic.Point;
 import renderer.GridQuad;
 import ceramic.UInt8Array;
@@ -20,6 +22,9 @@ class Tilemap extends VBox {
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: Border;
   public var gridOverlay: GridQuad;
+  public var activeLayer: TilemapLayerData;
+  public var selectionRect: Rect;
+  public var selectedTiles: Array<TilemapTile>; 
 
   var viewport: Visual;
 
@@ -121,5 +126,47 @@ class Tilemap extends VBox {
         mouseInfo: info
     });
     dispatch(event);
+
+    if (activeLayer == null) return;
+
+    var info: TouchInfo = event.data.mouseInfo;
+    var tiles: Array<Tile> = event.data.tiles;
+    var clickedTile = tiles[0];
+    var tilePos = clickedTile.position;
+    var layerName = activeLayer.name;
+    
+    var tilesToDrawTo = gridOverlay.grid.getCellsFromRect(
+      new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
+    );
+    // handle fill
+    // right click erase
+    if (info.buttonId == 0 || info.buttonId == 2) {
+      var tilemapData = tilemap.tilemapData;
+      if (tilemapData != null) {
+        var layers = tilemapData.layers;
+        var layerData = tilemapData.layer(layerName);
+        var layer = tilemap.layer(layerName);
+        if (layerData != null && layer != null) {
+          var index = clickedTile.frame;
+          var tiles = [].concat(layerData.tiles.original);
+
+          if (info.buttonId == 0) {
+            for (index => tile in tilesToDrawTo) {
+              var tilemapTile = selectedTiles[index];
+              tiles[tile.frame] = tilemapTile;
+            }
+          } else {
+            for (index => tile in tilesToDrawTo) {
+              tiles[tile.frame] = 0;
+            }
+          }
+
+          layerData.tiles = tiles;
+
+          var layer = tilemap.layer(layerName);
+          if (layer != null) layer.contentDirty = true;
+        }
+      }
+    }
   }
 }
