@@ -21,7 +21,7 @@ class Tilemap extends VBox {
   public var tilemapBackground: ceramic.Quad;
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: Border;
-  public var gridOverlay: GridQuad;
+  public var overlay: GridQuad;
   public var activeLayer: TilemapLayerData;
   public var selectionRect: Rect;
   public var selectedTiles: Array<TilemapTile>; 
@@ -47,13 +47,13 @@ class Tilemap extends VBox {
   }
 
   function createOverlay() {
-    gridOverlay = new GridQuad();
+    overlay = new GridQuad();
     var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
-    gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
-    gridOverlay.shader.setVec2('resolution', 480, 480);
-    gridOverlay.depth = 90;
-    gridOverlay.grid.onGridClick(null, onGridClick);
-    viewport.add(gridOverlay);
+    overlay.texture = Texture.fromPixels(480, 480, whitePixels);
+    overlay.shader.setVec2('resolution', 480, 480);
+    overlay.depth = 90;
+    overlay.grid.onGridClick(null, onGridClick);
+    viewport.add(overlay);
   }
 
   function createTilemapBackground() {
@@ -81,7 +81,7 @@ class Tilemap extends VBox {
   public function changeTileSize(newSize: Rect) {
     tileSize = newSize;
     tileCursor.size(tileSize.width, tileSize.height);
-    gridOverlay.grid.cellSize = newSize;
+    overlay.grid.cellSize = newSize;
   }
 
   public function changeActiveMap(mapData: TilemapData) {
@@ -91,8 +91,8 @@ class Tilemap extends VBox {
 
   public function resize(width, height) {
     tilemapBackground.size(width, height);
-    gridOverlay.size(width, height);
-    gridOverlay.shader.setVec2('resolution', width, height);
+    overlay.size(width, height);
+    overlay.shader.setVec2('resolution', width, height);
     tilemapContainer.width = width;
     tilemapContainer.height = height;
   }
@@ -135,7 +135,7 @@ class Tilemap extends VBox {
     var tilePos = clickedTile.position;
     var layerName = activeLayer.name;
     
-    var tilesToDrawTo = gridOverlay.grid.getCellsFromRect(
+    var tilesToDrawTo = overlay.grid.getCellsFromRect(
       new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
     );
     // handle fill
@@ -143,11 +143,9 @@ class Tilemap extends VBox {
     if (info.buttonId == 0 || info.buttonId == 2) {
       var tilemapData = tilemap.tilemapData;
       if (tilemapData != null) {
-        var layers = tilemapData.layers;
         var layerData = tilemapData.layer(layerName);
         var layer = tilemap.layer(layerName);
         if (layerData != null && layer != null) {
-          var index = clickedTile.frame;
           var tiles = [].concat(layerData.tiles.original);
 
           if (info.buttonId == 0) {
