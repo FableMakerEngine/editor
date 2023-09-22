@@ -2,7 +2,6 @@ package components;
 
 import haxe.ui.events.UIEvent;
 import ceramic.Rect;
-import ceramic.TilemapTile;
 import components.menus.ContextMenu;
 import haxe.ui.events.MouseEvent;
 import components.menus.ContextMenuEntry;
