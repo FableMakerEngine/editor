@@ -28,6 +28,7 @@ class Tilemap extends VBox {
   var tilemapTiles: Array<TilemapTile>;
   var selectionRect: Rect;
   var viewport: Visual;
+  var buttonId: Int = -1;
 
   public function new() {
     super();
@@ -75,6 +76,7 @@ class Tilemap extends VBox {
     overlay.shader.setVec2('resolution', 480, 480);
     overlay.depth = 90;
     overlay.grid.onGridClick(null, onGridClick);
+    overlay.onPointerUp(null, handlePointerUp);
     viewport.add(overlay);
   }
 
@@ -132,6 +134,10 @@ class Tilemap extends VBox {
       var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
       var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
       tileCursor.pos(x, y);
+
+      if (activeLayer != null && selectionRect != null) {
+        handleTilemapAction(x, y);
+      }
     }
   }
 
@@ -181,19 +187,30 @@ class Tilemap extends VBox {
     updateLayerTiles(tiles);
   }
 
+  function handleTilemapAction(x: Float, y: Float) {
+    if (buttonId < 0) return;
+    var tilesToEdit = overlay.grid.getCellsFromRect(
+      new Rect(x, y, selectionRect.width, selectionRect.height)
+    );
+
+    if (buttonId == 0) {
+      drawTile(tilesToEdit);
+    } else if (buttonId == 2) {
+      eraseTile(tilesToEdit);
+    }
+  }
+
   function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
     if (activeLayer == null) return;
     var selectedTile = tiles[0];
     var tilePos = selectedTile.position;
+    buttonId = info.buttonId;
+    handleTilemapAction(tilePos.x, tilePos.y);
+  }
 
-    var tilesToEdit = overlay.grid.getCellsFromRect(
-      new Rect(tilePos.x, tilePos.y, selectionRect.width, selectionRect.height)
-    );
-
-    if (info.buttonId == 0) {
-      drawTile(tilesToEdit);
-    } else if (info.buttonId == 2) {
-      eraseTile(tilesToEdit);
+  function handlePointerUp(info: TouchInfo) {
+    if (info.buttonId == buttonId) {
+      buttonId = -1;
     }
   }
 }
