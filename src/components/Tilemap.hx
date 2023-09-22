@@ -122,10 +122,4 @@ class Tilemap extends VBox {
     });
     dispatch(event);
   }
-
-  public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
-    var selectedPos = cells[0].position;
-    tileCursor.pos(selectedPos.x, selectedPos.y);
-    tileCursor.size(gridOverlay.grid.cellSize.width, gridOverlay.grid.cellSize.height);
-  }
 }
