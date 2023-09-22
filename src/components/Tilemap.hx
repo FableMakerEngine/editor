@@ -22,15 +22,37 @@ class Tilemap extends VBox {
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: Border;
   public var overlay: GridQuad;
-  public var activeLayer: TilemapLayerData;
-  public var selectionRect: Rect;
-  public var selectedTiles: Array<TilemapTile>; 
-
+  public var activeLayer(default, set): TilemapLayerData;
+  public var selectedTiles(default, set): Array<Tile>; 
+  
+  var tilemapTiles: Array<TilemapTile>;
+  var selectionRect: Rect;
   var viewport: Visual;
 
   public function new() {
     super();
     app.screen.onPointerMove(null, onPointerMove);
+  }
+
+  function set_activeLayer(layer: TilemapLayerData) {
+    if (activeLayer == layer) return layer;
+    activeLayer = layer;
+    var tilemapLayer = tilemap.layer(layer.name);
+    var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
+    overlay.texture = Texture.fromPixels(tilemapLayer.width, tilemapLayer.height, whitePixels);
+    return layer;
+  }
+
+  function set_selectedTiles(tiles: Array<Tile>) {
+    if (selectedTiles == tiles) return tiles;
+    tilemapTiles = [];
+    for (tile in tiles) {
+      tilemapTiles.push(new TilemapTile(tile.frame));
+    }
+    selectedTiles = tiles;
+    selectionRect = overlay.grid.createRectFromCells(cast selectedTiles, tileSize);
+    tileCursor.size(selectionRect.width, selectionRect.height);
+    return tiles;
   }
 
   public override function onReady() {
@@ -150,7 +172,7 @@ class Tilemap extends VBox {
 
           if (info.buttonId == 0) {
             for (index => tile in tilesToDrawTo) {
-              var tilemapTile = selectedTiles[index];
+              var tilemapTile = tilemapTiles[index];
               tiles[tile.frame] = tilemapTile;
             }
           } else {

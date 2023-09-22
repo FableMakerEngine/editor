@@ -130,7 +130,7 @@ class Grid extends Entity implements Component implements Observable {
     return (value >= minValue && value <= maxValue);
   }
 
-  function getCellFrame(x: Float, y: Float, startIndex: Int = 0): Int {
+  public function getCellFrame(x: Float, y: Float, startIndex: Int = 0): Int {
     var tileCol = Math.floor(x / cellSize.width);
     var tileRow = Math.floor(y / cellSize.height);
     var tileFrame = 0;
@@ -146,7 +146,7 @@ class Grid extends Entity implements Component implements Observable {
     return tileFrame + startIndex;
   }
 
-  function screenToCellPosition(screenX, screenY): Point {
+  public function screenToCellPosition(screenX, screenY): Point {
     var localCoords = new Point();
     // screenToVisual may be heavy on performance?
     visual.screenToVisual(screenX, screenY, localCoords);
@@ -162,7 +162,7 @@ class Grid extends Entity implements Component implements Observable {
     return getSelectedCells(rect);
   }
 
-  function getSelectedCells(rect: Rect): Array<Cell> {
+  public function getSelectedCells(rect: Rect): Array<Cell> {
     var selectedCells: Array<Cell> = [];
     var rectX1 = Math.floor(rect.x);
     var rectX2 = Math.floor(rect.x + rect.width);
@@ -189,7 +189,7 @@ class Grid extends Entity implements Component implements Observable {
   }
 
   // Move out of Grid?
-  function createRectFromCells(selectedCells: Array<Cell>, cellSize: Rect): Rect {
+  public function createRectFromCells(selectedCells: Array<Cell>, cellSize: Rect): Rect {
     if (selectedCells.length == 0) {
       return new Rect(0, 0, 0, 0);
     }

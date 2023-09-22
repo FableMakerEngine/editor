@@ -104,14 +104,7 @@ class MapEditor extends VBox {
   function onTileSelection(event: UIEvent) {
     var tiles: Array<Tile> = cast event.data;
     if (tilemapView == null || tiles.length <= 0) return;
-    var selectionRect = createRectFromTiles(tiles, tileSize);
-    var selectedTiles = [];
-    for (tile in tiles) {
-      selectedTiles.push(new TilemapTile(tile.frame));
-    }
-    tilemapView.tileCursor.size(selectionRect.width, selectionRect.height);
-    tilemapView.selectionRect = createRectFromTiles(tiles, tileSize);
-    tilemapView.selectedTiles = selectedTiles;
+    tilemapView.selectedTiles = tiles;
   }
 
   function onActiveMapChanged(event: UIEvent) {
@@ -148,26 +141,5 @@ class MapEditor extends VBox {
     data.width = Math.round(20 * tileSize.width);
     data.height = Math.round(20 * tileSize.height);
     return data;
-  }
-
-  // We definitely want this as a utility or somewhere else, this is the 2nd time using this.
-  function createRectFromTiles(selectedCells: Array<Tile>, cellSize: Rect): Rect {
-    if (selectedCells.length == 0) {
-      return new Rect(0, 0, 0, 0);
-    }
-
-    var minX = selectedCells[0].position.x;
-    var minY = selectedCells[0].position.y;
-    var maxX = selectedCells[0].position.x;
-    var maxY = selectedCells[0].position.y;
-
-    for (cell in selectedCells) {
-      minX = Math.min(minX, cell.position.x);
-      minY = Math.min(minY, cell.position.y);
-      maxX = Math.max(maxX, cell.position.x);
-      maxY = Math.max(maxY, cell.position.y);
-    }
-
-    return new Rect(minX, minY, (maxX - minX) + cellSize.width, (maxY - minY) + cellSize.height);
   }
 }
