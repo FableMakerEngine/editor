@@ -76,7 +76,7 @@ class Tilemap extends VBox {
     overlay.shader.setVec2('resolution', 480, 480);
     overlay.depth = 90;
     overlay.grid.onGridClick(null, onGridClick);
-    overlay.onPointerUp(null, handlePointerUp);
+    overlay.grid.onOnGridSelection(null, handleGridPointerMove);
     viewport.add(overlay);
   }
 
@@ -134,10 +134,6 @@ class Tilemap extends VBox {
       var x = Math.floor(localCoords.x / tileSize.width) * tileSize.width;
       var y = Math.floor(localCoords.y / tileSize.height) * tileSize.height;
       tileCursor.pos(x, y);
-
-      if (activeLayer != null && selectionRect != null) {
-        handleTilemapAction(x, y);
-      }
     }
   }
 
@@ -197,6 +193,12 @@ class Tilemap extends VBox {
       drawTile(tilesToEdit);
     } else if (buttonId == 2) {
       eraseTile(tilesToEdit);
+    }
+  }
+
+  function handleGridPointerMove(tiles: Array<Cell>, _) {
+    if (activeLayer != null && selectionRect != null) {
+      handleTilemapAction(tiles[0].position.x, tiles[0].position.y);
     }
   }
 

@@ -34,6 +34,7 @@ class Grid extends Entity implements Component implements Observable {
   public var thickness(default, set): Float = 1.0;
   public var selectedCells: Array<Cell> = [];
   public var cellStartIndex: Int = 0;
+  public var enableSelection: Bool = false;
 
   var startPos = new Point();
 
@@ -217,15 +218,23 @@ class Grid extends Entity implements Component implements Observable {
 
   function onPointerMove(info: TouchInfo) {
     // may be performanc heavy to calculate every pixel moved
+    var selectionRect = new Rect();
     var current = screenToCellPosition(info.x, info.y);
     if (!isWithinBounds(current.x, 0, width - cellSize.width)
       || !isWithinBounds(current.y, 0, height - cellSize.height)) {
       return;
     }
-    selectedCells = getSelectedCells(
-      new Rect(startPos.x, startPos.y, current.x - startPos.x, current.y - startPos.y)
-    );
-    var selectionRect = createRectFromCells(selectedCells, cellSize);
+
+    if (enableSelection) {
+      selectedCells = getSelectedCells(
+        new Rect(startPos.x, startPos.y, current.x - startPos.x, current.y - startPos.y)
+      );
+      selectionRect = createRectFromCells(selectedCells, cellSize);
+    } else {
+      selectedCells = getSelectedCells(
+        new Rect(current.x, current.y, cellSize.width, cellSize.height)
+      );
+    }
     emitOnGridSelection(selectedCells, selectionRect);
   }
 
