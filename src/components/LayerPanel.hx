@@ -55,6 +55,8 @@ class LayerPanel extends Panel {
   function onLayerSelect(event: UIEvent) {
     var index = (this.layers.length - 1) - list.selectedIndex;
     activeLayer = this.layers[index];
+    final event = new MapEvent(MapEvent.LAYER_SELECT, false, activeLayer);
+    dispatch(event);
   }
 
   function onVisibleStateChange(event: UIEvent) {

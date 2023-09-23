@@ -1,5 +1,7 @@
 package components;
 
+import ceramic.TilemapTile;
+import ceramic.TilemapLayerData;
 import ceramic.Point;
 import renderer.GridQuad;
 import ceramic.UInt8Array;
@@ -19,13 +21,39 @@ class Tilemap extends VBox {
   public var tilemapBackground: ceramic.Quad;
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
   public var tileCursor: Border;
-  public var gridOverlay: GridQuad;
-
+  public var overlay: GridQuad;
+  public var activeLayer(default, set): TilemapLayerData;
+  public var selectedTiles(default, set): Array<Tile>; 
+  
+  var tilemapTiles: Array<TilemapTile>;
+  var selectionRect: Rect;
   var viewport: Visual;
+  var buttonId: Int = -1;
 
   public function new() {
     super();
     app.screen.onPointerMove(null, onPointerMove);
+  }
+
+  function set_activeLayer(layer: TilemapLayerData) {
+    if (activeLayer == layer) return layer;
+    activeLayer = layer;
+    var tilemapLayer = tilemap.layer(layer.name);
+    var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
+    overlay.texture = Texture.fromPixels(tilemapLayer.width, tilemapLayer.height, whitePixels);
+    return layer;
+  }
+
+  function set_selectedTiles(tiles: Array<Tile>) {
+    if (selectedTiles == tiles) return tiles;
+    tilemapTiles = [];
+    for (tile in tiles) {
+      tilemapTiles.push(new TilemapTile(tile.frame));
+    }
+    selectedTiles = tiles;
+    selectionRect = overlay.grid.createRectFromCells(cast selectedTiles, tileSize);
+    tileCursor.size(selectionRect.width, selectionRect.height);
+    return tiles;
   }
 
   public override function onReady() {
@@ -42,13 +70,14 @@ class Tilemap extends VBox {
   }
 
   function createOverlay() {
-    gridOverlay = new GridQuad();
+    overlay = new GridQuad();
     var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
-    gridOverlay.texture = Texture.fromPixels(480, 480, whitePixels);
-    gridOverlay.shader.setVec2('resolution', 480, 480);
-    gridOverlay.depth = 90;
-    gridOverlay.grid.onGridClick(null, onGridClick);
-    viewport.add(gridOverlay);
+    overlay.texture = Texture.fromPixels(480, 480, whitePixels);
+    overlay.shader.setVec2('resolution', 480, 480);
+    overlay.depth = 90;
+    overlay.grid.onGridClick(null, handleGridClick);
+    overlay.grid.onOnGridSelection(null, handleGridPointerMove);
+    viewport.add(overlay);
   }
 
   function createTilemapBackground() {
@@ -76,7 +105,7 @@ class Tilemap extends VBox {
   public function changeTileSize(newSize: Rect) {
     tileSize = newSize;
     tileCursor.size(tileSize.width, tileSize.height);
-    gridOverlay.grid.cellSize = newSize;
+    overlay.grid.cellSize = newSize;
   }
 
   public function changeActiveMap(mapData: TilemapData) {
@@ -86,8 +115,8 @@ class Tilemap extends VBox {
 
   public function resize(width, height) {
     tilemapBackground.size(width, height);
-    gridOverlay.size(width, height);
-    gridOverlay.shader.setVec2('resolution', width, height);
+    overlay.size(width, height);
+    overlay.shader.setVec2('resolution', width, height);
     tilemapContainer.width = width;
     tilemapContainer.height = height;
   }
@@ -115,17 +144,75 @@ class Tilemap extends VBox {
     resize(tilemap.width, tilemap.height);
   }
 
-  function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
-    final event = new MapEvent(MapEvent.MAP_CLICK, false, {
-        tiles: tiles,
-        mouseInfo: info
-    });
-    dispatch(event);
+  function getActiveLayerTiles() {
+    var tiles: Array<TilemapTile> = null;
+    if (tilemap.tilemapData != null) {
+      var layerData = tilemap.tilemapData.layer(activeLayer.name);
+      var layer = tilemap.layer(activeLayer.name);
+      if (layerData != null && layer != null) {
+        tiles = [].concat(layerData.tiles.original);
+      }
+    }
+    return tiles;
   }
 
-  public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
-    var selectedPos = cells[0].position;
-    tileCursor.pos(selectedPos.x, selectedPos.y);
-    tileCursor.size(gridOverlay.grid.cellSize.width, gridOverlay.grid.cellSize.height);
+  function updateLayerTiles(tiles: Array<TilemapTile>) {
+    tilemap.tilemapData.layer(activeLayer.name).tiles = tiles;
+
+    var layer = tilemap.layer(activeLayer.name);
+    if (layer != null) layer.contentDirty = true;
+  }
+
+  function eraseTile(tilesToEdit: Array<Tile>) {
+    var tiles = getActiveLayerTiles();
+    if (tiles == null) return;
+    for (index => tile in tilesToEdit) {
+      tiles[tile.frame] = 0;
+    }
+    updateLayerTiles(tiles);
+  }
+
+  function drawTile(tilesToEdit: Array<Tile>) {
+    var tiles = getActiveLayerTiles();
+    if (tiles == null) return;
+
+    for (index => tile in tilesToEdit) {
+      var tilemapTile = tilemapTiles[index];
+      tiles[tile.frame] = tilemapTile;
+    }
+    updateLayerTiles(tiles);
+  }
+
+  function handleTilemapAction(x: Float, y: Float) {
+    if (buttonId < 0) return;
+    var tilesToEdit = overlay.grid.getCellsFromRect(
+      new Rect(x, y, selectionRect.width, selectionRect.height)
+    );
+
+    if (buttonId == 0) {
+      drawTile(tilesToEdit);
+    } else if (buttonId == 2) {
+      eraseTile(tilesToEdit);
+    }
+  }
+
+  function handleGridPointerMove(tiles: Array<Cell>, _) {
+    if (activeLayer != null && selectionRect != null) {
+      handleTilemapAction(tiles[0].position.x, tiles[0].position.y);
+    }
+  }
+
+  function handleGridClick (info: TouchInfo, tiles: Array<Cell>) { 
+    if (activeLayer == null) return;
+    var selectedTile = tiles[0];
+    var tilePos = selectedTile.position;
+    buttonId = info.buttonId;
+    handleTilemapAction(tilePos.x, tilePos.y);
+  }
+
+  function handlePointerUp(info: TouchInfo) {
+    if (info.buttonId == buttonId) {
+      buttonId = -1;
+    }
   }
 }
