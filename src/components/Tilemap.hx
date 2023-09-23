@@ -75,7 +75,7 @@ class Tilemap extends VBox {
     overlay.texture = Texture.fromPixels(480, 480, whitePixels);
     overlay.shader.setVec2('resolution', 480, 480);
     overlay.depth = 90;
-    overlay.grid.onGridClick(null, onGridClick);
+    overlay.grid.onGridClick(null, handleGridClick);
     overlay.grid.onOnGridSelection(null, handleGridPointerMove);
     viewport.add(overlay);
   }
@@ -202,7 +202,7 @@ class Tilemap extends VBox {
     }
   }
 
-  function onGridClick (info: TouchInfo, tiles: Array<Cell>) { 
+  function handleGridClick (info: TouchInfo, tiles: Array<Cell>) { 
     if (activeLayer == null) return;
     var selectedTile = tiles[0];
     var tilePos = selectedTile.position;
