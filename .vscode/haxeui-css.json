@@ -1,0 +1,9 @@
+{
+    "version": 1.0,
+    "properties": [
+        { "name": "icon", "description": "An icon used within the button" }
+    ],
+    "atDirectives": [],
+    "pseudoClasses": [],
+    "pseudoElements": []
+  }

@@ -1,0 +1,40 @@
+.toolbar .button {
+    width: 42;
+    height: 42;
+}
+
+.toolbar .button {
+    width: 42;
+    height: 42;
+}
+
+.toolbar #save {
+    icon: "icons/dark/save";
+}
+.toolbar #export {
+    icon: "icons/dark/export";
+}
+.toolbar #zoomIn {
+    icon: "icons/dark/zoomIn";
+}
+.toolbar #zoomOut {
+    icon: "icons/dark/zoomOut";
+}
+.toolbar #toolPencil {
+    icon: "icons/dark/toolPencil";
+}
+.toolbar #toolBrush {
+    icon: "icons/dark/toolBrush";
+}
+.toolbar #toolFill {
+    icon: "icons/dark/toolFill";
+}
+.toolbar #toolEraser {
+    icon: "icons/dark/toolEraser";
+}
+.toolbar #musicManager {
+    icon: "icons/dark/musicOn";
+}
+.toolbar #settings {
+    icon: "icons/dark/gear";
+}

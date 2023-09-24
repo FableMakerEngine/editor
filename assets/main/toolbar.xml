@@ -1,23 +1,17 @@
 <vbox width="100%" height="42">
-<style>
-    .icon-button {
-        width: 42;
-        height: 42;
-    }
-</style>
    <hbox width="100%" height="100%">
-       <button icon="icons/dark/save" styleName="icon-button"/>
-       <button icon="icons/dark/export" styleName="icon-button"/>
+       <button id="save"/>
+       <button id="export"/>
        <spacer width="100" />
-       <button icon="icons/dark/zoomIn" styleName="icon-button"/>
-       <button icon="icons/dark/zoomOut" styleName="icon-button"/>
+       <button id="zoomIn"/>
+       <button id="zoomOut"/>
        <spacer width="100" />
-       <button icon="icons/dark/toolPencil" styleName="icon-button"/>
-       <button icon="icons/dark/toolBrush" styleName="icon-button"/>
-       <button icon="icons/dark/toolFill" styleName="icon-button"/>
-       <button icon="icons/dark/toolEraser" styleName="icon-button"/>
-       <spacer width="100" styleName="icon-button"/>
-       <button icon="icons/dark/musicOn" styleName="icon-button"/>
-       <button icon="icons/dark/gear" styleName="icon-button"/>
+       <button id="toolPencil"/>
+       <button id="toolBrush"/>
+       <button id="toolFill"/>
+       <button id="toolEraser"/>
+       <spacer width="100"/>
+       <button id="musicManager"/>
+       <button id="settings"/>
    </hbox>
 </vbox>
