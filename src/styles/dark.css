@@ -3,11 +3,6 @@
     height: 42;
 }
 
-.toolbar .button {
-    width: 42;
-    height: 42;
-}
-
 .toolbar #save {
     icon: "icons/dark/save";
 }
