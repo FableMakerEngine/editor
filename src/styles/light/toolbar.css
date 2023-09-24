@@ -1,0 +1,39 @@
+.toolbar .hbox {
+    background-color:  $toolbar-background-color;
+}
+
+.toolbar .button {
+    width: 42;
+    height: 42;
+}
+
+.toolbar #save {
+    icon: icon('save');
+}
+.toolbar #export {
+    icon: icon('export');
+}
+.toolbar #zoomIn {
+    icon: icon('zoomIn');
+}
+.toolbar #zoomOut {
+    icon: icon('zoomOut');
+}
+.toolbar #toolPencil {
+    icon: icon('toolPencil');
+}
+.toolbar #toolBrush {
+    icon: icon('toolBrush');
+}
+.toolbar #toolFill {
+    icon: icon('toolFill');
+}
+.toolbar #toolEraser {
+    icon: icon('toolEraser');
+}
+.toolbar #musicManager {
+    icon: icon('musicOn');
+}
+.toolbar #settings {
+    icon: icon('gear');
+}

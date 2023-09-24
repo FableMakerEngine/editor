@@ -2,7 +2,6 @@ package;
 
 import ceramic.Assets;
 import ceramic.Entity;
-import ceramic.Color;
 import ceramic.InitSettings;
 import haxe.ui.Toolkit;
 import haxe.ui.core.Screen;
@@ -12,7 +11,6 @@ class Project extends Entity {
     super();
 
     settings.antialiasing = 2;
-    settings.background = Color.fromRGB(49, 52, 53);
     settings.targetWidth = 640;
     settings.targetHeight = 480;
     settings.scaling = RESIZE;
