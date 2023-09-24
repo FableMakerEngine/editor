@@ -1,6 +1,7 @@
 <module>
   <components>
     <component class="components.TopMenu" />
+    <component class="components.Toolbar" />
     <component class="components.StatusBar" />
     <component class="components.MapsPanel" />
     <component class="components.LayerPanel" />

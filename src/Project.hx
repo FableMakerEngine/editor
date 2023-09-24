@@ -23,6 +23,8 @@ class Project extends Entity {
   }
 
   function loadAssets(assets: Assets) {
+    final iconsRegx = ~/^icons\/.*$/ig;
+    assets.addAll(iconsRegx);
     assets.add(Shaders.SHADERS__GRID);
   }
 

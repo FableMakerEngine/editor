@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vbox height="100%" width="100%">
+<toolbar id="toolbar"></toolbar>
   <splitter id="splitView" width="100%" height="100%">
     <box width="15%" height="100%">
       <splitter id="mapListSplitter" direction="vertical" width="100%" height="100%">
