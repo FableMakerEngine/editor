@@ -1,6 +1,7 @@
 <module>
   <components>
     <component class="components.TopMenu" />
+    <component class="components.Toolbar" />
     <component class="components.StatusBar" />
     <component class="components.MapsPanel" />
     <component class="components.LayerPanel" />
@@ -11,6 +12,7 @@
 
   <resources>
     <resource path="locale/" prefix="/locale" />
+    <resource path="styles/" prefix="/styles" />
   </resources>
 
   <locales>
@@ -19,4 +21,21 @@
       <resource path="locale/en_US/layerList.properties" />
     </locale>
   </locales>
+
+  <cssExtensions>
+    <cssFunction name="icon" call="styles.StyleFunctions.icon" />
+  </cssExtensions>
+
+  <themes>
+    <default>
+      <var name="background-color" value="#ffffff"/>
+      <var name="toolbar-background-color" value="#ffffff"/>
+      <style resource="styles/light/main.css" />
+      <style resource="styles/light/toolbar.css" />
+    </default>
+    <dark parent="default">
+      <var name="background-color" value="#313435"/>
+      <var name="toolbar-background-color" value="#313435"/>
+    </dark>
+  </themes>
 </module>

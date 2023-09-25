@@ -9,5 +9,8 @@
         "**/libs": true
     },
     "haxe.executable": "libs/ceramic/tools/haxe.cmd",
-    "haxelib.executable": "libs/ceramic/tools/haxelib.cmd"
+    "haxelib.executable": "libs/ceramic/tools/haxelib.cmd",
+    "css.customData": [
+        ".vscode/haxeui-css.json"
+    ]
 }

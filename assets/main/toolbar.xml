@@ -1,0 +1,17 @@
+<vbox width="100%" height="42">
+   <hbox width="100%" height="100%">
+       <button id="save"/>
+       <button id="export"/>
+       <spacer width="100" />
+       <button id="zoomIn"/>
+       <button id="zoomOut"/>
+       <spacer width="100" />
+       <button id="toolPencil"/>
+       <button id="toolBrush"/>
+       <button id="toolFill"/>
+       <button id="toolEraser"/>
+       <spacer width="100"/>
+       <button id="musicManager"/>
+       <button id="settings"/>
+   </hbox>
+</vbox>
