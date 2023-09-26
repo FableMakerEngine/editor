@@ -119,7 +119,7 @@ class MapsPanel extends Panel {
       contextMenu.left = e.screenX + 2;
       contextMenu.top = e.screenY + 2;
       Screen.instance.addComponent(contextMenu);
-    }, 25);
+    });
   }
 
   function onNodeSelected(e) {
