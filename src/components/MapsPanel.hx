@@ -109,7 +109,7 @@ class MapsPanel extends Panel {
 
   function onNodeRightClick(e: MouseEvent) {
     // Timer to workaround a bug in haxeui-ceramic backend
-    haxe.Timer.delay(() -> {
+    ceramic.Timer.delay(null, 0.25, () -> {
       var selectedNode = list.selectedNode;
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
         return;
@@ -119,12 +119,12 @@ class MapsPanel extends Panel {
       contextMenu.left = e.screenX + 2;
       contextMenu.top = e.screenY + 2;
       Screen.instance.addComponent(contextMenu);
-    }, 25);
+    });
   }
 
   function onNodeSelected(e) {
     // Timer to workaround a bug in haxeui-ceramic backend
-    haxe.Timer.delay(() -> {
+    ceramic.Timer.delay(null, 0.25, () -> {
       var selectedNode = list.selectedNode;
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
         return;
@@ -136,7 +136,7 @@ class MapsPanel extends Panel {
       }
       final mapEvent = new UIEvent(MapEvent.MAP_SELECT, false, mapInfo);
       dispatch(mapEvent);
-    }, 25);
+    });
   }
 
   public function onNewMap(event: MouseEvent) {
@@ -144,7 +144,7 @@ class MapsPanel extends Panel {
       name: 'New Map',
       // @TODO figure out how to assign an ID. Maybe loop through all nodes?
       // Assign id based on id of main parent and then the amounr of children?
-      id: null,
+      id: 0,
       path: null
     });
     list.selectedNode = node;
