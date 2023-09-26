@@ -109,7 +109,7 @@ class MapsPanel extends Panel {
 
   function onNodeRightClick(e: MouseEvent) {
     // Timer to workaround a bug in haxeui-ceramic backend
-    haxe.Timer.delay(() -> {
+    ceramic.Timer.delay(null, 0.25, () -> {
       var selectedNode = list.selectedNode;
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
         return;
@@ -124,7 +124,8 @@ class MapsPanel extends Panel {
 
   function onNodeSelected(e) {
     // Timer to workaround a bug in haxeui-ceramic backend
-    haxe.Timer.delay(() -> {
+    ceramic.Timer.delay(null, 0.25, () -> {
+      trace('clikc timer active');
       var selectedNode = list.selectedNode;
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
         return;
@@ -136,7 +137,7 @@ class MapsPanel extends Panel {
       }
       final mapEvent = new UIEvent(MapEvent.MAP_SELECT, false, mapInfo);
       dispatch(mapEvent);
-    }, 25);
+    });
   }
 
   public function onNewMap(event: MouseEvent) {
