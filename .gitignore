@@ -1,5 +1,6 @@
 .DS_Store
 .haxelib
 /out
+/project/windows
 /completion.hxml
 /libs/ceramic
