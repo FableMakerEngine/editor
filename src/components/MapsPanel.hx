@@ -125,7 +125,6 @@ class MapsPanel extends Panel {
   function onNodeSelected(e) {
     // Timer to workaround a bug in haxeui-ceramic backend
     ceramic.Timer.delay(null, 0.25, () -> {
-      trace('clikc timer active');
       var selectedNode = list.selectedNode;
       if (!selectedNode.hitTest(e.screenX, e.screenY)) {
         return;
