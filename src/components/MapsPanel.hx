@@ -145,7 +145,7 @@ class MapsPanel extends Panel {
       name: 'New Map',
       // @TODO figure out how to assign an ID. Maybe loop through all nodes?
       // Assign id based on id of main parent and then the amounr of children?
-      id: null,
+      id: 0,
       path: null
     });
     list.selectedNode = node;
