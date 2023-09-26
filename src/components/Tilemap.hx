@@ -4,8 +4,6 @@ import ceramic.TilemapTile;
 import ceramic.TilemapLayerData;
 import ceramic.Point;
 import renderer.GridQuad;
-import ceramic.UInt8Array;
-import ceramic.Texture;
 import ceramic.TilemapData;
 import ceramic.TouchInfo;
 import renderer.Grid.Cell;
@@ -39,8 +37,8 @@ class Tilemap extends VBox {
     if (activeLayer == layer) return layer;
     activeLayer = layer;
     var tilemapLayer = tilemap.layer(layer.name);
-    var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
-    overlay.texture = Texture.fromPixels(tilemapLayer.width, tilemapLayer.height, whitePixels);
+    overlay.size(tilemapLayer.width, tilemapLayer.height);
+    overlay.shader.setVec2('resolution', tilemapLayer.width, tilemapLayer.height);
     return layer;
   }
 
@@ -71,9 +69,9 @@ class Tilemap extends VBox {
 
   function createOverlay() {
     overlay = new GridQuad();
-    var whitePixels = UInt8Array.fromArray([255, 255, 255, 255]);
-    overlay.texture = Texture.fromPixels(480, 480, whitePixels);
-    overlay.shader.setVec2('resolution', 480, 480);
+    overlay.size(480, 480);
+    overlay.texture = app.defaultWhiteTexture;
+    overlay.shader.setVec2('resolution', overlay.width, overlay.height);
     overlay.depth = 90;
     overlay.grid.onGridClick(null, handleGridClick);
     overlay.grid.onOnGridSelection(null, handleGridPointerMove);
