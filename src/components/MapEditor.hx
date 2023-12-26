@@ -10,6 +10,7 @@ import haxe.ui.containers.VBox;
 @:build(haxe.ui.macros.ComponentMacros.build('../../assets/main/mapeditor.xml'))
 class MapEditor extends VBox {
   public var contextMenu: ContextMenu;
+  public var mode: MapEditorMode = Draw;
 
   var tileSize: Rect = new Rect(0, 0, 16, 16);
 
@@ -66,10 +67,19 @@ class MapEditor extends VBox {
   }
 
   @:bind(tilemapView, MouseEvent.RIGHT_MOUSE_DOWN)
-  function onContextMenu(e: MouseEvent) {
-    contextMenu.left = e.screenX;
-    contextMenu.top = e.screenY;
-    contextMenu.show();
+  function onTilemapRightClick(e: MouseEvent) {
+    switch mode {
+      case Draw:
+      // tile drawing mode
+      case Event:
+        contextMenu.left = e.screenX;
+        contextMenu.top = e.screenY;
+        contextMenu.show();
+      case Transform:
+      // transform mode
+      case _:
+        trace('unknown mode');
+    }
   }
 
   public function onNewEvent(event: MouseEvent) {}
