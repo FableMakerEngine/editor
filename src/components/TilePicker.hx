@@ -47,6 +47,7 @@ class TilePicker extends VBox {
     tileset.grid.onOnGridSelectionFinished(null, onTilesetSelectionFinished);
     tileset.grid.cellStartIndex = 1;
     tileset.grid.enableTexture = true;
+    tileset.grid.enableSelection = true;
     viewport.add(tileset);
   }
 
