@@ -176,9 +176,15 @@ class Tilemap extends VBox {
 
     for (index => tile in tilesToEdit) {
       var tilemapTile = tilemapTiles[index];
-      tiles[tile.frame] = tilemapTile;
+      if (withinTilemapBounds(tile.position.x, tile.position.y)) {
+        tiles[tile.frame] = tilemapTile;
+      }
     }
     updateLayerTiles(tiles);
+  }
+
+  function withinTilemapBounds(x: Float, y: Float) {
+    return x >= 0 && x < tilemap.width && y >= 0 && y < tilemap.height;
   }
 
   function handleTilemapAction(x: Float, y: Float) {
