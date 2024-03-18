@@ -23,8 +23,8 @@ class TilePicker extends VBox {
 
   public function new() {
     super();
-    onMouseOver = handleZoomable;
-    onMouseOut = handleZoomable;
+    onMouseOver = handleMouseOver;
+    onMouseOut = haneMouseOut;
     tileView.scrollMode = ScrollMode.NORMAL;
   }
 
@@ -77,8 +77,12 @@ class TilePicker extends VBox {
     imageContainer.height = tileset.height * viewport.scaleY;
   }
 
-  function handleZoomable(e) {
-    zoomable.enable = !zoomable.enable;
+  function handleMouseOver(e) {
+    zoomable.enable = true;
+  }
+
+  function haneMouseOut(e) {
+    zoomable.enable = false;
   }
 
   function clearTilesets() {
