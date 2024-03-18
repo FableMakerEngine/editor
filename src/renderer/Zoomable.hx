@@ -9,7 +9,7 @@ import ceramic.Component;
 
 class Zoomable extends Entity implements Component {
   @entity var visual: Visual;
-  var ctrlKeyDown = false;
+  public var ctrlKeyDown = false;
 
   public var enable = false;
   public var minZoom = 0.0;
@@ -19,6 +19,8 @@ class Zoomable extends Entity implements Component {
   // not finished with implementation
   var zoomToMouse = false;
 
+  @event public function zoomKeyDown();
+  @event public function zoomKeyUp();
   @event public function onZoomFinish(scale: Float);
 
   public function new() {
@@ -50,10 +52,16 @@ class Zoomable extends Entity implements Component {
 
   function onKeyUp(key: Key) {
     ctrlKeyDown = !(key.keyCode == KeyCode.LCTRL);
+    if (key.keyCode == KeyCode.LCTRL) {
+      emitZoomKeyUp();
+    }
   }
 
   function onKeyDown(key: Key) {
     ctrlKeyDown = key.keyCode == KeyCode.LCTRL;
+    if (key.keyCode == KeyCode.LCTRL) {
+      emitZoomKeyDown();
+    }
   }
 
   function handleMouseWheel(x: Float, y: Float) {
