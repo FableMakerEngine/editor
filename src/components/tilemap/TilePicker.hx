@@ -1,5 +1,6 @@
 package components.tilemap;
 
+import haxe.ui.constants.ScrollPolicy;
 import ceramic.TouchInfo;
 import renderer.Grid.Cell;
 import renderer.Zoomable;
@@ -37,6 +38,8 @@ class TilePicker extends VBox {
     viewport = new Visual();
     viewport.component('zoomable', zoomable);
     zoomable.onOnZoomFinish(null, onZoomFinished);
+    zoomable.onZoomKeyDown(null, onZoomKeyDown);
+    zoomable.onZoomKeyUp(null, onZoomKeyUp);
     imageContainer.add(viewport);
   }
 
@@ -59,6 +62,14 @@ class TilePicker extends VBox {
     tileCursor.size(tileSize.width, tileSize.height);
     tileCursor.depth = 99;
     viewport.add(tileCursor);
+  }
+
+  function onZoomKeyDown() {
+    tileView.scrollPolicy = ScrollPolicy.NEVER;
+  }
+
+  function onZoomKeyUp() {
+    tileView.scrollPolicy = ScrollPolicy.AUTO;
   }
 
   function onZoomFinished(scale: Float) {
