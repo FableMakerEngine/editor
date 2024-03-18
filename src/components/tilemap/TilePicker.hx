@@ -20,6 +20,7 @@ class TilePicker extends VBox {
   var viewport: Visual;
   var zoomable = new Zoomable();
   var tileCursor: Border;
+  var isMiddleMouseClick: Bool;
 
   public function new() {
     super();
@@ -144,17 +145,28 @@ class TilePicker extends VBox {
   }
 
   public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
+    if (info.buttonId == 1) {
+      isMiddleMouseClick = true;
+      return;
+    }
+    isMiddleMouseClick = false;
     var selectedPos = cells[0].position;
     tileCursor.pos(selectedPos.x, selectedPos.y);
     tileCursor.size(tileset.grid.cellSize.width, tileset.grid.cellSize.height);
   }
 
   public function onTilesetSelection(cells: Array<Cell>, selectionRect) {
+    if (isMiddleMouseClick) {
+      return;
+    }
     tileCursor.pos(selectionRect.x, selectionRect.y);
     tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
+    if (isMiddleMouseClick) {
+      return;
+    }
     final event = new MapEvent(MapEvent.TILE_SELECTION, false, cells);
     dispatch(event);
   }
