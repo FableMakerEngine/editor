@@ -1,5 +1,6 @@
 package components.tilemap;
 
+import haxe.ui.constants.MouseButton;
 import haxe.ui.constants.ScrollPolicy;
 import ceramic.TouchInfo;
 import renderer.Grid.Cell;
@@ -12,7 +13,6 @@ import ceramic.Color;
 import haxe.ui.containers.VBox;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
-import haxe.ui.constants.ScrollMode;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
@@ -26,7 +26,7 @@ class TilePicker extends VBox {
     super();
     onMouseOver = handleMouseOver;
     onMouseOut = haneMouseOut;
-    tileView.scrollMode = ScrollMode.NORMAL;
+    tileView.scrollDragButton = MouseButton.MIDDLE;
   }
 
   public override function onReady() {
