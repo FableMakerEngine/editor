@@ -1,4 +1,13 @@
-/* Splitter */
+/* Menus */
+.menubar {
+    background-color: $solid-background-color;
+    padding: 2px;
+    border-bottom-width: 1px;
+    border-bottom-color: $normal-border-color;
+    filter: $menu-shadow;
+}
+
+
 .vertical-splitter-gripper {
     width: 100%;
     height: 8px;
