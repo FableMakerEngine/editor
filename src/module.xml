@@ -43,7 +43,7 @@
       <var name="secondary-background-color" value="#252525" />
       <var name="tertiary-background-color" value="#232323" />
 
-      <var name="solid-background-color" value="#232323" />
+      <var name="solid-background-color" value="#2d2d30" />
       <!-- <var name="solid-background-color-alt" value="#1a1a1a" />
       <var name="solid-background-color-hover" value="#1a1a1a" />
       <var name="solid-background-color-down" value="#1a1a1a" />
