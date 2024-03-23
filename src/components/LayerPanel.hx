@@ -102,6 +102,7 @@ private class LayerItemRenderer extends ItemRenderer {
     visibleState.selected = false;
     visibleState.onClick = onVisibleStateClick;
     visibleState.tooltip = '{{layer.visible}}';
+    visibleState.verticalAlign = 'center';
 
     addComponent(label);
     addComponent(textField);
