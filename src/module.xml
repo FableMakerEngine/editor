@@ -32,10 +32,36 @@
       <var name="toolbar-background-color" value="#ffffff"/>
       <style resource="styles/light/main.css" />
       <style resource="styles/light/toolbar.css" />
+      <style resource="styles/default/overrides.css" />
     </default>
     <dark parent="default">
-      <var name="background-color" value="#313435"/>
-      <var name="toolbar-background-color" value="#313435"/>
+      <var name="normal-background-color-start" value="#232323" />
+      <var name="normal-background-color-end" value="#232323" />
+
+      <!-- <var name="default-background-color" value="#1a1a1a" /> -->
+      <var name="default-background-color" value="#2d2d30" />
+      <var name="secondary-background-color" value="#252525" />
+      <var name="tertiary-background-color" value="#232323" />
+
+      <var name="solid-background-color" value="#232323" />
+      <!-- <var name="solid-background-color-alt" value="#1a1a1a" />
+      <var name="solid-background-color-hover" value="#1a1a1a" />
+      <var name="solid-background-color-down" value="#1a1a1a" />
+      <var name="solid-background-color-disabled" value="#1a1a1a" /> -->
+
+                  <!-- selection -->
+      <var name="selection-background-color" value="#29425c" />
+      <var name="selection-text-color" value="#ffffff" />
+      <var name="selection-background-color-hover" value="#3a5d82" />
+
+      <var name="background-color" value="#232323"/>
+      <var name="toolbar-background-color" value="#232323"/>
+
+      <var name="normal-border-color" value="#1a1a1a" />
+      <var name="normal-border-size" value="1px" />
+  
+      <var name="normal-text-color" value="#a7a7a7" />
+      <var name="normal-border-radius" value="2px" />
     </dark>
   </themes>
 </module>
