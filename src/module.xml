@@ -34,6 +34,8 @@
       <style resource="styles/light/main.css" />
       <style resource="styles/light/toolbar.css" />
       <style resource="styles/default/statusbar.css" />
+      <style resource="styles/default/maps-panel.css" />
+      <style resource="styles/default/layers-panel.css" />
       <style resource="styles/default/overrides.css" />
     </default>
     <dark parent="default">
