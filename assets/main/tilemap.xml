@@ -1,5 +1,3 @@
-<vbox width="100%" height="100%">
-  <scrollview id="scrollview" width="100%" height="100%" styleName="classic-scrolls">
-    <vbox id="tilemapContainer"></vbox>
-  </scrollview>
-</vbox>
+<scrollview id="scrollview" width="100%" height="100%" styleName="classic-scrolls">
+  <box id="tilemapContainer"></box>
+</scrollview>
