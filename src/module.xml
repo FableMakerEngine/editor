@@ -29,16 +29,18 @@
   <themes>
     <default>
       <var name="background-color" value="#ffffff"/>
+      <var name="statusbar-background-color" value="#ffffff" />
       <var name="toolbar-background-color" value="#ffffff"/>
       <style resource="styles/light/main.css" />
       <style resource="styles/light/toolbar.css" />
+      <style resource="styles/default/statusbar.css" />
       <style resource="styles/default/overrides.css" />
     </default>
     <dark parent="default">
       <var name="normal-background-color-start" value="#232323" />
       <var name="normal-background-color-end" value="#232323" />
 
-      <!-- <var name="default-background-color" value="#1a1a1a" /> -->
+      <var name="statusbar-background-color" value="#1a1a1a" />
       <var name="default-background-color" value="#2d2d30" />
       <var name="secondary-background-color" value="#252525" />
       <var name="tertiary-background-color" value="#232323" />
