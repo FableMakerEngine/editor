@@ -22,6 +22,22 @@
     pointer-events: true;
 }
 
+.vertical-splitter-gripper:hover {
+    background-color: $selection-background-color;
+}
+
+.vertical-splitter-gripper:down {
+    background-color: $selection-background-color;
+}
+
+.horizontal-splitter-gripper:hover {
+    background-color: $selection-background-color;
+}
+
+.horizontal-splitter-gripper:down {
+    background-color: $selection-background-color;
+}
+
 /* ListView */
 .listview .listview-contents > .itemrenderer {
   height: auto;
