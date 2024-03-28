@@ -1,5 +1,5 @@
 .tilemap.scrollview {
-  border: 0px;
+  border: none;
   padding: 0px;
   background-color: $secondary-background-color;
 }
