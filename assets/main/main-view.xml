@@ -9,5 +9,5 @@
   <box id="workspace" width="100%" height="100%">
     <mapeditor id="mapEditor"></mapeditor>
   </box>
-  <statusbar id="statusBar"></statusbar>
+  <statusbar id="statusbar"></statusbar>
 </vbox>

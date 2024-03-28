@@ -1,5 +1,6 @@
 package components;
 
+import haxe.ui.containers.ScrollView;
 import ceramic.TilemapTile;
 import ceramic.TilemapLayerData;
 import ceramic.Point;
@@ -11,10 +12,9 @@ import ceramic.Visual;
 import ceramic.Rect;
 import ceramic.Border;
 import ceramic.Color;
-import haxe.ui.containers.VBox;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tilemap.xml'))
-class Tilemap extends VBox {
+class Tilemap extends ScrollView {
   public var tilemap(default, null): ceramic.Tilemap;
   public var tilemapBackground: ceramic.Quad;
   public var tileSize: Rect = new Rect(0, 0, 16, 16);
