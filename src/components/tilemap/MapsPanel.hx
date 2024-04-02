@@ -1,4 +1,4 @@
-package components;
+package components.tilemap;
 
 import haxe.ui.events.UIEvent;
 import haxe.ui.containers.Panel;
