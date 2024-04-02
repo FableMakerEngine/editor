@@ -1,3 +1,5 @@
+package constants;
+
 typedef MapInfo = {
   name: String,
   id: Int,
