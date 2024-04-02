@@ -4,4 +4,5 @@
 import assets.*;
 import ceramic.Shortcuts.*;
 import Shortcuts.*;
+import constants.*;
 #end
