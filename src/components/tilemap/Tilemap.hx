@@ -1,4 +1,4 @@
-package components;
+package components.tilemap;
 
 import haxe.ui.containers.ScrollView;
 import ceramic.TilemapTile;

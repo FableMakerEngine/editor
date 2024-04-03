@@ -1,4 +1,4 @@
-package components;
+package components.tilemap;
 
 import ceramic.TouchInfo;
 import renderer.Grid.Cell;

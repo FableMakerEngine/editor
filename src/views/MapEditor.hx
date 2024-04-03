@@ -1,4 +1,4 @@
-package components;
+package views;
 
 import haxe.ui.events.UIEvent;
 import ceramic.Rect;

@@ -1,3 +1,5 @@
+package constants;
+
 import haxe.ui.events.EventType;
 import haxe.ui.events.UIEvent;
 

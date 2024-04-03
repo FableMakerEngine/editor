@@ -1,4 +1,4 @@
-package;
+package utils;
 
 class MapInfoParser {
   public var maps: Array<MapInfo> = [];

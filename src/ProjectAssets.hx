@@ -5,6 +5,8 @@ import ceramic.Files;
 import ceramic.RuntimeAssets;
 import ceramic.Assets;
 
+import utils.MapInfoParser;
+
 using ceramic.TilemapPlugin;
 
 class ProjectAssets extends Assets {
