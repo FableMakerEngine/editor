@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<frame text="PLACEHOLDER" width="100%" height="100%">
+    <hbox width="100%" height="100%">
+        <database-list id="variablelist" />
+        <spacer height="50" />
+        <grid width="50%" height="100%">
+            <label id="variablekey" text="Name:" verticalAlign="center" />
+            <textfield placeholder="" />
+            <label text="Type:" verticalAlign="center" />
+            <dropdown width="100%">
+                <data>
+                    <item text="String" />
+                    <item text="Int" />
+                    <item text="Float" />
+                    <item text="Bool" />
+                </data>
+            </dropdown>
+            <label text="Value:" verticalAlign="center" />
+            <!-- maybe in this case we could a special component type to swap depending the type?-->
+            <textfield placeholder="" />
+        </grid>
+    </hbox>
+</frame>

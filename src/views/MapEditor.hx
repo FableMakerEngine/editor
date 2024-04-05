@@ -25,6 +25,8 @@ class MapEditor extends VBox {
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
     tilePicker.registerEvent(MapEvent.TILE_SELECTION, onTileSelection);
+    localvariable.text = 'Local Variables';
+    globalvariable.text = 'Global Variables';
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -101,8 +103,7 @@ class MapEditor extends VBox {
     });
   }
 
-  public override function onResized() {
-  }
+  public override function onResized() {}
 
   function onTileSizeChanged(newSize: Rect, oldSize: Rect) {
     tileSize = newSize;
