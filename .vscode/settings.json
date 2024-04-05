@@ -8,8 +8,8 @@
         "**/sample": true,
         "**/libs": true
     },
-    "haxe.executable": "libs/ceramic/tools/haxe.cmd",
-    "haxelib.executable": "libs/ceramic/tools/haxelib.cmd",
+    "haxe.executable": "../../../../ceramic/tools/haxe.cmd",
+    "haxelib.executable": "../../../../ceramic/tools/haxelib.cmd",
     "css.customData": [
         ".vscode/haxeui-css.json"
     ]

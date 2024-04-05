@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<panel width="50%" height="100%">
+    <vbox width="100%" height="100%">
+        <list-view id="list" height="100%" width="100%" styleName="full-width" />
+        <button text="Change Maximum..." width="100%" horizontalAlign="center"
+            verticalAlign="center" />
+    </vbox>
+</panel>
