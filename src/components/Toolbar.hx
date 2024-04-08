@@ -12,7 +12,6 @@ class Toolbar extends VBox {
     super();
 
     toolPencil.registerEvent(MouseEvent.CLICK, onToolSelected);
-    toolBrush.registerEvent(MouseEvent.CLICK, onToolSelected);
     toolFill.registerEvent(MouseEvent.CLICK, onToolSelected);
     toolEraser.registerEvent(MouseEvent.CLICK, onToolSelected);
   }

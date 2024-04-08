@@ -28,9 +28,6 @@
 .toolbar #toolEllipse {
     icon: icon('toolEllipse');
 }
-.toolbar #toolBrush {
-    icon: icon('toolBrush');
-}
 .toolbar #toolFill {
     icon: icon('toolFill');
 }
