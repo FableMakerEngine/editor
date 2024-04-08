@@ -26,7 +26,7 @@ class TilePicker extends VBox {
     super();
     onMouseOver = handleMouseOver;
     onMouseOut = haneMouseOut;
-    tileView.scrollDragButton = MouseButton.MIDDLE;
+    tileView.scrollMouseButton = MouseButton.MIDDLE;
   }
 
   public override function onReady() {
