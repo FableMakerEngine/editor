@@ -22,6 +22,12 @@
 .toolbar #toolPencil {
     icon: icon('toolPencil');
 }
+.toolbar #toolRect {
+    icon: icon('toolRect');
+}
+.toolbar #toolEllipse {
+    icon: icon('toolEllipse');
+}
 .toolbar #toolBrush {
     icon: icon('toolBrush');
 }

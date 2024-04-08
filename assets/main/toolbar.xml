@@ -8,6 +8,8 @@
        <spacer width="100" />
        <button id="toolPencil"/>
        <button id="toolBrush"/>
+       <button id="toolRect"/>
+       <button id="toolEllipse"/>
        <button id="toolFill"/>
        <button id="toolEraser"/>
        <spacer width="100"/>
