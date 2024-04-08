@@ -1,5 +1,7 @@
 package components.tilemap;
 
+import haxe.ui.constants.MouseButton;
+import haxe.ui.constants.ScrollPolicy;
 import ceramic.TouchInfo;
 import renderer.Grid.Cell;
 import renderer.Zoomable;
@@ -11,7 +13,6 @@ import ceramic.Color;
 import haxe.ui.containers.VBox;
 import haxe.ui.components.Button;
 import haxe.ui.events.MouseEvent;
-import haxe.ui.constants.ScrollMode;
 
 @:build(haxe.ui.ComponentBuilder.build('../../assets/main/tile-picker.xml'))
 class TilePicker extends VBox {
@@ -19,12 +20,13 @@ class TilePicker extends VBox {
   var viewport: Visual;
   var zoomable = new Zoomable();
   var tileCursor: Border;
+  var isMiddleMouseClick: Bool;
 
   public function new() {
     super();
-    onMouseOver = handleZoomable;
-    onMouseOut = handleZoomable;
-    tileView.scrollMode = ScrollMode.NORMAL;
+    onMouseOver = handleMouseOver;
+    onMouseOut = haneMouseOut;
+    tileView.scrollMouseButton = MouseButton.MIDDLE;
   }
 
   public override function onReady() {
@@ -37,6 +39,8 @@ class TilePicker extends VBox {
     viewport = new Visual();
     viewport.component('zoomable', zoomable);
     zoomable.onOnZoomFinish(null, onZoomFinished);
+    zoomable.onZoomKeyDown(null, onZoomKeyDown);
+    zoomable.onZoomKeyUp(null, onZoomKeyUp);
     imageContainer.add(viewport);
   }
 
@@ -61,13 +65,25 @@ class TilePicker extends VBox {
     viewport.add(tileCursor);
   }
 
+  function onZoomKeyDown() {
+    tileView.scrollPolicy = ScrollPolicy.NEVER;
+  }
+
+  function onZoomKeyUp() {
+    tileView.scrollPolicy = ScrollPolicy.AUTO;
+  }
+
   function onZoomFinished(scale: Float) {
     imageContainer.width = tileset.width * viewport.scaleX;
     imageContainer.height = tileset.height * viewport.scaleY;
   }
 
-  function handleZoomable(e) {
-    zoomable.enable = !zoomable.enable;
+  function handleMouseOver(e) {
+    zoomable.enable = true;
+  }
+
+  function haneMouseOut(e) {
+    zoomable.enable = false;
   }
 
   function clearTilesets() {
@@ -129,17 +145,28 @@ class TilePicker extends VBox {
   }
 
   public function onTilesetClick(info: TouchInfo, cells: Array<Cell>) {
+    if (info.buttonId == 1) {
+      isMiddleMouseClick = true;
+      return;
+    }
+    isMiddleMouseClick = false;
     var selectedPos = cells[0].position;
     tileCursor.pos(selectedPos.x, selectedPos.y);
     tileCursor.size(tileset.grid.cellSize.width, tileset.grid.cellSize.height);
   }
 
   public function onTilesetSelection(cells: Array<Cell>, selectionRect) {
+    if (isMiddleMouseClick) {
+      return;
+    }
     tileCursor.pos(selectionRect.x, selectionRect.y);
     tileCursor.size(selectionRect.width, selectionRect.height);
   }
 
   function onTilesetSelectionFinished(cells: Array<Cell>, selectionRect) {
+    if (isMiddleMouseClick) {
+      return;
+    }
     final event = new MapEvent(MapEvent.TILE_SELECTION, false, cells);
     dispatch(event);
   }
