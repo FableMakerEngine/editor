@@ -25,6 +25,7 @@ class Tilemap extends ScrollView {
   public var overlay: GridQuad;
   public var activeLayer(default, set): TilemapLayerData;
   public var selectedTilesetCells(default, set): Array<Cell>; 
+  public var activeTool: MapEditorTool;
   
   var selectedTilesetTiles: Array<TilemapTile>;
   var tilesetRect: Rect;
@@ -228,8 +229,17 @@ class Tilemap extends ScrollView {
       new Rect(x, y, tilesetRect.width, tilesetRect.height)
     );
 
-    if (buttonId == 0) {
-      drawTile(cellsToEdit);
+    if (buttonId == 0)  {
+      switch (activeTool) {
+        case MapEditorTool.Pencil:
+          drawTile(cellsToEdit);
+        case MapEditorTool.Eraser:
+          eraseTile(cellsToEdit);
+        case MapEditorTool.Fill:
+        case MapEditorTool.Rect:
+        case MapEditorTool.Elipse:
+        case MapEditorTool.Clone:
+      }
     } else if (buttonId == 2) {
       eraseTile(cellsToEdit);
     }
