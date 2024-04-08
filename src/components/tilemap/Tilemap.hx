@@ -1,5 +1,8 @@
 package components.tilemap;
 
+import haxe.ui.constants.MouseButton;
+import haxe.ui.constants.ScrollPolicy;
+import renderer.Zoomable;
 import haxe.ui.containers.ScrollView;
 import ceramic.TilemapTile;
 import ceramic.TilemapLayerData;
@@ -27,9 +30,12 @@ class Tilemap extends ScrollView {
   var selectionRect: Rect;
   var viewport: Visual;
   var buttonId: Int = -1;
+  var zoomable = new Zoomable();
 
   public function new() {
     super();
+    onMouseOver = handleMouseOver;
+    onMouseOut = haneMouseOut;
     app.screen.onPointerMove(null, onPointerMove);
   }
 
@@ -55,6 +61,7 @@ class Tilemap extends ScrollView {
   }
 
   public override function onReady() {
+    scrollMouseButton = MouseButton.MIDDLE;
     createViewport();
     createOverlay();
     createTilemapBackground();
@@ -64,6 +71,13 @@ class Tilemap extends ScrollView {
 
   function createViewport() {
     viewport = new Visual();
+    viewport.component('zoomable', zoomable);
+
+    zoomable.enable = true;
+    zoomable.onOnZoomFinish(null, onZoomFinished);
+    zoomable.onZoomKeyDown(null, onZoomKeyDown);
+    zoomable.onZoomKeyUp(null, onZoomKeyUp);
+
     tilemapContainer.add(viewport);
   }
 
@@ -117,6 +131,27 @@ class Tilemap extends ScrollView {
     overlay.shader.setVec2('resolution', width, height);
     tilemapContainer.width = width;
     tilemapContainer.height = height;
+  }
+
+  public function onZoomFinished(scale: Float) {
+    tilemapContainer.width = tilemap.width * viewport.scaleX;
+    tilemapContainer.height = tilemap.height * viewport.scaleY;
+  }
+
+  public function onZoomKeyDown() {
+    scrollPolicy = ScrollPolicy.NEVER;
+  }
+
+  public function onZoomKeyUp() {
+    scrollPolicy = ScrollPolicy.AUTO;
+  }
+
+  function handleMouseOver(e) {
+    zoomable.enable = true;
+  }
+
+  function haneMouseOut(e) {
+    zoomable.enable = false;
   }
 
   public function onPointerMove(info: TouchInfo) {
