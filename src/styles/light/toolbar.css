@@ -31,6 +31,9 @@
 .toolbar #toolFill {
     icon: icon('toolFill');
 }
+.toolbar #toolDropper {
+    icon: icon('toolDropper');
+}
 .toolbar #toolEraser {
     icon: icon('toolEraser');
 }

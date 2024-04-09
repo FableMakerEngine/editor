@@ -10,6 +10,7 @@
        <button id="toolRect"/>
        <button id="toolEllipse"/>
        <button id="toolFill"/>
+       <button id="toolDropper" />
        <button id="toolEraser"/>
        <spacer width="100"/>
        <button id="musicManager"/>
