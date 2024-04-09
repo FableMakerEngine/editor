@@ -219,6 +219,41 @@ class Tilemap extends ScrollView {
     updateLayerTiles(tiles);
   }
 
+  function floodFillDraw(x: Float, y: Float, initialCell: Cell, replacementTile: TilemapTile) {
+    var stack: Array<Point> = [];
+
+    if (!withinTilemapBounds(x, y)) {
+      return;
+    }
+
+    var activeLayerTiles = getActiveLayerTiles();
+    var initialTile = activeLayerTiles[initialCell.frame];
+
+    if (initialTile == replacementTile) {
+      return;
+    }
+
+    stack.push(new Point(x, y));
+    
+    while (stack.length > 0) {
+      var currentPoint = stack.pop();
+      x = currentPoint.x;
+      y = currentPoint.y;
+      var currentCellIndex = overlay.grid.getCellFrame(x, y);
+      var currentTile = activeLayerTiles[currentCellIndex];
+
+      if (currentTile != initialTile) continue;
+
+      activeLayerTiles[currentCellIndex] = replacementTile;
+
+      stack.push({ x: x + tileSize.width, y: y });
+      stack.push({ x: x - tileSize.width, y: y });
+      stack.push({ x: x, y: y + tileSize.height });
+      stack.push({ x: x, y: y - tileSize.height });
+    }
+    updateLayerTiles(activeLayerTiles);
+  }
+
   function withinTilemapBounds(x: Float, y: Float) {
     return x >= 0 && x < tilemap.width && y >= 0 && y < tilemap.height;
   }
@@ -236,6 +271,8 @@ class Tilemap extends ScrollView {
         case MapEditorTool.Eraser:
           eraseTile(cellsToEdit);
         case MapEditorTool.Fill:
+          var replacementTile = tilemapTiles[0];
+          floodFillDraw(x, y, tilesToEdit[0], replacementTile);
         case MapEditorTool.Rect:
         case MapEditorTool.Elipse:
         case MapEditorTool.Clone:
