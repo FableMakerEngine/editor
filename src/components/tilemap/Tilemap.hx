@@ -26,7 +26,7 @@ class Tilemap extends ScrollView {
   public var activeLayer(default, set): TilemapLayerData;
   public var selectedTiles(default, set): Array<Tile>; 
   
-  var tilemapTiles: Array<TilemapTile>;
+  var tilesetTiles: Array<TilemapTile>;
   var selectionRect: Rect;
   var viewport: Visual;
   var buttonId: Int = -1;
@@ -50,9 +50,9 @@ class Tilemap extends ScrollView {
 
   function set_selectedTiles(tiles: Array<Tile>) {
     if (selectedTiles == tiles) return tiles;
-    tilemapTiles = [];
+    tilesetTiles = [];
     for (tile in tiles) {
-      tilemapTiles.push(new TilemapTile(tile.frame));
+      tilesetTiles.push(new TilemapTile(tile.frame));
     }
     selectedTiles = tiles;
     selectionRect = overlay.grid.createRectFromCells(cast selectedTiles, tileSize);
@@ -210,7 +210,7 @@ class Tilemap extends ScrollView {
     if (tiles == null) return;
 
     for (index => tile in tilesToEdit) {
-      var tilemapTile = tilemapTiles[index];
+      var tilemapTile = tilesetTiles[index];
       if (withinTilemapBounds(tile.position.x, tile.position.y)) {
         tiles[tile.frame] = tilemapTile;
       }
