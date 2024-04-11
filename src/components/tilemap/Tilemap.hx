@@ -55,7 +55,7 @@ class Tilemap extends ScrollView {
       selectedTilesetTiles.push(new TilemapTile(cell.frame));
     }
     selectedTilesetCells = cells;
-    selectionRect = overlay.grid.createRectFromCells(cast selectedTilesetCells, tileSize);
+    selectionRect = overlay.grid.createRectFromCells(selectedTilesetCells, tileSize);
     tileCursor.size(selectionRect.width, selectionRect.height);
     return cells;
   }
