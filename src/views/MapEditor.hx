@@ -25,7 +25,7 @@ class MapEditor extends VBox {
     layerPanel.registerEvent(MapEvent.LAYER_VISIBILITY, onLayerVisibilityChange);
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
-    tilePicker.registerEvent(MapEvent.TILE_SELECTION, onTileSelection);
+    tilePicker.registerEvent(MapEvent.TILESET_TILE_SELECTION, onTileSelection);
   }
 
   public function menu(): Array<ContextMenuEntry> {
