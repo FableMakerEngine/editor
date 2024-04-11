@@ -27,7 +27,7 @@ class Tilemap extends ScrollView {
   public var selectedTilesetCells(default, set): Array<Cell>; 
   
   var selectedTilesetTiles: Array<TilemapTile>;
-  var selectionRect: Rect;
+  var tilesetRect: Rect;
   var viewport: Visual;
   var buttonId: Int = -1;
   var zoomable = new Zoomable();
@@ -55,8 +55,8 @@ class Tilemap extends ScrollView {
       selectedTilesetTiles.push(new TilemapTile(cell.frame));
     }
     selectedTilesetCells = cells;
-    selectionRect = overlay.grid.createRectFromCells(selectedTilesetCells, tileSize);
-    tileCursor.size(selectionRect.width, selectionRect.height);
+    tilesetRect = overlay.grid.createRectFromCells(selectedTilesetCells, tileSize);
+    tileCursor.size(tilesetRect.width, tilesetRect.height);
     return cells;
   }
 
@@ -225,7 +225,7 @@ class Tilemap extends ScrollView {
   function handleTilemapAction(x: Float, y: Float) {
     if (buttonId < 0) return;
     var cellsToEdit = overlay.grid.getCellsFromRect(
-      new Rect(x, y, selectionRect.width, selectionRect.height)
+      new Rect(x, y, tilesetRect.width, tilesetRect.height)
     );
 
     if (buttonId == 0) {
@@ -236,7 +236,7 @@ class Tilemap extends ScrollView {
   }
 
   function handleGridPointerMove(cells: Array<Cell>, _) {
-    if (activeLayer != null && selectionRect != null) {
+    if (activeLayer != null && tilesetRect != null) {
       handleTilemapAction(cells[0].position.x, cells[0].position.y);
     }
   }
