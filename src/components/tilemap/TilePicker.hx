@@ -167,7 +167,7 @@ class TilePicker extends VBox {
     if (isMiddleMouseClick) {
       return;
     }
-    final event = new MapEvent(MapEvent.TILE_SELECTION, false, cells);
+    final event = new MapEvent(MapEvent.TILESET_TILE_SELECTION, false, cells);
     dispatch(event);
   }
 }
