@@ -24,9 +24,9 @@ class Tilemap extends ScrollView {
   public var tileCursor: Border;
   public var overlay: GridQuad;
   public var activeLayer(default, set): TilemapLayerData;
-  public var selectedCells(default, set): Array<Cell>; 
+  public var selectedTilesetCells(default, set): Array<Cell>; 
   
-  var tilesetTiles: Array<TilemapTile>;
+  var selectedTilesetTiles: Array<TilemapTile>;
   var selectionRect: Rect;
   var viewport: Visual;
   var buttonId: Int = -1;
@@ -48,14 +48,14 @@ class Tilemap extends ScrollView {
     return layer;
   }
 
-  function set_selectedCells(cells: Array<Cell>) {
-    if (selectedCells == cells) return cells;
-    tilesetTiles = [];
+  function set_selectedTilesetCells(cells: Array<Cell>) {
+    if (selectedTilesetCells == cells) return cells;
+    selectedTilesetTiles = [];
     for (cell in cells) {
-      tilesetTiles.push(new TilemapTile(cell.frame));
+      selectedTilesetTiles.push(new TilemapTile(cell.frame));
     }
-    selectedCells = cells;
-    selectionRect = overlay.grid.createRectFromCells(cast selectedCells, tileSize);
+    selectedTilesetCells = cells;
+    selectionRect = overlay.grid.createRectFromCells(cast selectedTilesetCells, tileSize);
     tileCursor.size(selectionRect.width, selectionRect.height);
     return cells;
   }
@@ -210,7 +210,7 @@ class Tilemap extends ScrollView {
     if (tiles == null) return;
 
     for (index => cell in cellsToEdit) {
-      var tilemapTile = tilesetTiles[index];
+      var tilemapTile = selectedTilesetTiles[index];
       if (withinTilemapBounds(cell.position.x, cell.position.y)) {
         tiles[cell.frame] = tilemapTile;
       }

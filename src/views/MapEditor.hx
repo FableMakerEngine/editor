@@ -114,7 +114,7 @@ class MapEditor extends VBox {
   function onTileSelection(event: UIEvent) {
     var cells: Array<Cell> = cast event.data;
     if (tilemapView == null || cells.length <= 0) return;
-    tilemapView.selectedCells = cells;
+    tilemapView.selectedTilesetCells = cells;
   }
 
   function onActiveMapChanged(event: UIEvent) {
