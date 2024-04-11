@@ -6,10 +6,12 @@
        <button id="zoomIn"/>
        <button id="zoomOut"/>
        <spacer width="100" />
-       <button id="toolPencil"/>
-       <button id="toolBrush"/>
-       <button id="toolFill"/>
-       <button id="toolEraser"/>
+       <button id="toolPencil" tooltip="{{toolbar.toolPencil}}" />
+       <button id="toolRect" tooltip="{{toolbar.toolRect}}" />
+       <button id="toolEllipse" tooltip="{{toolbar.toolEllipse}}" />
+       <button id="toolFill" tooltip="{{toolbar.toolFill}}" />
+       <button id="toolDropper" tooltip="{{toolbar.toolDropper}}" />
+       <button id="toolEraser" tooltip="{{toolbar.toolEraser}}" />
        <spacer width="100"/>
        <button id="musicManager"/>
        <button id="settings"/>

@@ -24,4 +24,7 @@ class MapEvent extends UIEvent {
 
   /* Dispatched when the tilemap is zoomed' */
   public static final MAP_ZOOM: EventType<UIEvent> = EventType.name('mapZoom');
+
+  /* Dispatched when a tool is selected  */
+  public static final TOOL_SELECT: EventType<UIEvent> = EventType.name('toolChange');
 }

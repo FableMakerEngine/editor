@@ -26,6 +26,7 @@ class MapEditor extends VBox {
     layerPanel.registerEvent(MapEvent.LAYER_RENAME, onLayerRename);
     mapListPanel.registerEvent(MapEvent.MAP_SELECT, onActiveMapChanged);
     tilePicker.registerEvent(MapEvent.TILESET_TILE_SELECTION, onTileSelection);
+    toolbar.registerEvent(MapEvent.TOOL_SELECT, onToolSelect);
   }
 
   public function menu(): Array<ContextMenuEntry> {
@@ -141,6 +142,10 @@ class MapEditor extends VBox {
 
   function onLayerRename(event: UIEvent) {
     layerPanel.activeLayer.name = event.data;
+  }
+
+  function onToolSelect(event: UIEvent) {
+    tilemapView.activeTool = MapEditorTool.fromName(event.data);
   }
 
   public function update(dt: Float) {}

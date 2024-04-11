@@ -14,6 +14,7 @@
     <locale id="en_US">
       <resource path="locale/en_US/menus.properties" />
       <resource path="locale/en_US/layerList.properties" />
+      <resource path="locale/en_US/toolbar.properties" />
     </locale>
   </locales>
 

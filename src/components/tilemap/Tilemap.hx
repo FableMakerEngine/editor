@@ -25,7 +25,9 @@ class Tilemap extends ScrollView {
   public var overlay: GridQuad;
   public var activeLayer(default, set): TilemapLayerData;
   public var selectedTilesetCells(default, set): Array<Cell>; 
-  
+  public var activeTool: MapEditorTool;
+
+  var isShapeFillActive: Bool = false;
   var selectedTilesetTiles: Array<TilemapTile>;
   var tilesetRect: Rect;
   var viewport: Visual;
@@ -89,6 +91,7 @@ class Tilemap extends ScrollView {
     overlay.depth = 90;
     overlay.grid.onGridClick(null, handleGridClick);
     overlay.grid.onOnGridSelection(null, handleGridPointerMove);
+    overlay.onPointerUp(null, handlePointerUp);
     viewport.add(overlay);
   }
 
@@ -155,7 +158,7 @@ class Tilemap extends ScrollView {
   }
 
   public function onPointerMove(info: TouchInfo) {
-    if (tileCursor == null) {
+    if (tileCursor == null || !tileCursor.visible) {
       return;
     };
     var localCoords = new Point();
@@ -218,6 +221,59 @@ class Tilemap extends ScrollView {
     updateLayerTiles(tiles);
   }
 
+  function floodFillDraw(x: Float, y: Float, initialCell: Cell, replacementTile: TilemapTile) {
+    var stack: Array<Point> = [];
+
+    if (!withinTilemapBounds(x, y)) {
+      return;
+    }
+
+    var activeLayerTiles = getActiveLayerTiles();
+    var initialTile = activeLayerTiles[initialCell.frame];
+
+    if (initialTile == replacementTile) {
+      return;
+    }
+
+    stack.push(new Point(x, y));
+    
+    while (stack.length > 0) {
+      var currentPoint = stack.pop();
+      x = currentPoint.x;
+      y = currentPoint.y;
+      var currentCellIndex = overlay.grid.getCellFrame(x, y);
+      var currentTile = activeLayerTiles[currentCellIndex];
+
+      if (currentTile != initialTile) continue;
+
+      activeLayerTiles[currentCellIndex] = replacementTile;
+
+      stack.push({ x: x + tileSize.width, y: y });
+      stack.push({ x: x - tileSize.width, y: y });
+      stack.push({ x: x, y: y + tileSize.height });
+      stack.push({ x: x, y: y - tileSize.height });
+    }
+    updateLayerTiles(activeLayerTiles);
+  }
+
+  function drawRectShapeFill(rect: Rect) {
+    var activeLayerTiles = getActiveLayerTiles();
+    var cols = Std.int(rect.width / tileSize.width) + 1;
+    var rows  = Std.int(rect.height / tileSize.height) + 1;
+
+    for (i in 0...rows) {
+      for (j in 0...cols) {
+        var tileX: Float = rect.x + j * tileSize.width;
+        var tileY: Float = rect.y + i * tileSize.height;
+        var currentCellIndex = overlay.grid.getCellFrame(tileX, tileY);
+        var tilemapTile = selectedTilesetTiles[currentCellIndex];
+
+        activeLayerTiles[currentCellIndex] = tilemapTile;
+        updateLayerTiles(activeLayerTiles);
+      }
+    }
+  }
+
   function withinTilemapBounds(x: Float, y: Float) {
     return x >= 0 && x < tilemap.width && y >= 0 && y < tilemap.height;
   }
@@ -228,16 +284,35 @@ class Tilemap extends ScrollView {
       new Rect(x, y, tilesetRect.width, tilesetRect.height)
     );
 
-    if (buttonId == 0) {
-      drawTile(cellsToEdit);
+    if (buttonId == 0)  {
+      switch (activeTool) {
+        case MapEditorTool.Pencil:
+          drawTile(cellsToEdit);
+        case MapEditorTool.Eraser:
+          eraseTile(cellsToEdit);
+        case MapEditorTool.Fill:
+          var replacementTile = selectedTilesetTiles[0];
+          floodFillDraw(x, y, selectedTilesetCells[0], replacementTile);
+        case MapEditorTool.Rect:
+          isShapeFillActive = true;
+          overlay.grid.enableSelection = true;
+          tileCursor.visible = false;
+        case MapEditorTool.Elipse:
+        case MapEditorTool.Clone:
+      }
     } else if (buttonId == 2) {
       eraseTile(cellsToEdit);
     }
   }
 
-  function handleGridPointerMove(cells: Array<Cell>, _) {
-    if (activeLayer != null && tilesetRect != null) {
-      handleTilemapAction(cells[0].position.x, cells[0].position.y);
+  function handleGridPointerMove(cells: Array<Cell>, __) {
+    // if (activeLayer != null && selectionRect != null) {
+    //   handleTilemapAction(tiles[0].position.x, tiles[0].position.y);
+    // }
+    if (isShapeFillActive) {
+      var rect = overlay.grid.createRectFromCells(cells, tileSize);
+
+      drawRectShapeFill(rect);
     }
   }
 
@@ -250,6 +325,10 @@ class Tilemap extends ScrollView {
   }
 
   function handlePointerUp(info: TouchInfo) {
+    if (isShapeFillActive) {
+      isShapeFillActive = false;
+      tileCursor.visible = true;
+    }
     if (info.buttonId == buttonId) {
       buttonId = -1;
     }
