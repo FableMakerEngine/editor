@@ -1,5 +1,6 @@
 package views;
 
+import renderer.Grid.Cell;
 import haxe.ui.events.UIEvent;
 import ceramic.Rect;
 import components.menus.ContextMenu;
@@ -111,9 +112,9 @@ class MapEditor extends VBox {
   }
 
   function onTileSelection(event: UIEvent) {
-    var tiles: Array<Tile> = cast event.data;
-    if (tilemapView == null || tiles.length <= 0) return;
-    tilemapView.selectedTiles = tiles;
+    var cells: Array<Cell> = cast event.data;
+    if (tilemapView == null || cells.length <= 0) return;
+    tilemapView.selectedCells = cells;
   }
 
   function onActiveMapChanged(event: UIEvent) {
