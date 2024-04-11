@@ -196,23 +196,23 @@ class Tilemap extends ScrollView {
     if (layer != null) layer.contentDirty = true;
   }
 
-  function eraseTile(tilesToEdit: Array<Tile>) {
+  function eraseTile(cellsToEdit: Array<Cell>) {
     var tiles = getActiveLayerTiles();
     if (tiles == null) return;
-    for (index => tile in tilesToEdit) {
-      tiles[tile.frame] = 0;
+    for (index => cell in cellsToEdit) {
+      tiles[cell.frame] = 0;
     }
     updateLayerTiles(tiles);
   }
 
-  function drawTile(tilesToEdit: Array<Tile>) {
+  function drawTile(cellsToEdit: Array<Cell>) {
     var tiles = getActiveLayerTiles();
     if (tiles == null) return;
 
-    for (index => tile in tilesToEdit) {
+    for (index => cell in cellsToEdit) {
       var tilemapTile = tilesetTiles[index];
-      if (withinTilemapBounds(tile.position.x, tile.position.y)) {
-        tiles[tile.frame] = tilemapTile;
+      if (withinTilemapBounds(cell.position.x, cell.position.y)) {
+        tiles[cell.frame] = tilemapTile;
       }
     }
     updateLayerTiles(tiles);
@@ -224,29 +224,29 @@ class Tilemap extends ScrollView {
 
   function handleTilemapAction(x: Float, y: Float) {
     if (buttonId < 0) return;
-    var tilesToEdit = overlay.grid.getCellsFromRect(
+    var cellsToEdit = overlay.grid.getCellsFromRect(
       new Rect(x, y, selectionRect.width, selectionRect.height)
     );
 
     if (buttonId == 0) {
-      drawTile(tilesToEdit);
+      drawTile(cellsToEdit);
     } else if (buttonId == 2) {
-      eraseTile(tilesToEdit);
+      eraseTile(cellsToEdit);
     }
   }
 
-  function handleGridPointerMove(tiles: Array<Cell>, _) {
+  function handleGridPointerMove(cells: Array<Cell>, _) {
     if (activeLayer != null && selectionRect != null) {
-      handleTilemapAction(tiles[0].position.x, tiles[0].position.y);
+      handleTilemapAction(cells[0].position.x, cells[0].position.y);
     }
   }
 
-  function handleGridClick (info: TouchInfo, tiles: Array<Cell>) { 
+  function handleGridClick (info: TouchInfo, cells: Array<Cell>) { 
     if (activeLayer == null) return;
-    var selectedTile = tiles[0];
-    var tilePos = selectedTile.position;
+    var selectedCell = cells[0];
+    var cellPos = selectedCell.position;
     buttonId = info.buttonId;
-    handleTilemapAction(tilePos.x, tilePos.y);
+    handleTilemapAction(cellPos.x, cellPos.y);
   }
 
   function handlePointerUp(info: TouchInfo) {
